@@ -94,6 +94,12 @@
         ];
       };
     };
+
+    services = {
+      mpris-proxy.enable = true;
+      playerctld.enable = true;
+    };
+
     manual.html.enable = true;
   };
 }
