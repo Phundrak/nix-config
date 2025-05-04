@@ -46,7 +46,6 @@ in {
       plex-media-player
       spicetify-cli
       spotify
-      spotify-tray
 
       # Social
       vesktop # Discord alternative that works well with wayland
