@@ -1,0 +1,110 @@
+{
+  pkgs,
+  inputs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.modules.packages;
+in {
+  options.modules.packages.emacsPackage = mkOption {
+    type = types.package;
+    default = pkgs.emacs;
+  };
+  config.home.packages = with pkgs; let
+    scripts = import ../scripts/scripts.nix {
+      inherit pkgs;
+      config.emacsPkg = cfg.emacsPackage;
+    };
+  in
+    [
+      flatpak
+
+      # LSP server for Nix
+      nil
+
+      # Terminal stuff
+      duf
+      ffmpeg
+      ripgrep-all
+      unzip
+
+      # Fonts
+      #nerdfonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      tibetan-machine
+
+      # Browsers
+      amfora
+
+      # Media
+      ani-cli
+      audacity
+      plexamp
+      plex-media-player
+      spicetify-cli
+      spotify
+      spotify-tray
+
+      # Social
+      vesktop # Discord alternative that works well with wayland
+      element-desktop
+      signal-desktop-bin
+
+      # Misc
+      bitwarden
+      gplates
+      libnotify
+      nextcloud-client
+      onlyoffice-bin
+      scrcpy
+      syncthing
+      watchmate
+      inputs.zen-browser.packages.${system}.default
+
+      # Games
+      atlauncher
+      heroic
+      modrinth-app
+      openttd-jgrpp
+      moonlight-qt
+
+      # Emacs stuff
+      emacs-all-the-icons-fonts
+
+      # Gnome stuff
+      gnome-tweaks
+      gnomeExtensions.docker
+      gnomeExtensions.syncthing-indicator
+      gnomeExtensions.tray-icons-reloaded
+      gthumb
+
+      # Graphics
+      inkscape
+      gimp
+      gimpPlugins.fourier
+      gimpPlugins.farbfeld
+
+      # Dev
+      devenv
+      dive # A tool for exploring each layer in a docker image
+      grype # Vulnerability scanner for container images and filesystems
+      podman-desktop
+      podman-compose
+      python3 # for Emacs and LSP
+      tectonic # better LaTeX engine
+      virt-manager
+      zeal
+
+      # # It is sometimes useful to fine-tune packages, for example, by applying
+      # # overrides. You can do that directly here, just don't forget the
+      # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
+      # # fonts?
+      # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+
+      # Custom scripts
+    ]
+    ++ scripts;
+}

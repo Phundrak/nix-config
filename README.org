@@ -1,0 +1,37 @@
+#+title: NixOS Configuration
+#+author: Lucien Cartier-Tilet <lucien@phundrak.com>
+
+This repository contains the NixOS configuration for my personal
+setup. It uses Nix Flakes to manache the configuration, making it
+reproducible and easy to share across my different machines.
+
+* Repository Structure
+- =flake.nix= :: The main entry point for the Nix Flake. It defines my
+  NixOS configurations as well as a dev shell which installs the tools
+  needed for testing and building my configurations.
+- =hosts/= :: Directory containing host-specific configurations. Each
+  host has its own directory with at least a =configuration.nix= file.
+- =modules/= :: Custom NixOS modules that can be reused across different
+  hosts.
+- =programs/= :: Programs shared across hosts at the system level that
+  are not made into configurable modules.
+- =secrets/= :: Contains secret values that I cannot or will not share
+  publicly.
+- =system/= :: Common system-level configuration shared across hosts
+  that are not made into configurable modules.
+- =users/phundrak/= :: My home-manager configuration, containing
+  user-specific settings and applications.
+- =users/modules/= :: Custom user NixOS modules that can be reused
+  across different users.
+- =user/scripts/= :: Custom shell scripts shared across users.
+
+* Updating and Rebuilding the Configuration
+In this repository, there are two helper scripts:
+- =update.sh= :: Updates the Flake’s lockfile.
+- =rebuild.sh= :: Rebuilds the configuration and switch to it
+  immediately.
+
+* Contributing
+Feel free to fork this repository and make your own changes. If you
+have any improvements or suggestions, please open an issue or submit a
+pull request.

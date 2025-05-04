@@ -1,0 +1,17 @@
+keys:
+  - &gampo age1ajemtm502nn2n4q7v4j8meyd5mxtcqngkkedxq2pqzuwu78zp93qnw8q48
+  - &gampo-host age197lfdanym647wdaz9uy8hrfqjwj9fs8rm7vs3fsrctceu8mr9gms2jedhz
+  - &marpa age17pn6suvz2f7zmrm9zxj5hr0putvcvdamqxqt7ewhncgg6ccgmp2qr00xm2
+  - &marpa-host age1cnnpnglkvgw5ffv8qpgwpqvj203lh4uwt698y9mxjwklxt8nysmsa8hepn
+  - &tilo age1g68hxv73llkyc7etzh499ztcrt93pwawy0n8p93px4taqu58mehsp88vjq
+  - &tilo-host age1awytvphvty4f9wmdn86xnjg9kgetqjx8qlwj5d2882t4fyyzy58s3vg5k4
+creation_rules:
+  - path_regex: secrets/secrets.yaml$
+    key_groups:
+    - age:
+      - *gampo
+      - *gampo-host
+      - *marpa
+      - *marpa-host
+      - *tilo
+      - *tilo-host

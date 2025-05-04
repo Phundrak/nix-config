@@ -1,0 +1,99 @@
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}: {
+  imports = [
+    ./light-home.nix
+    ./packages.nix
+    ../modules/emacs.nix
+    ../modules/kdeconnect.nix
+    ../modules/kitty.nix
+    ../modules/mbsync.nix
+    ../modules/mpd.nix
+    ../modules/mpv.nix
+    ../modules/wofi.nix
+    ../modules/yt-dlp.nix
+    ../modules/emoji.nix
+    ../modules/qt.nix
+  ];
+
+  config = let
+    emacsPkg = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
+      epkgs: [
+        epkgs.vterm
+        epkgs.mu4e
+        epkgs.pdf-tools
+      ]
+    ));
+    askpass = import ../scripts/askpass.nix {inherit pkgs;};
+    launchWithEmacsclient = import ../scripts/launch-with-emacsclient.nix {
+      inherit pkgs;
+      emacsPackage = emacsPkg;
+    };
+  in {
+    sops.secrets = {
+      emailPassword = {};
+      "mopidy/bandcamp" = {};
+      "mopidy/spotify" = {};
+    };
+
+    home.sessionVariables = {
+      EDITOR = "${emacsPkg}/bin/emacsclient -c -a ${emacsPkg}/bin/emacs";
+      LAUNCH_EDITOR = "${launchWithEmacsclient}/bin/launch-with-emacsclient";
+      SUDO_ASKPASS = "${askpass}/bin/askpass";
+      LSP_USE_PLISTS = "true";
+    };
+
+    modules = {
+      emacs = {
+        enable = true;
+        service = true;
+        package = emacsPkg;
+      };
+      shell.starship.jjIntegration = true;
+      bat.extras = true;
+      packages.emacsPackage = emacsPkg;
+      mopidy.enable = true;
+
+      mbsync = {
+        enable = true;
+        passwordFile = config.sops.secrets.emailPassword.path;
+      };
+      ssh = {
+        enable = true;
+        hosts = config.sops.secrets."ssh/hosts".path;
+      };
+      vcs.git = {
+        browser = "${inputs.zen-browser.packages.${pkgs.system}.default}/bin/zen";
+        emacs = {
+          integration = true;
+          pkg = emacsPkg;
+        };
+        sendmail = {
+          enable = true;
+          passwordFile = config.sops.secrets.emailPassword.path;
+        };
+      };
+    };
+
+    programs = {
+      zsh.enableVteIntegration = true;
+      mu.enable = true;
+      obs-studio = {
+        enable = true;
+        plugins = with pkgs; [
+          obs-studio-plugins.input-overlay
+          obs-studio-plugins.obs-backgroundremoval
+          obs-studio-plugins.obs-mute-filter
+          obs-studio-plugins.obs-pipewire-audio-capture
+          obs-studio-plugins.obs-source-clone
+          obs-studio-plugins.obs-source-record
+          obs-studio-plugins.obs-tuna
+        ];
+      };
+    };
+    manual.html.enable = true;
+  };
+}
