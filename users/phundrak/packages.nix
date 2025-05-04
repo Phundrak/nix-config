@@ -13,7 +13,7 @@ in {
     default = pkgs.emacs;
   };
   config.home.packages = with pkgs; let
-    scripts = import ../scripts/scripts.nix {
+    scripts = import ../scripts {
       inherit pkgs;
       config.emacsPkg = cfg.emacsPackage;
     };
