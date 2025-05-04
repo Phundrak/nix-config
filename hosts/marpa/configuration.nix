@@ -7,11 +7,12 @@
   imports = [
     inputs.sops-nix.nixosModules.sops
     ./system/hardware-configuration.nix
-    ./services.nix
+    ./services
     ../../modules/system.nix
     ../../modules/sops.nix
     ../../modules/opentablet.nix
     ../../programs/flatpak.nix
+    ../../programs/hyprland.nix
     ../../programs/steam.nix
   ];
 
@@ -53,6 +54,8 @@
       jack = true;
     };
   };
+
+  modules.hyprland.enable = true;
 
   security.rtkit.enable = true;
 
