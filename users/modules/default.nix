@@ -7,6 +7,7 @@
     ./eza.nix
     ./mopidy.nix
     ./nh.nix
+    ./nix-index.nix
     ./shell
     ./ssh.nix
     ./tealdeer.nix
