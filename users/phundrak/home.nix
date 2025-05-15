@@ -51,6 +51,8 @@
         enable = true;
         service = true;
         package = emacsPkg;
+        mu4eMime = true;
+        org-protocol = true;
       };
       shell.starship.jjIntegration = true;
       bat.extras = true;
