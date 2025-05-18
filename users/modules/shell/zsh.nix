@@ -69,15 +69,6 @@ in {
         };
       }
       {
-        name = "auto-notify";
-        src = pkgs.fetchFromGitHub {
-          owner = "MichaelAquilina";
-          repo = "zsh-auto-notify";
-          rev = "0.11.0";
-          sha256 = "sha256-8r5RsyldJIzlWr9+G8lrkHvJ8KxTVO859M//wDnYOUY=";
-        };
-      }
-      {
         name = "zsh-autopair";
         src = pkgs.fetchFromGitHub {
           owner = "hlissner";

@@ -7,6 +7,7 @@
   imports = [
     ./light-home.nix
     ./packages.nix
+    ./email.nix
     ../modules/emacs.nix
     ../modules/kdeconnect.nix
     ../modules/kitty.nix
