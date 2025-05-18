@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: with lib; let
+}:
+with lib; let
   emacsDefaultPackage = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
     epkgs: [
       epkgs.vterm
