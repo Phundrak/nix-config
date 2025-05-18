@@ -13,7 +13,7 @@ in {
     default = pkgs.emacs;
   };
   config.home.packages = with pkgs; let
-    scripts = import ../scripts/scripts.nix {
+    scripts = import ../scripts {
       inherit pkgs;
       config.emacsPkg = cfg.emacsPackage;
     };
@@ -46,7 +46,6 @@ in {
       plex-media-player
       spicetify-cli
       spotify
-      spotify-tray
 
       # Social
       vesktop # Discord alternative that works well with wayland

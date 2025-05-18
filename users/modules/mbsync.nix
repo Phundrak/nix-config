@@ -29,32 +29,6 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.mbsync.unitConfig.After = ["sops-nix.service"];
     services.mbsync.enable = cfg.service.enable;
-    programs.mbsync = {
-      enable = true;
-      extraConfig = ''
-        IMAPAccount Main
-        Host ${cfg.host}
-        User ${cfg.user}
-        PassCmd "cat ${cfg.passwordFile}"
-        SSLType IMAPS
-        SSLVersion TLSv1.2
-        CertificateFile /etc/ssl/certs/ca-certificates.crt
-
-        IMAPStore main-remote
-        Account Main
-
-        MaildirStore main-local
-        Subfolders Verbatim
-        Path ~/Mail/
-        Inbox ~/Mail/Inbox
-
-        Channel main
-        Far :main-remote:
-        Near :main-local:
-        Create Both
-        SyncState *
-        Patterns *
-      '';
-    };
+    programs.mbsync.enable = true;
   };
 }

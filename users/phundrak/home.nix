@@ -7,9 +7,11 @@
   imports = [
     ./light-home.nix
     ./packages.nix
+    ./email.nix
     ../modules/emacs.nix
     ../modules/kdeconnect.nix
     ../modules/kitty.nix
+    ../modules/hyprland.nix
     ../modules/mbsync.nix
     ../modules/mpd.nix
     ../modules/mpv.nix
@@ -47,6 +49,11 @@
     };
 
     modules = {
+      shell.starship.jjIntegration = true;
+      bat.extras = true;
+      packages.emacsPackage = emacsPkg;
+      mopidy.enable = true;
+
       emacs = {
         enable = true;
         service = true;
@@ -54,11 +61,16 @@
         mu4eMime = true;
         org-protocol = true;
       };
-      shell.starship.jjIntegration = true;
-      bat.extras = true;
-      packages.emacsPackage = emacsPkg;
-      mopidy.enable = true;
-
+      hyprland = {
+        inherit emacsPkg;
+        enable = true;
+        swaync = true;
+        waybar = {
+          enable = true;
+          battery = false;
+          style = ./config/waybar/style.css;
+        };
+      };
       mbsync = {
         enable = true;
         passwordFile = config.sops.secrets.emailPassword.path;
@@ -96,6 +108,12 @@
         ];
       };
     };
+
+    services = {
+      mpris-proxy.enable = true;
+      playerctld.enable = true;
+    };
+
     manual.html.enable = true;
   };
 }

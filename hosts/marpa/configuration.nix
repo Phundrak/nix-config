@@ -7,11 +7,12 @@
   imports = [
     inputs.sops-nix.nixosModules.sops
     ./system/hardware-configuration.nix
-    ./services.nix
+    ./services
     ../../modules/system.nix
     ../../modules/sops.nix
     ../../modules/opentablet.nix
     ../../programs/flatpak.nix
+    ../../programs/hyprland.nix
     ../../programs/steam.nix
   ];
 
@@ -54,6 +55,8 @@
     };
   };
 
+  modules.hyprland.enable = true;
+
   security.rtkit.enable = true;
 
   nix.settings.trusted-users = ["root" "phundrak"];
@@ -64,7 +67,12 @@
     curl
     openssl
     wget
+    alsa-scarlett-gui
   ];
+
+  boot.extraModprobeConfig = ''
+    options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
+  '';
 
   programs.nix-ld.enable = true;
 
