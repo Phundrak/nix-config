@@ -70,8 +70,15 @@ in {
           border_size = 2;
           "col.active_border" = "rgb(81a1c1) rgb(a3be8c) 45deg";
           "col.inactive_border" = "rgb(4c566a)";
-          layout = "dwindle";
+          layout = "master";
         };
+        master = {
+          orientation = "center";
+          new_status = "inherit";
+        };
+        workspace = [
+          "2, layoutopt:orientation:bottom"
+        ];
         decoration = {
           rounding = 5;
           # blur = {
