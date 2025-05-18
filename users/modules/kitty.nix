@@ -1,6 +1,7 @@
 {
   programs.kitty = {
     enable = true;
+    themeFile = "Nord";
     settings = {
       enable_audio_bell = true;
       enabled_layouts = "fat,fat:mirrored=true,tall,tall:mirrored=true";
