@@ -1,4 +1,15 @@
-{config, ...}: {
+{config, ...}: let
+  signature = ''
+    Lucien “Phundrak” Cartier-Tilet
+    https://phundrak.com (Français)
+    https://phundrak.com/en (English)
+    Sent from GNU/Emacs
+  '';
+in {
+  home.file.".signature" = {
+    target = ".signature";
+    text = signature;
+  };
   accounts.email = {
     maildirBasePath = "Mail";
     accounts."lucien@phundrak.com" = {
@@ -12,12 +23,7 @@
       ];
       passwordCommand = "cat ${config.sops.secrets.emailPassword.path}";
       signature = {
-        text = ''
-          Lucien “Phundrak” Cartier-Tilet
-          https://phundrak.com (Français)
-          https://phundrak.com/en (English)
-          Sent from GNU/Emacs
-        '';
+        text = signature;
         showSignature = "append";
       };
       userName = "lucien@phundrak.com";
