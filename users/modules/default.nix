@@ -5,6 +5,7 @@
     ./btop.nix
     ./direnv.nix
     ./eza.nix
+    ./gpg.nix
     ./mopidy.nix
     ./nh.nix
     ./nix-index.nix
