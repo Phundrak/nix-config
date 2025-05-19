@@ -1,11 +1,24 @@
-{
+{pkgs, ...}:{
   programs.kitty = {
     enable = true;
     themeFile = "Nord";
+    font = {
+      package = pkgs.cascadia-code;
+      name = "Cascadia Code";
+      size = 10;
+    };
     settings = {
       enable_audio_bell = true;
+      visual_bell_duration = 0.1;
       enabled_layouts = "fat,fat:mirrored=true,tall,tall:mirrored=true";
       kitty_mod = "ctrl+shift";
+      disable_ligatures = "never";
+      font_features = "Cascadia-Mono +onum +zero";
+      cursor_shape = "block";
+      scrollback_lines = "10000";
+      mouse_hide_wait = 3.0;
+      detect_urls = true;
+      background_opacity = 0.7;
     };
     keybindings = {
       "alt+c" = "copy_to_clipboard";
