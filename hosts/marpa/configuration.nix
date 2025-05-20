@@ -60,7 +60,6 @@
   security.rtkit.enable = true;
 
   nix.settings.trusted-users = ["root" "phundrak"];
-  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
     clinfo # AMD
