@@ -1,6 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   config,
   pkgs,
@@ -9,11 +6,13 @@
 }: {
   imports = [
     inputs.sops-nix.nixosModules.sops
-    ./system/hardware-configuration.nix
-    ./services.nix
-    ../../modules/system.nix
-    ../../modules/sops.nix
+    ./hardware-configuration.nix
+    ./services
     ../../modules/opentablet.nix
+    ../../modules/sops.nix
+    ../../modules/system.nix
+    ../../programs/flatpak.nix
+    ../../programs/hyprland.nix
     ../../programs/steam.nix
   ];
 
@@ -39,6 +38,8 @@
     };
     sound.enable = true;
   };
+
+  modules.hyprland.enable = true;
 
   security.rtkit.enable = true;
 

@@ -1,6 +1,6 @@
 {
   imports = [
-    ./services/gnome.nix
+    ./gnome.nix
   ];
 
   services = {
