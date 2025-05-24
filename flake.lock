@@ -288,14 +288,57 @@
         "type": "github"
       }
     },
+    "pumo-system-info": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1748127405,
+        "narHash": "sha256-5Xh7VXmjeK5m8Dxt2bti8A2HdkpmPftHc2+WXH3tQH8=",
+        "ref": "refs/heads/develop",
+        "rev": "06fa652f9626590a9727f3ec8b48330ad3fcb78f",
+        "revCount": 6,
+        "type": "git",
+        "url": "https://labs.phundrak.com/phundrak/pumo-system-info"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://labs.phundrak.com/phundrak/pumo-system-info"
+      }
+    },
     "root": {
       "inputs": {
         "devenv": "devenv",
         "home-manager": "home-manager",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
+        "pumo-system-info": "pumo-system-info",
         "sops-nix": "sops-nix",
         "zen-browser": "zen-browser"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "pumo-system-info",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1748054080,
+        "narHash": "sha256-rwFiLLNCwkj9bqePtH1sMqzs1xmohE0Ojq249piMzF4=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "2221d8d53c128beb69346fa3ab36da3f19bb1691",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "sops-nix": {

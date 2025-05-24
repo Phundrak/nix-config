@@ -62,6 +62,7 @@ in {
       syncthing
       watchmate
       inputs.zen-browser.packages.${system}.default
+      inputs.pumo-system-info.packages.${system}.default
 
       # Games
       atlauncher
