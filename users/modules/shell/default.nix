@@ -17,6 +17,19 @@ with lib; let
     psmem10 = "ps auxf | sort -nr -k 4 | head -10";
 
     s = "systemctl";
+    ss = "systemctl status";
+    sst = "systemctl stop";
+    sr = "systemctl restart";
+    sre = "systemctl reload";
+    se = "systemctl enable";
+    sen = "systemctl enable --now";
+    su = "systemctl --user";
+    sus = "systemctl --user status";
+    sust = "systemctl --user stop";
+    sur = "systemctl --user restart";
+    sure = "systemctl --user reload";
+    sue = "systemctl --user enable";
+    suen = "systemctl --user enable --now";
 
     dc = "docker compose";
     dcd = "docker compose down";
