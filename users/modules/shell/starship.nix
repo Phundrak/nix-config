@@ -14,8 +14,8 @@ in {
   config.programs.starship = mkIf cfg.enable {
     inherit (cfg) enable;
     enableTransience = true;
-    settings.custom = {
-      jj = {
+    settings = {
+      custom.jj = {
         description = "The current jj status";
         detect_folders = [".jj"];
         symbol = "🥋 ";
@@ -36,7 +36,7 @@ in {
                 truncate_end(29, description.first_line(), "…"),
                 "(no description set)",
               ) ++ raw_escape_sequence("\x1b[0m"),
-            )
+              )
           '
         '';
       };
