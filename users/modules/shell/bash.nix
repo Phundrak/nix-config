@@ -25,6 +25,7 @@ in {
   config = lib.mkIf cfg.enable {
     programs.bash = {
       enable = true;
+      inherit (cfg) bashrcExtra;
       shellAliases = cfg.aliases;
       shellOptions = [
         "histappend"

@@ -8,7 +8,7 @@ with lib; let
   cfg = config.modules.zsh;
 in {
   options.modules.zsh = {
-    enable = lib.mkEnableOption "enables zsh";
+    enable = lib.mkEnableOption "Enables zsh";
     abbrs = lib.mkOption {
       type = types.attrsOf types.str;
       default = {};
@@ -19,17 +19,7 @@ in {
     };
     zshrcExtra = lib.mkOption {
       type = types.lines;
-      default = ''
-        bindkey -e
-        bindkey '^p' history-search-backward
-        bindkey '^n' history-search-forward
-
-        # Completion styling
-        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-        zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
-        zstyle ':completion:*' menu no
-        zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza $realpath'
-      '';
+      default = "";
     };
   };
 
@@ -50,7 +40,21 @@ in {
       saveNoDups = true;
     };
     historySubstringSearch.enable = true;
-    initContent = cfg.zshrcExtra;
+    initContent = with lib;
+      concatLines [
+        ''
+          bindkey -e
+          bindkey '^p' history-search-backward
+          bindkey '^n' history-search-forward
+
+          # Completion styling
+          zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+          zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+          zstyle ':completion:*' menu no
+          zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza $realpath'
+        ''
+        cfg.zshrcExtra
+      ];
     oh-my-zsh = {
       enable = true;
       plugins = [

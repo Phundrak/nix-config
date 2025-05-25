@@ -12,7 +12,6 @@
     ./shell
     ./ssh.nix
     ./tealdeer.nix
-    ./tmux.nix
     ./vcs
   ];
 }

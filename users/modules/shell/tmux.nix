@@ -1,6 +1,15 @@
-{pkgs, ...}: {
-  programs.tmux = {
-    enable = true;
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.modules.tmux;
+in {
+  options.modules.tmux.enable = mkEnableOption "Enable tmux";
+  config.programs.tmux = mkIf cfg.enable {
+    inherit (cfg) enable;
     baseIndex = 1;
     clock24 = true;
     customPaneNavigationAndResize = true;

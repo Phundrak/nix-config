@@ -51,7 +51,10 @@ in {
     };
 
     modules = {
-      shell.starship.enable = true;
+      shell = {
+        starship.enable = true;
+        tmux.enable = true;
+      };
       vcs = {
         git.enable = true;
         jj.enable = true;

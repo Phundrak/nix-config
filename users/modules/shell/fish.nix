@@ -17,6 +17,10 @@ in {
         lns = "ln -si";
       };
     };
+    extraShellInit = mkOption {
+      type = types.lines;
+      default = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -24,11 +28,15 @@ in {
       enable = true;
       shellAbbrs = cfg.abbrs;
       preferAbbrs = true;
-      shellInit = ''
-        function fish_command_not_found
-          __fish_default_command_not_found_handler $argv
-        end
-      '';
+      shellInit = with lib;
+        concatLines [
+          ''
+            function fish_command_not_found
+              __fish_default_command_not_found_handler $argv
+            end
+          ''
+          cfg.extraShellInit
+        ];
       plugins = [
         {
           name = "bass";

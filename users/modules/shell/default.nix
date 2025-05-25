@@ -67,24 +67,26 @@ in {
     ./bash.nix
     ./fish.nix
     ./starship.nix
+    ./tmux.nix
     ./zsh.nix
   ];
 
   options.modules.shell = {
+    tmux.enable = mkEnableOption "Enables tmux";
     enableBash = mkOption {
       type = types.bool;
       default = true;
-      description = "enables bash";
+      description = "Enables bash";
     };
     enableFish = mkOption {
       type = types.bool;
       default = true;
-      description = "enables fish";
+      description = "Enables fish";
     };
     enableZsh = mkOption {
       type = types.bool;
       default = true;
-      description = "enables zsh";
+      description = "Enables zsh";
     };
     starship = {
       enable = mkEnableOption "Enables the starship prompt.";
@@ -124,6 +126,7 @@ in {
         enable = mkDefault cfg.enableZsh;
         abbrs = mkDefault aliases;
       };
+      tmux.enable = cfg.tmux.enable;
       inherit (cfg) starship;
     };
 
