@@ -72,7 +72,7 @@ in {
   ];
 
   options.modules.shell = {
-    tmux.enable = mkEnableOption "Enables tmux";
+    eatIntegration = mkEnableOption "Enable Emacs Eat integration in Bash or Zsh";
     enableBash = mkOption {
       type = types.bool;
       default = true;
@@ -92,6 +92,7 @@ in {
       enable = mkEnableOption "Enables the starship prompt.";
       jjIntegration = mkEnableOption "Enables Jujutsu integration in starship.";
     };
+    tmux.enable = mkEnableOption "Enables tmux";
     zoxide = {
       enable = mkOption {
         type = types.bool;

@@ -7,8 +7,8 @@ with lib; let
   cfg = config.modules.bash;
 in {
   options.modules.bash = {
-    enable = lib.mkEnableOption "enables bash";
-    aliases = lib.mkOption {
+    enable = mkEnableOption "Enables bash";
+    aliases = mkOption {
       type = types.attrsOf types.str;
       default = {};
       example = {
@@ -16,16 +16,23 @@ in {
         lns = "ln -si";
       };
     };
-    bashrcExtra = lib.mkOption {
+    eatIntegration = mkEnableOption "Enable Emacs Eat integration";
+    bashrcExtra = mkOption {
       type = types.lines;
       default = "";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     programs.bash = {
       enable = true;
-      inherit (cfg) bashrcExtra;
+      # inherit (cfg) bashrcExtra;
+      bashrcExtra =
+        concatLines
+        [
+          (strings.optionalString cfg.eatIntegration ''[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"'')
+          cfg.bashrcExtra
+        ];
       shellAliases = cfg.aliases;
       shellOptions = [
         "histappend"

@@ -121,7 +121,7 @@ in {
         $down = t
         $menu = ${pkgs.wofi}/bin/wofi --show drun
 
-        bind = SUPER, Return, exec, kitty
+        bind = SUPER, Return, exec, ${pkgs.kitty}/bin/kitty ${pkgs.tmux}/bin/tmux
         bind = SUPER, Space, submap, leader
         bind = , Print, submap, screenshot
 

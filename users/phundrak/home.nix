@@ -24,7 +24,6 @@
   config = let
     emacsPkg = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
       epkgs: [
-        epkgs.vterm
         epkgs.mu4e
         epkgs.pdf-tools
       ]
@@ -49,7 +48,10 @@
     };
 
     modules = {
-      shell.starship.jjIntegration = true;
+      shell = {
+        eatIntegration = true;
+        starship.jjIntegration = true;
+      };
       bat.extras = true;
       packages.emacsPackage = emacsPkg;
       mopidy.enable = true;

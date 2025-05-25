@@ -17,6 +17,7 @@ in {
         lns = "ln -si";
       };
     };
+    eatIntegration = mkEnableOption "Enable Emacs Eat integration";
     zshrcExtra = lib.mkOption {
       type = types.lines;
       default = "";
@@ -53,6 +54,7 @@ in {
           zstyle ':completion:*' menu no
           zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza $realpath'
         ''
+        (strings.optionalString cfg.eatIntegration ''[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/zsh"'')
         cfg.zshrcExtra
       ];
     oh-my-zsh = {
