@@ -50,7 +50,7 @@ in {
         input = {
           kb_layout = "fr";
           kb_variant = "bepo_afnor";
-          kb_options = "caps:ctrl_modifier";
+          # kb_options = "caps:ctrl_modifier";
           numlock_by_default = true;
           follow_mouse = 1;
           touchpad.natural_scroll = false;
@@ -77,21 +77,11 @@ in {
           new_status = "inherit";
         };
         workspace = [
-          "2, layoutopt:orientation:bottom"
+          "4, layoutopt:orientation:bottom"
+          "1, layoutopt:orientation:bottom"
         ];
         decoration = {
           rounding = 5;
-          # blur = {
-          #   enable = true;
-          #   size = 9;
-          #   passes = 1;
-          # };
-          # shadow = {
-          #   enable = true;
-          #   color = "rgba(2e3440aa)";
-          #   range = 4;
-          #   render_power = 3;
-          # };
         };
         animations = {
           enabled = true;
