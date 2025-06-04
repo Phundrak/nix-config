@@ -9,16 +9,17 @@
     ./packages.nix
     ./email.nix
     ../modules/emacs.nix
+    ../modules/emoji.nix
+    ../modules/hyprland.nix
     ../modules/kdeconnect.nix
     ../modules/kitty.nix
-    ../modules/hyprland.nix
     ../modules/mbsync.nix
     ../modules/mpd.nix
     ../modules/mpv.nix
+    ../modules/ollama.nix
+    ../modules/qt.nix
     ../modules/wofi.nix
     ../modules/yt-dlp.nix
-    ../modules/emoji.nix
-    ../modules/qt.nix
   ];
 
   config = let
@@ -55,6 +56,7 @@
       bat.extras = true;
       packages.emacsPackage = emacsPkg;
       mopidy.enable = true;
+      ollama.enable = true;
 
       emacs = {
         enable = true;
