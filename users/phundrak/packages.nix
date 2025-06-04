@@ -24,6 +24,7 @@ in {
       # LSP servers
       bash-language-server
       docker-language-server
+      kdePackages.qtdeclarative # For QML LSP
       nil # Nix
       python3 # for Emacs and LSP
       yaml-language-server # Yaml (Docker, GitHub Actions, ...)
@@ -67,6 +68,7 @@ in {
       watchmate
       inputs.zen-browser.packages.${system}.default
       inputs.pumo-system-info.packages.${system}.default
+      inputs.quickshell.packages.${system}.default
 
       # Games
       atlauncher
