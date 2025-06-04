@@ -83,7 +83,7 @@ in {
         };
 
         "group/audio" = {
-          modules = ["mpris" "pulseaudio" "pulseaudio/slider"];
+          modules = ["pulseaudio" "pulseaudio/slider" "mpris"];
           orientation = "inherit";
           drawer.transition-duration = 300;
         };
