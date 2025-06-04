@@ -89,6 +89,7 @@
           integration = true;
           pkg = emacsPkg;
         };
+        cliff = true;
         sendmail = {
           enable = true;
           passwordFile = config.sops.secrets.emailPassword.path;

@@ -17,6 +17,7 @@ in {
       type = types.str;
       default = "Lucien Cartier-Tilet";
     };
+    cliff = mkEnableOption "enables git-cliff support";
     sendmail = {
       enable = mkOption {
         type = types.bool;
@@ -77,6 +78,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    programs.git-cliff.enable = cfg.cliff;
     programs.git = let
       smtpEmail =
         if (cfg.sendmail.user == null)

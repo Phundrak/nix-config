@@ -12,6 +12,7 @@ in {
   options.modules.vcs = {
     git = {
       enable = mkEnableOption "enables git";
+      cliff = mkEnableOption "enables git-cliff support";
       sendmail = {
         enable = mkOption {
           type = types.bool;
@@ -94,7 +95,7 @@ in {
     '');
     modules = {
       git = mkIf cfg.git.enable {
-        inherit (cfg.git) enable sendmail browser completeConfig emacs mergeTool;
+        inherit (cfg.git) enable cliff sendmail browser completeConfig emacs mergeTool;
         inherit (cfg) email name editor;
         publicKeyFile = cfg.publicKey.file;
       };
