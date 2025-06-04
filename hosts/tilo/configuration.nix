@@ -14,6 +14,7 @@
     ../../modules/ssh.nix
     ../../modules/endlessh.nix
     ../../programs/nano.nix
+    ./services
   ];
 
   system = {
