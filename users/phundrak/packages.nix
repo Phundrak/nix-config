@@ -21,8 +21,12 @@ in {
     [
       flatpak
 
-      # LSP server for Nix
-      nil
+      # LSP servers
+      bash-language-server
+      docker-language-server
+      nil # Nix
+      python3 # for Emacs and LSP
+      yaml-language-server # Yaml (Docker, GitHub Actions, ...)
 
       # Terminal stuff
       duf
@@ -93,7 +97,6 @@ in {
       grype # Vulnerability scanner for container images and filesystems
       podman-desktop
       podman-compose
-      python3 # for Emacs and LSP
       tectonic # better LaTeX engine
       virt-manager
       zeal
