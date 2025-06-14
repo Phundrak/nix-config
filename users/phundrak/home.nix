@@ -71,7 +71,7 @@
         swaync = true;
         waybar = {
           enable = true;
-          battery = false;
+          battery = true;
           style = ./config/waybar/style.css;
         };
       };
