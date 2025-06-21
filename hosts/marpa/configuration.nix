@@ -55,7 +55,10 @@
     };
   };
 
-  modules.hyprland.enable = true;
+  modules = {
+    appimage.enable = true;
+    hyprland.enable = true;
+  };
 
   security.rtkit.enable = true;
 

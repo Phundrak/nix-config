@@ -9,6 +9,7 @@ with lib; let
 in {
   imports = [
     ./amdgpu.nix
+    ./appimage.nix
     ./boot.nix
     ./locale.nix
     ./networking.nix
