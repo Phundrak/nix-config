@@ -115,6 +115,7 @@
     };
 
     services = {
+      blanket.enable = true;
       mpris-proxy.enable = true;
       playerctld.enable = true;
     };
