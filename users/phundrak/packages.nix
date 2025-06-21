@@ -51,6 +51,7 @@ in {
       plex-desktop
       spicetify-cli
       spotify
+      pavucontrol # Volume control
 
       # Social
       vesktop # Discord alternative that works well with wayland
@@ -97,6 +98,7 @@ in {
       devenv
       dive # A tool for exploring each layer in a docker image
       grype # Vulnerability scanner for container images and filesystems
+      kicad # Working on my custom keyboard
       podman-desktop
       podman-compose
       tectonic # better LaTeX engine
