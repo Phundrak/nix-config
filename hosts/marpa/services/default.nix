@@ -1,5 +1,6 @@
 {
   imports = [
+    ./logind.nix
     ../../../modules/ssh.nix
     ../../../modules/sunshine.nix
     ../../../modules/xserver.nix
