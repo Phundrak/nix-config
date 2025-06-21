@@ -48,7 +48,7 @@ in {
       ani-cli
       audacity
       plexamp
-      plex-media-player
+      plex-desktop
       spicetify-cli
       spotify
 

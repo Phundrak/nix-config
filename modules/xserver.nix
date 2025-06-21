@@ -16,8 +16,14 @@ in {
     };
   };
   config.services = {
-    displayManager.sddm.enable = mkIf (cfg.de == "kde") true;
-    desktopManager.plasma6.enable = mkIf (cfg.de == "kde") true;
+    displayManager = {
+      sddm.enable = mkIf (cfg.de == "kde") true;
+      gdm.enable = mkIf (cfg.de == "gnome") true;
+    };
+    desktopManager = {
+      plasma6.enable = mkIf (cfg.de == "kde") true;
+      gnome.enable = mkIf (cfg.de == "gnome") true;
+    };
 
     gnome = mkIf (cfg.de == "gnome") {
       gnome-browser-connector.enable = true;
@@ -29,8 +35,6 @@ in {
 
     xserver = {
       enable = true;
-      displayManager.gdm.enable = mkIf (cfg.de == "gnome") true;
-      desktopManager.gnome.enable = mkIf (cfg.de == "gnome") true;
       videoDrivers = lists.optional cfg.amdgpu.enable "amdgpu";
       xkb = {
         layout = "fr";
