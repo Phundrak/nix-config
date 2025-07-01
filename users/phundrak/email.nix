@@ -3,7 +3,11 @@
     Lucien “Phundrak” Cartier-Tilet
     https://phundrak.com (Français)
     https://phundrak.com/en (English)
+
     Sent from GNU/Emacs
+
+    *** Sauvez un arbre, mangez un castor ***
+    ***      Save a tree, eat a beaver    ***
   '';
 in {
   home.file.".signature" = {
