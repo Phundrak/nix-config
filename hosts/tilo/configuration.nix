@@ -1,24 +1,15 @@
 # Edit this configuration file to define what should be installed on your
 # system.  Help is available in the configuration.nix(5) man page and in
 # the NixOS manual (accessible by running ‘nixos-help’).
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{inputs, ...}: {
   imports = [
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.default
-    ../../modules/locale.nix
-    ../../modules/system.nix
-    ../../modules/ssh.nix
-    ../../modules/endlessh.nix
-    ../../programs/nano.nix
+    ../../system
     ./services
   ];
 
   system = {
-    amdgpu.enable = false;
     boot = {
       kernel = {
         hardened = true;
@@ -29,16 +20,15 @@
         pools = ["tank"];
       };
     };
-    docker.enable = true;
+    dev.docker.enable = true;
+    misc.keymap = "fr-bepo";
     networking = {
       hostname = "tilo";
       id = "7110b33f";
       firewall = {
         openPorts = [
-          22 # SSH
           80 # HTTP
           443 # HTTPS
-          2222 # endlessh
           25565 # Minecraft
         ];
         extraCommands = ''
@@ -47,27 +37,23 @@
         '';
       };
     };
-    nix.gc.automatic = true;
-    sound.enable = false;
+    packages.nix = {
+      gc.automatic = true;
+      trusted-users = ["root" "phundrak"];
+    };
+    services = {
+      endlessh.enable = true;
+      ssh = {
+        enable = true;
+        allowedUsers = ["phundrak"];
+        passwordAuthentication = false;
+      };
+    };
     users = {
       root.disablePassword = true;
-      phundrak = true;
+      phundrak.enable = true;
     };
-    console.keyMap = "fr-bepo";
   };
-
-  modules = {
-    ssh = {
-      enable = true;
-      allowedUsers = ["phundrak"];
-      passwordAuthentication = false;
-    };
-    endlessh.enable = true;
-  };
-
-  nixpkgs.config.allowUnfree = true;
-
-  environment.systemPackages = [pkgs.openssl];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

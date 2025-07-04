@@ -7,14 +7,63 @@
   imports = [
     inputs.sops-nix.nixosModules.sops
     ./hardware-configuration.nix
-    ./services
-    ../../modules/opentablet.nix
-    ../../modules/sops.nix
-    ../../modules/system.nix
-    ../../programs/flatpak.nix
-    ../../programs/hyprland.nix
-    ../../programs/steam.nix
+    # ./services
+    ../../system
   ];
+
+  system = {
+    boot = {
+      plymouth.enable = true;
+      kernel = {
+        cpuVendor = "intel";
+        package = pkgs.linuxPackages;
+        modules = ["i915"];
+      };
+      systemd-boot = true;
+    };
+    desktop = {
+      hyprland.enable = true;
+      xserver = {
+        enable = true;
+        de = "gnome";
+      };
+    };
+    dev.docker = {
+      enable = true;
+      podman.enable = true;
+      autoprune.enable = true;
+    };
+    hardware = {
+      bluetooth.enable = true;
+      corne.allowHidAccess = true;
+      ibmTrackpoint.disable = true;
+      opentablet.enable = true;
+      sound.enable = true;
+    };
+    misc.keymap = "fr-bepo";
+    networking = {
+      hostname = "gampo";
+      id = "0630b33f";
+      hostFiles = [config.sops.secrets.extraHosts.path];
+    };
+    packages = {
+      appimage.enable = true;
+      flatpak.enable = true;
+      nix = {
+        nix-ld.enable = true;
+        trusted-users = ["root" "phundrak"];
+      };
+    };
+    programs.steam.enable = true;
+    services = {
+      fwupd.enable = true;
+      ssh.enable = true;
+    };
+    users = {
+      root.disablePassword = true;
+      phundrak.enable = true;
+    };
+  };
 
   sops.secrets.extraHosts = {
     inherit (config.users.users.root) group;
@@ -22,39 +71,7 @@
     mode = "0440";
   };
 
-  boot.initrd.kernelModules = ["i915"];
-
-  system = {
-    boot.plymouth.enable = true;
-    docker = {
-      enable = true;
-      autoprune.enable = true;
-      podman.enable = true;
-    };
-    networking = {
-      hostname = "gampo";
-      id = "0630b33f";
-      hostFiles = [config.sops.secrets.extraHosts.path];
-    };
-    sound.enable = true;
-  };
-
-  modules = {
-    appimage.enable = true;
-    hyprland.enable = true;
-  };
-
   security.rtkit.enable = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    curl
-    openssl
-    wget
-  ];
-
-  nix.settings.trusted-users = ["root" "phundrak"];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database
