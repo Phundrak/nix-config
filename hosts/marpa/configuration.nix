@@ -1,42 +1,48 @@
 {
   config,
-  pkgs,
   inputs,
   ...
 }: {
   imports = [
     inputs.sops-nix.nixosModules.sops
     ./system/hardware-configuration.nix
-    ./services
-    ../../modules/opentablet.nix
-    ../../modules/sops.nix
-    ../../modules/system.nix
-    ../../programs/flatpak.nix
-    ../../programs/hyprland.nix
-    ../../programs/steam.nix
+    ../../system
   ];
 
-  sops.secrets.extraHosts = {
-    inherit (config.users.users.root) group;
-    owner = config.users.users.phundrak.name;
-    mode = "0440";
-  };
-
-  security.polkit.enable = true;
-
-  fileSystems."/games" = {
-    device = "/dev/disk/by-uuid/77d32db8-2e85-4593-b6b8-55d4f9d14e1a";
-    fsType = "ext4";
-  };
-
   system = {
-    amdgpu.enable = true;
-    boot.plymouth.enable = true;
-    docker = {
+    boot = {
+      extraModprobeConfig = ''
+        options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
+      '';
+      plymouth.enable = true;
+      kernel.cpuVendor = "amd";
+      systemd-boot = true;
+    };
+    desktop = {
+      hyprland.enable = true;
+      niri.enable = true;
+      xserver = {
+        enable = true;
+        de = "gnome";
+      };
+    };
+    dev.docker = {
       enable = true;
       podman.enable = true;
       autoprune.enable = true;
     };
+    hardware = {
+      amdgpu.enable = true;
+      bluetooth.enable = true;
+      corne.allowHidAccess = true;
+      opentablet.enable = true;
+      sound = {
+        enable = true;
+        jack = true;
+        scarlett.enable = true;
+      };
+    };
+    misc.keymap = "fr-bepo";
     networking = {
       hostname = "marpa";
       id = "7EA4A111";
@@ -49,34 +55,45 @@
         }
       ];
     };
-    sound = {
-      enable = true;
-      jack = true;
+    packages = {
+      appimage.enable = true;
+      flatpak.enable = true;
+      nix = {
+        nix-ld.enable = true;
+        trusted-users = ["root" "phundrak"];
+      };
+    };
+    programs.steam.enable = true;
+    services = {
+      fwupd.enable = true;
+      printing.enable = true;
+      ssh.enable = true;
+      sunshine = {
+        enable = true;
+        autostart = true;
+      };
+    };
+    users = {
+      root.disablePassword = true;
+      phundrak.enable = true;
     };
   };
 
-  modules = {
-    appimage.enable = true;
-    hyprland.enable = true;
+  sops.secrets.extraHosts = {
+    inherit (config.users.users.root) group;
+    owner = config.users.users.phundrak.name;
+    mode = "0440";
   };
 
-  security.rtkit.enable = true;
+  security = {
+    polkit.enable = true;
+    rtkit.enable = true;
+  };
 
-  nix.settings.trusted-users = ["root" "phundrak"];
-
-  environment.systemPackages = with pkgs; [
-    clinfo # AMD
-    curl
-    openssl
-    wget
-    alsa-scarlett-gui
-  ];
-
-  boot.extraModprobeConfig = ''
-    options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
-  '';
-
-  programs.nix-ld.enable = true;
+  fileSystems."/games" = {
+    device = "/dev/disk/by-uuid/77d32db8-2e85-4593-b6b8-55d4f9d14e1a";
+    fsType = "ext4";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

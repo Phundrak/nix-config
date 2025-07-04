@@ -1,7 +1,7 @@
 {
-  imports = [
-    ./gnome.nix
-  ];
+  # imports = [
+  #   ./gnome.nix
+  # ];
 
   services = {
     # Enable CUPS to print documents.

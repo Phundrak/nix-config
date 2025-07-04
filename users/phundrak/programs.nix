@@ -1,12 +1,12 @@
 {
-  imports = [
-    ../modules/emacs.nix
-    ../modules/kdeconnect.nix
-    ../modules/kitty.nix
-    ../modules/mbsync.nix
-    ../modules/mpd.nix
-    ../modules/mpv.nix
-    ../modules/wofi.nix
-    ../modules/yt-dlp.nix
-  ];
+  modules = {
+    emacs.enable = true;
+    kdeconnect.enable = true;
+    kitty.enable = true;
+    mbsync.enable = true;
+    mpd.enable = true;
+    mpv.enable = true;
+    wofi.enable = true;
+    yt-dlp.enable = true;
+  };
 }
