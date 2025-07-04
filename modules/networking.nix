@@ -6,28 +6,33 @@
 with lib; let
   cfg = config.modules.networking;
 in {
-  options.modules.networking = {
+  options.modules.networking = with types; {
     hostname = mkOption {
-      type = types.str;
+      type = str;
       example = "gampo";
     };
     id = mkOption {
-      type = types.str;
+      type = str;
       example = "deadb33f";
     };
+    domain = mkOption {
+      type = nullOr str;
+      example = "phundrak.com";
+      default = null;
+    };
     hostFiles = mkOption {
-      type = types.listOf types.path;
+      type = listOf path;
       example = [/path/to/hostFile];
       default = [];
     };
     firewall = {
       openPorts = mkOption {
-        type = types.listOf types.int;
+        type = listOf int;
         example = [22 80 443];
         default = [];
       };
       openPortRanges = mkOption {
-        type = types.listOf (types.attrsOf types.port);
+        type = listOf (attrsOf port);
         default = [];
         example = [
           {
@@ -41,7 +46,7 @@ in {
         '';
       };
       extraCommands = mkOption {
-        type = types.nullOr types.lines;
+        type = nullOr lines;
         example = "iptables -A INPUTS -p icmp -j ACCEPT";
         default = null;
       };
@@ -52,7 +57,7 @@ in {
     hostName = cfg.hostname; # Define your hostname.
     hostId = cfg.id;
     networkmanager.enable = true;
-    inherit (cfg) hostFiles;
+    inherit (cfg) hostFiles domain;
     firewall = {
       enable = true;
       allowedTCPPorts = cfg.firewall.openPorts;

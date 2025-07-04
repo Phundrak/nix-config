@@ -30,6 +30,11 @@ in {
       };
       hardened = mkEnableOption "Enables hardened Linux kernel";
     };
+    systemd-boot = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Does the system use systemd-boot?";
+    };
     zfs = {
       enable = mkEnableOption "Enables ZFS";
       pools = mkOption {
@@ -42,8 +47,8 @@ in {
   config.boot = {
     initrd.kernelModules = lists.optional cfg.amdgpu.enable "amdgpu";
     loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+      systemd-boot.enable = cfg.systemd-boot;
+      efi.canTouchEfiVariables = cfg.systemd-boot;
     };
     supportedFilesystems = mkIf cfg.zfs.enable ["zfs"];
     zfs.extraPools = mkIf cfg.zfs.enable cfg.zfs.pools;

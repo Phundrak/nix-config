@@ -20,35 +20,40 @@ in {
     ./dev/docker.nix
   ];
 
-  options.system = {
+  options.system = with types; {
     amdgpu.enable = mkEnableOption "Enables AMD GPU support";
     boot = {
       kernel = {
         package = mkOption {
-          type = types.raw;
+          type = raw;
           default = pkgs.linuxPackages_zen;
         };
         modules = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [];
         };
         cpuVendor = mkOption {
           description = "Intel or AMD?";
-          type = types.enum ["intel" "amd"];
+          type = enum ["intel" "amd"];
           default = "amd";
         };
         v4l2loopback = mkOption {
           description = "Enables v4l2loopback";
-          type = types.bool;
+          type = bool;
           default = true;
         };
         hardened = mkEnableOption "Enables hardened Linux kernel";
+      };
+      systemd-boot = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Does the system use systemd-boot?";
       };
       plymouth.enable = mkEnableOption "Enables Plymouth";
       zfs = {
         enable = mkEnableOption "Enables ZFS";
         pools = mkOption {
-          type = types.listOf types.str;
+          type = listOf str;
           default = [];
         };
       };
@@ -61,26 +66,31 @@ in {
     };
     networking = {
       hostname = mkOption {
-        type = types.str;
+        type = str;
         example = "gampo";
       };
       id = mkOption {
-        type = types.str;
+        type = str;
         example = "deadb33f";
       };
+      domain = mkOption {
+        type = nullOr str;
+        example = "phundrak.com";
+        default = null;
+      };
       hostFiles = mkOption {
-        type = types.listOf types.path;
+        type = listOf path;
         example = [/path/to/hostFile];
         default = [];
       };
       firewall = {
         openPorts = mkOption {
-          type = types.listOf types.int;
+          type = listOf int;
           example = [22 80 443];
           default = [];
         };
         openPortRanges = mkOption {
-          type = types.listOf (types.attrsOf types.port);
+          type = listOf (attrsOf port);
           default = [];
           example = [
             {
@@ -94,7 +104,7 @@ in {
           '';
         };
         extraCommands = mkOption {
-          type = types.nullOr types.lines;
+          type = nullOr lines;
           example = "iptables -A INPUTS -p icmp -j ACCEPT";
           default = null;
         };
@@ -102,20 +112,20 @@ in {
     };
     nix = {
       disableSandbox = mkOption {
-        type = types.bool;
+        type = bool;
         default = false;
       };
       gc = {
         automatic = mkOption {
-          type = types.bool;
+          type = bool;
           default = true;
         };
         dates = mkOption {
-          type = types.str;
+          type = str;
           default = "Monday 01:00 UTC";
         };
         options = mkOption {
-          type = types.str;
+          type = str;
           default = "--delete-older-than 30d";
         };
       };
@@ -123,19 +133,19 @@ in {
     sound = {
       enable = mkEnableOption "Whether to enable sounds with Pipewire";
       alsa = mkOption {
-        type = types.bool;
+        type = bool;
         example = true;
         default = true;
         description = "Whether to enable ALSA support with Pipewire";
       };
       jack = mkOption {
-        type = types.bool;
+        type = bool;
         example = true;
         default = false;
         description = "Whether to enable JACK support with Pipewire";
       };
       package = mkOption {
-        type = types.package;
+        type = package;
         example = pkgs.pulseaudio;
         default = pkgs.pulseaudioFull;
         description = "Which base package to use for PulseAudio";
@@ -144,27 +154,28 @@ in {
     users = {
       root.disablePassword = mkEnableOption "Disables root password";
       phundrak = mkOption {
-        type = types.bool;
+        type = bool;
         default = true;
       };
     };
     timezone = mkOption {
-      type = types.str;
+      type = str;
       default = "Europe/Paris";
     };
     console.keyMap = mkOption {
-      type = types.str;
+      type = str;
       default = "fr";
     };
   };
 
   config = {
+    boot.tmp.cleanOnBoot = true;
     time.timeZone = cfg.timezone;
     console.keyMap = cfg.console.keyMap;
     modules = {
       boot = {
         inherit (cfg) amdgpu;
-        inherit (cfg.boot) kernel plymouth zfs;
+        inherit (cfg.boot) kernel systemd-boot plymouth zfs;
       };
       inherit (cfg) sound users networking docker amdgpu;
     };

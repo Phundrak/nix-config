@@ -80,6 +80,17 @@
     };
 
     homeConfigurations = {
+      "phundrak@alys" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = {
+          inherit inputs outputs;
+          home-conf = "minimal";
+        };
+        modules = [
+          ./users/phundrak/alys.nix
+          inputs.sops-nix.homeManagerModules.sops
+        ];
+      };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
@@ -116,6 +127,13 @@
     };
 
     nixosConfigurations = {
+      alys = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          ./hosts/alys/configuration.nix
+          inputs.sops-nix.nixosModules.sops
+        ];
+      };
       gampo = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [

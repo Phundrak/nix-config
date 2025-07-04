@@ -26,12 +26,7 @@ in {
         description = "Lucien Cartier-Tilet";
         extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman"];
         shell = pkgs.zsh;
-        openssh.authorizedKeys.keyFiles = [
-          ./keys/id_gampo.pub
-          ./keys/id_marpa.pub
-          ./keys/id_tilo.pub
-          ./keys/id_opn4.pub
-        ];
+        openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ./keys;
       };
     };
     programs.zsh.enable = true;
