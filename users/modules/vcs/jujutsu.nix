@@ -41,6 +41,7 @@ in {
       ui = {
         default-command = "st";
         pager = ":builtin";
+        show-cryptographic-signatures = true;
         inherit (cfg) editor;
       };
       signing = mkIf cfg.signing.enable {
@@ -49,6 +50,13 @@ in {
         key = cfg.signing.sshKey;
         backends."ssh.allowed-signers" = "~/.ssh/allowed_signers";
         backends."ssh.program" = "${pkgs.openssh}/bin/ssh-keygen";
+      };
+      aliases = {
+        l = ["log"];
+        lc = ["log" "-r" "(remote_bookmarks()..@)::"];
+        n = ["new"];
+        dm = ["desc" "-m"];
+        tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
       };
     };
   };
