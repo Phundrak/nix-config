@@ -75,6 +75,7 @@ in {
       atlauncher
       heroic
       modrinth-app
+      openmw
       openttd-jgrpp
       moonlight-qt
 
