@@ -88,10 +88,9 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs outputs;
-          home-conf = "minimal";
         };
         modules = [
-          ./users/phundrak/alys.nix
+          ./users/phundrak/host/alys.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
@@ -99,10 +98,9 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs outputs;
-          home-conf = "fullHome";
         };
         modules = [
-          ./users/phundrak/marpa.nix
+          ./users/phundrak/host/marpa.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
@@ -110,10 +108,9 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs outputs;
-          home-conf = "fullHome";
         };
         modules = [
-          ./users/phundrak/gampo.nix
+          ./users/phundrak/host/gampo.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
@@ -121,10 +118,9 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
           inherit inputs outputs;
-          home-conf = "minimal";
         };
         modules = [
-          ./users/phundrak/tilo.nix
+          ./users/phundrak/host/tilo.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };

@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.modules.fish;
+  cfg = config.home.shell.fish;
 in {
-  options.modules.fish = {
+  options.home.shell.fish = {
     enable = lib.mkEnableOption "enables fish";
     abbrs = lib.mkOption {
       type = types.attrsOf types.str;

@@ -4,17 +4,21 @@
   ...
 }:
 with lib; let
-  cfg = config.modules.starship;
+  cfg = config.home.shell.starship;
 in {
-  options.modules.starship = {
+  options.home.shell.starship = {
     enable = mkEnableOption "Enables the starship prompt.";
-    jjIntegration = mkEnableOption "Enables Jujutsu integration in starship.";
+    jjIntegration = mkOption {
+      description = "Enable Jujutsu integration in starship";
+      default = config.programs.jujutsu.enable;
+      type = types.bool;
+    };
   };
 
   config.programs.starship = mkIf cfg.enable {
     inherit (cfg) enable;
     enableTransience = true;
-    settings = {
+    settings = mkIf cfg.jjIntegration {
       custom.jj = {
         description = "The current jj status";
         detect_folders = [".jj"];

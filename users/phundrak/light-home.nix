@@ -33,11 +33,10 @@ in {
       age = {
         # automatically import user SSH keys as age keys
         sshKeyPaths = [
-          "/home/phundrak/.ssh/id_ed25519"
+          "${config.home.homeDirectory}/.ssh/id_ed25519"
         ];
         # this will use an age key that is expected to already be in the filesystem
-        # keyFile = "/home/phundrak/.config/sops/age/keys.txt";
-        keyFile = "/home/phundrak/.local/sops-nix/key.txt";
+        keyFile = "${config.home.homeDirectory}/.local/sops-nix/key.txt";
         # generate a new key if the key specified above does not exist
         generateKey = true;
       };
@@ -47,23 +46,35 @@ in {
       username = "phundrak";
       homeDirectory = "/home/phundrak";
       packages = [pkgs.tree pkgs.ncdu];
-      stateVersion = "24.11"; # Please read the comment before changing.
-    };
 
-    modules = {
-      shell = {
-        starship.enable = true;
-        tmux.enable = true;
-      };
-      vcs = {
-        git.enable = true;
+      phundrak.sshKey.file = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
+
+      dev.vcs = {
         jj.enable = true;
+        git.enable = true;
         publicKey = cfg.sshKey;
       };
-      ssh = {
+
+      security.ssh = {
         enable = true;
         hosts = config.sops.secrets."ssh/hosts".path;
       };
+
+      shell = {
+        bash.enable = true;
+        zsh.enable = true;
+        starship = {
+          enable = true;
+          jjIntegration = true;
+        };
+        tmux.enable = true;
+        zoxide = {
+          enable = true;
+          replaceCd = true;
+        };
+      };
+
+      stateVersion = "24.11"; # Do not modify!
     };
 
     manual.manpages.enable = true;
