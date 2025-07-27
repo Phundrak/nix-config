@@ -61,7 +61,7 @@ with lib; let
     please = "sudo -A";
     wget = "wget --hsts-file=\"$XDG_DATA_HOME/wget-hsts\" -c";
   };
-  cfg = config.modules.shell;
+  cfg = config.home.shell;
 in {
   imports = [
     ./bash.nix
@@ -69,73 +69,22 @@ in {
     ./starship.nix
     ./tmux.nix
     ./zsh.nix
+    ./zoxide.nix
   ];
-
-  options.modules.shell = {
-    eatIntegration = mkEnableOption "Enable Emacs Eat integration in Bash or Zsh";
-    enableBash = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enables bash";
+  options.home.shell.fullDesktop = mkEnableOption "Enable all shells";
+  config.home.shell = {
+    enableShellIntegration = cfg.bash.enable or cfg.zsh.enable or cfg.fish.enable;
+    bash = {
+      aliases = mkDefault aliases;
+      enable = mkDefault cfg.fullDesktop;
     };
-    enableFish = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enables fish";
+    fish = {
+      abbrs = mkDefault aliases;
+      enable = mkDefault cfg.fullDesktop;
     };
-    enableZsh = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enables zsh";
-    };
-    starship = {
-      enable = mkEnableOption "Enables the starship prompt.";
-      jjIntegration = mkEnableOption "Enables Jujutsu integration in starship.";
-    };
-    tmux.enable = mkEnableOption "Enables tmux";
-    zoxide = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "enables zoxide";
-      };
-      replaceCd = mkOption {
-        type = types.bool;
-        default = true;
-        description = "makes zoxide replace cd";
-      };
-    };
-  };
-
-  config = {
-    home.shell = {
-      enableFishIntegration = mkDefault cfg.enableFish;
-      enableBashIntegration = mkDefault cfg.enableBash;
-      enableZshIntegration = mkDefault cfg.enableZsh;
-    };
-
-    modules = {
-      fish = {
-        enable = mkDefault cfg.enableFish;
-        abbrs = mkDefault aliases;
-      };
-      bash = {
-        enable = mkDefault cfg.enableBash;
-        aliases = mkDefault aliases;
-      };
-      zsh = {
-        enable = mkDefault cfg.enableZsh;
-        abbrs = mkDefault aliases;
-      };
-      tmux.enable = cfg.tmux.enable;
-      inherit (cfg) starship;
-    };
-
-    programs.zoxide = mkIf cfg.zoxide.enable {
-      enable = true;
-      options = mkIf cfg.zoxide.replaceCd [
-        "--cmd cd"
-      ];
+    zsh = {
+      abbrs = mkDefault aliases;
+      enable = mkDefault cfg.fullDesktop;
     };
   };
 }

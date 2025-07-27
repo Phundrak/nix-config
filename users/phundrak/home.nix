@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }: {
   imports = [
@@ -18,10 +17,9 @@
         epkgs.pdf-tools
       ]
     ));
-    askpass = import ../scripts/askpass.nix {inherit pkgs;};
-    launchWithEmacsclient = import ../scripts/launch-with-emacsclient.nix {
-      inherit pkgs;
-      emacsPackage = emacsPkg;
+    askpass = import ../modules/cli/scripts/askpass.nix {inherit pkgs;};
+    launchWithEmacsclient = import ../modules/cli/scripts/launch-with-emacsclient.nix {
+      inherit pkgs config;
     };
   in {
     sops.secrets = {
@@ -30,83 +28,21 @@
       "mopidy/spotify" = {};
     };
 
-    home.sessionVariables = {
-      EDITOR = "${emacsPkg}/bin/emacsclient -c -a ${emacsPkg}/bin/emacs";
-      LAUNCH_EDITOR = "${launchWithEmacsclient}/bin/launch-with-emacsclient";
-      SUDO_ASKPASS = "${askpass}/bin/askpass";
-      LSP_USE_PLISTS = "true";
-    };
+    home = {
+      sessionVariables = {
+        EDITOR = "${emacsPkg}/bin/emacsclient -c -a ${emacsPkg}/bin/emacs";
+        LAUNCH_EDITOR = "${launchWithEmacsclient}/bin/launch-with-emacsclient";
+        SUDO_ASKPASS = "${askpass}/bin/askpass";
+        LSP_USE_PLISTS = "true";
+      };
 
-    modules = {
-      shell = {
-        eatIntegration = true;
-        starship.jjIntegration = true;
-      };
-      bat.extras = true;
-      packages.emacsPackage = emacsPkg;
-      mopidy.enable = true;
-      ollama.enable = true;
-
-      emacs = {
+      desktop.waybar.style = ./config/waybar/style.css;
+      dev.ollama = {
         enable = true;
-        service = true;
-        package = emacsPkg;
-        mu4eMime = true;
-        org-protocol = true;
+        gpu = "amd";
       };
-      hyprland = {
-        inherit emacsPkg;
-        enable = true;
-        swaync = true;
-        waybar = {
-          enable = true;
-          battery = true;
-          style = ./config/waybar/style.css;
-        };
-      };
-      mbsync = {
-        enable = true;
-        passwordFile = config.sops.secrets.emailPassword.path;
-      };
-      ssh = {
-        enable = true;
-        hosts = config.sops.secrets."ssh/hosts".path;
-      };
-      vcs.git = {
-        browser = "${inputs.zen-browser.packages.${pkgs.system}.default}/bin/zen";
-        emacs = {
-          integration = true;
-          pkg = emacsPkg;
-        };
-        cliff = true;
-        sendmail = {
-          enable = true;
-          passwordFile = config.sops.secrets.emailPassword.path;
-        };
-      };
-    };
-
-    programs = {
-      zsh.enableVteIntegration = true;
-      mu.enable = true;
-      obs-studio = {
-        enable = true;
-        plugins = with pkgs; [
-          obs-studio-plugins.input-overlay
-          obs-studio-plugins.obs-backgroundremoval
-          obs-studio-plugins.obs-mute-filter
-          obs-studio-plugins.obs-pipewire-audio-capture
-          obs-studio-plugins.obs-source-clone
-          obs-studio-plugins.obs-source-record
-          obs-studio-plugins.obs-tuna
-        ];
-      };
-    };
-
-    services = {
-      blanket.enable = true;
-      mpris-proxy.enable = true;
-      playerctld.enable = true;
+      fullDesktop = true;
+      shell.fish.enable = true;
     };
 
     manual.html.enable = true;

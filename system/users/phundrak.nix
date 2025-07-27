@@ -23,7 +23,7 @@ in {
         description = "Lucien Cartier-Tilet";
         extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman"];
         shell = pkgs.zsh;
-        openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ./keys;
+        openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ../../keys;
       };
     };
     programs.zsh.enable = true;

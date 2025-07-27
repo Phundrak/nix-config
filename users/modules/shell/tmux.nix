@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.modules.tmux;
+  cfg = config.home.shell.tmux;
 in {
-  options.modules.tmux.enable = mkEnableOption "Enable tmux";
+  options.home.shell.tmux.enable = mkEnableOption "Enable tmux";
   config.programs.tmux = mkIf cfg.enable {
     inherit (cfg) enable;
     baseIndex = 1;

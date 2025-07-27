@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.modules.bash;
+  cfg = config.home.shell.bash;
 in {
-  options.modules.bash = {
+  options.home.shell.bash = {
     enable = mkEnableOption "Enables bash";
     aliases = mkOption {
       type = types.attrsOf types.str;
