@@ -4,14 +4,12 @@ Personal NixOS configuration for my machines, using Nix Flakes for reproducible 
 
 ## Repository Structure
 
-- **flake.nix**: Main entry point for the Nix Flake, defining NixOS and home-manager configurations
-- **hosts/**: Host-specific NixOS configurations
-- **modules/**: Custom NixOS modules reusable across different hosts
-- **programs/**: System-level programs shared across hosts
-- **secrets/**: Encrypted secrets managed with sops-nix
-- **system/**: Common system-level configurations shared across hosts
-- **users/phundrak/**: Home-manager configuration for my user
-- **users/modules/**: Custom user modules reusable across configurations
+- **flake.nix**: Main entry point for the Nix Flake, defining NixOS and home-manager configurations.
+- **hosts/**: Contains the host-specific NixOS configurations.
+- **system/**: Holds system-wide configuration modules that can be shared across different hosts. This includes things like boot settings, desktop environments, hardware configurations, networking, packages, security, and system services.
+- **users/**: Manages user-specific configurations. It's split into `modules` for reusable home-manager configurations and `phundrak` for my personal configuration.
+- **keys/**: Public keys for various machines.
+- **secrets/**: Encrypted secrets managed with `sops-nix`.
 
 ## Usage
 
@@ -51,23 +49,8 @@ nh home switch
 
 Format Nix files (using Alejandra):
 ```bash
-nix fmt
+nix fmt .
 ```
-
-## Development
-
-For development, a devShell is provided with linting tools and git hooks:
-
-```bash
-nix develop
-```
-
-This will set up an environment with:
-- alejandra (formatting)
-- commitizen (commit messages)
-- deadnix (dead code detection)
-- statix (linting)
-- Other useful git hooks
 
 ## Contributing
 
