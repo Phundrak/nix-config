@@ -1,5 +1,6 @@
 {
   imports = [
+    ./calibre.nix
     ./endlessh.nix
     ./fwupd.nix
     ./plex.nix

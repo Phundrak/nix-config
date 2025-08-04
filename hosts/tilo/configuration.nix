@@ -38,6 +38,7 @@
       trusted-users = ["root" "phundrak"];
     };
     services = {
+      calibre.enable = true;
       endlessh.enable = true;
       plex = {
         enable = true;
