@@ -31,10 +31,6 @@
           443 # HTTPS
           25565 # Minecraft
         ];
-        extraCommands = ''
-          iptables -I INPUT 1 -i 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
-          iptables -I INPUT 1 -i 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
-        '';
       };
     };
     packages.nix = {
