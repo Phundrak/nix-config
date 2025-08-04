@@ -39,6 +39,10 @@
     };
     services = {
       endlessh.enable = true;
+      plex = {
+        enable = true;
+        dataDir = "/tank/web/stacks/plex/plex-config";
+      };
       ssh = {
         enable = true;
         allowedUsers = ["phundrak"];
