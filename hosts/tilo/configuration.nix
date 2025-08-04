@@ -40,6 +40,7 @@
     services = {
       calibre.enable = true;
       endlessh.enable = true;
+      jellyfin.enable = true;
       plex = {
         enable = true;
         dataDir = "/tank/web/stacks/plex/plex-config";
