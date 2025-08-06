@@ -40,5 +40,8 @@ in {
       };
       jack.enable = mkDefault cfg.jack;
     };
+    programs.noisetorch = mkIf cfg.enable {
+      inherit (cfg) enable;
+    };
   };
 }
