@@ -51,7 +51,6 @@ with lib; {
     # Games
     atlauncher
     heroic
-    modrinth-app
     openmw
     openttd-jgrpp
     moonlight-qt
