@@ -9,7 +9,7 @@
     ./services
   ];
 
-  system = {
+  mySystem = {
     boot = {
       kernel = {
         hardened = true;

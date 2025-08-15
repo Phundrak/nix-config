@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.boot;
+  cfg = config.mySystem.boot;
 in {
-  options.system.boot = {
+  options.mySystem.boot = {
     extraModprobeConfig = mkOption {
       type = types.lines;
       default = "";
@@ -51,7 +51,7 @@ in {
   };
 
   config.boot = {
-    initrd.kernelModules = lists.optional config.system.hardware.amdgpu.enable "amdgpu";
+    initrd.kernelModules = lists.optional config.mySystem.hardware.amdgpu.enable "amdgpu";
     loader = {
       systemd-boot.enable = cfg.systemd-boot;
       efi.canTouchEfiVariables = cfg.systemd-boot;

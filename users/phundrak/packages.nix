@@ -54,6 +54,7 @@ with lib; {
     openmw
     openttd-jgrpp
     moonlight-qt
+    modrinth-app
 
     # Gnome stuff
     gnome-tweaks

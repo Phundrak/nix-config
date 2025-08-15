@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.hardware.amdgpu;
+  cfg = config.mySystem.hardware.amdgpu;
 in {
-  options.system.hardware.amdgpu.enable = mkEnableOption "Enables an AMD GPU configuration";
+  options.mySystem.hardware.amdgpu.enable = mkEnableOption "Enables an AMD GPU configuration";
   config = mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"

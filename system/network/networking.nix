@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.networking;
+  cfg = config.mySystem.networking;
 in {
-  options.system.networking = with types; {
+  options.mySystem.networking = with types; {
     hostname = mkOption {
       type = str;
       example = "gampo";

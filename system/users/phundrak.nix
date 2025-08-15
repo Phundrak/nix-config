@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.users;
+  cfg = config.mySystem.users;
 in {
-  options.system.users = {
+  options.mySystem.users = {
     root.disablePassword = mkEnableOption "Disables root password";
     phundrak.enable = mkEnableOption "Enables users phundrak";
   };

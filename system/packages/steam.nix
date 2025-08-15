@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.programs.steam;
+  cfg = config.mySystem.programs.steam;
 in {
-  options.system.programs.steam.enable = mkEnableOption "Enables Steam and Steam hardware";
+  options.mySystem.programs.steam.enable = mkEnableOption "Enables Steam and Steam hardware";
   config = mkIf cfg.enable {
     programs = {
       steam = {

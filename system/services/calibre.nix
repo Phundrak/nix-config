@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.calibre;
+  cfg = config.mySystem.services.calibre;
 in {
-  options.system.services.calibre = {
+  options.mySystem.services.calibre = {
     enable = mkEnableOption "Enable Calibre Web";
     user = mkOption {
       type = types.string;

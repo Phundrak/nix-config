@@ -4,7 +4,7 @@
   ...
 }:
 with lib; let
-  cfg = config.system.misc;
+  cfg = config.mySystem.misc;
 in {
   imports = [
     ./boot
@@ -19,7 +19,7 @@ in {
     ./users
   ];
 
-  options.system.misc = {
+  options.mySystem.misc = {
     timezone = mkOption {
       type = types.str;
       default = "Europe/Paris";

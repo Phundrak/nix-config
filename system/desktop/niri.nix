@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.desktop.niri;
+  cfg = config.mySystem.desktop.niri;
 in {
-  options.system.desktop.niri.enable = mkEnableOption "Enables Niri";
+  options.mySystem.desktop.niri.enable = mkEnableOption "Enables Niri";
   config.programs.niri = mkIf cfg.enable {
     inherit (cfg) enable;
   };

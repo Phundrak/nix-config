@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.fwupd;
+  cfg = config.mySystem.services.fwupd;
 in {
-  options.system.services.fwupd.enable = mkEnableOption "Enable fwupd";
+  options.mySystem.services.fwupd.enable = mkEnableOption "Enable fwupd";
   config.services.fwupd = mkIf cfg.enable {
     inherit (cfg) enable;
   };

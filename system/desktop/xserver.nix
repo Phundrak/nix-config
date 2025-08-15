@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.desktop.xserver;
+  cfg = config.mySystem.desktop.xserver;
 in {
-  options.system.desktop.xserver = {
+  options.mySystem.desktop.xserver = {
     enable = mkEnableOption "Enables xserver";
     de = mkOption {
       type = types.enum ["gnome" "kde"];
@@ -35,7 +35,7 @@ in {
 
     xserver = {
       inherit (cfg) enable;
-      videoDrivers = lists.optional config.system.hardware.amdgpu.enable "amdgpu";
+      videoDrivers = lists.optional config.mySystem.hardware.amdgpu.enable "amdgpu";
       xkb = {
         layout = "fr";
         variant = "bepo_afnor";

@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.desktop.hyprland;
+  cfg = config.mySystem.desktop.hyprland;
 in {
-  options.system.desktop.hyprland.enable = mkEnableOption "Enables Hyprland";
+  options.mySystem.desktop.hyprland.enable = mkEnableOption "Enables Hyprland";
   config.programs.hyprland = mkIf cfg.enable {
     inherit (cfg) enable;
     withUWSM = true;

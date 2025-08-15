@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.boot.plymouth;
+  cfg = config.mySystem.boot.plymouth;
 in {
-  options.system.boot.plymouth.enable = mkEnableOption "Enables Plymouth at system boot";
+  options.mySystem.boot.plymouth.enable = mkEnableOption "Enables Plymouth at system boot";
   config.boot = mkIf cfg.enable {
     plymouth = {
       inherit (cfg) enable;
