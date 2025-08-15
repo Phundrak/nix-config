@@ -5,9 +5,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.hardware.sound;
+  cfg = config.mySystem.hardware.sound;
 in {
-  options.system.hardware.sound = {
+  options.mySystem.hardware.sound = {
     enable = mkEnableOption "Whether to enable sounds with Pipewire";
     scarlett.enable = mkEnableOption "Activate support for Scarlett sound card";
     alsa = mkOption {

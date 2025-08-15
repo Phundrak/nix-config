@@ -7,11 +7,10 @@
   imports = [
     inputs.sops-nix.nixosModules.sops
     ./hardware-configuration.nix
-    # ./services
     ../../system
   ];
 
-  system = {
+  mySystem = {
     boot = {
       plymouth.enable = true;
       kernel = {

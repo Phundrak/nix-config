@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.endlessh;
+  cfg = config.mySystem.services.endlessh;
 in {
-  options.system.services.endlessh = {
+  options.mySystem.services.endlessh = {
     enable = mkEnableOption "Enables endlessh.";
     port = mkOption {
       type = types.port;

@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.dev.docker;
+  cfg = config.mySystem.dev.docker;
 in {
-  options.system.dev.docker = {
+  options.mySystem.dev.docker = {
     enable = mkEnableOption "Enable Docker";
     podman.enable = mkEnableOption "Enable Podman rather than Docker";
     nvidia.enable = mkEnableOption "Activate Nvidia support";

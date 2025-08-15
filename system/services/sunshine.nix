@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.sunshine;
+  cfg = config.mySystem.services.sunshine;
 in {
-  options.system.services.sunshine = {
+  options.mySystem.services.sunshine = {
     enable = mkEnableOption "Enables Sunshine";
     autostart = mkEnableOption "Enables autostart";
   };
@@ -15,6 +15,6 @@ in {
     autoStart = cfg.autostart;
     capSysAdmin = true;
     openFirewall = true;
-    settings.sunshine_name = config.system.networking.hostname;
+    settings.sunshine_name = config.mySystem.networking.hostname;
   };
 }

@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.jellyfin;
+  cfg = config.mySystem.services.jellyfin;
 in {
-  options.system.services.jellyfin = {
+  options.mySystem.services.jellyfin = {
     enable = mkEnableOption "Enable Jellyfin";
     dataDir = mkOption {
       type = types.string;

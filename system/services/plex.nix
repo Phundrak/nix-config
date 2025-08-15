@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.plex;
+  cfg = config.mySystem.services.plex;
 in {
-  options.system.services.plex = {
+  options.mySystem.services.plex = {
     enable = mkEnableOption "Enable Plex";
     group = mkOption {
       type = types.string;

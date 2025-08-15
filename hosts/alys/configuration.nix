@@ -5,7 +5,7 @@
     ../../system
   ];
 
-  system = {
+  mySystem = {
     boot = {
       kernel.hardened = true;
       systemd-boot = false;

@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.packages.nix;
+  cfg = config.mySystem.packages.nix;
 in {
-  options.system.packages.nix = {
+  options.mySystem.packages.nix = {
     allowUnfree = mkEnableOption "Enable unfree packages";
     disableSandbox = mkEnableOption "Disable Nix sandbox";
     gc = {

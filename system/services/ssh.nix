@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.services.ssh;
+  cfg = config.mySystem.services.ssh;
 in {
-  options.system.services.ssh = {
+  options.mySystem.services.ssh = {
     enable = mkEnableOption "Enables OpenSSH";
     allowedUsers = mkOption {
       type = types.listOf types.str;

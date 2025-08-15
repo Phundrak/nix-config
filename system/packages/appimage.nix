@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.packages.appimage;
+  cfg = config.mySystem.packages.appimage;
 in {
-  options.system.packages.appimage.enable = mkEnableOption "Enables AppImage support";
+  options.mySystem.packages.appimage.enable = mkEnableOption "Enables AppImage support";
   config.programs.appimage = mkIf cfg.enable {
     inherit (cfg) enable;
     binfmt = true;

@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.system.boot.zram;
+  cfg = config.mySystem.boot.zram;
 in {
-  options.system.boot.zram = {
+  options.mySystem.boot.zram = {
     enable = mkEnableOption "Enable ZRAM";
     memoryMax = mkOption {
       type = types.int;
