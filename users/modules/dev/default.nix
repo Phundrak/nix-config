@@ -7,8 +7,8 @@ with lib; let
   cfg = config.home.dev;
 in {
   imports = [
+    ./ai
     ./editors
-    ./ollama.nix
     ./vcs
   ];
 

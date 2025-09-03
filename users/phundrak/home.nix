@@ -37,10 +37,7 @@
       };
 
       desktop.waybar.style = ./config/waybar/style.css;
-      dev.ollama = {
-        enable = true;
-        gpu = "amd";
-      };
+      dev.ai.claude.enable = true;
       fullDesktop = true;
       shell.fish.enable = true;
     };

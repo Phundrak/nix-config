@@ -34,6 +34,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    claude-desktop = {
+      url = "github:k3d3/claude-desktop-linux-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,42 +88,33 @@
       ];
     };
 
-    homeConfigurations = {
+    homeConfigurations = let
+      extraSpecialArgs = {inherit inputs outputs system;};
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    in {
       "phundrak@alys" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
+        inherit extraSpecialArgs pkgs;
         modules = [
           ./users/phundrak/host/alys.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
+        inherit extraSpecialArgs pkgs;
         modules = [
           ./users/phundrak/host/marpa.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
       "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
+        inherit extraSpecialArgs pkgs;
         modules = [
           ./users/phundrak/host/gampo.nix
           inputs.sops-nix.homeManagerModules.sops
         ];
       };
       "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs outputs;
-        };
+        inherit extraSpecialArgs pkgs;
         modules = [
           ./users/phundrak/host/tilo.nix
           inputs.sops-nix.homeManagerModules.sops
@@ -126,30 +122,32 @@
       };
     };
 
-    nixosConfigurations = {
+    nixosConfigurations = let
+      specialArgs = {inherit inputs outputs;};
+    in {
       alys = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        inherit specialArgs;
         modules = [
           ./hosts/alys/configuration.nix
           inputs.sops-nix.nixosModules.sops
         ];
       };
       gampo = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        inherit specialArgs;
         modules = [
           ./hosts/gampo/configuration.nix
           inputs.sops-nix.nixosModules.sops
         ];
       };
       marpa = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        inherit specialArgs;
         modules = [
           ./hosts/marpa/configuration.nix
           inputs.sops-nix.nixosModules.sops
         ];
       };
       tilo = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+        inherit specialArgs;
         modules = [
           ./hosts/tilo/configuration.nix
           inputs.sops-nix.nixosModules.sops
