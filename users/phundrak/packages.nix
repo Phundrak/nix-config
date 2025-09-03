@@ -65,8 +65,7 @@ with lib; {
     # Graphics
     inkscape
     gimp
-    gimpPlugins.fourier
-    gimpPlugins.farbfeld
+    gimpPlugins.gmic
 
     # Dev
     devenv
