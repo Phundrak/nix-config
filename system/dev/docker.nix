@@ -17,9 +17,10 @@ in {
   config = {
     environment.systemPackages = mkIf cfg.podman.enable [
       pkgs.podman-desktop
+      pkgs.podman-compose
     ];
-    virtualisation = {
-      docker = mkIf (cfg.enable && !cfg.podman.enable) {
+    virtualisation = mkIf cfg.enable {
+      docker = mkIf (!cfg.podman.enable) {
         enable = true;
         enableNvidia = cfg.nvidia.enable;
         autoPrune.enable = cfg.autoprune.enable;
