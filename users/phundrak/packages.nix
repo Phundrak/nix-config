@@ -74,8 +74,6 @@ with lib; {
     dive # A tool for exploring each layer in a docker image
     grype # Vulnerability scanner for container images and filesystems
     kicad # Working on my custom keyboard
-    podman-desktop
-    podman-compose
     tectonic # better LaTeX engine
     virt-manager
     zeal
