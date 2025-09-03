@@ -20,7 +20,6 @@ in {
     emacsPkg = mkOption {
       type = types.package;
       default = config.home.dev.editors.emacs.package or pkgs.emacs;
-      # default = pkgs.emacs;
       example = pkgs.emacs;
     };
     host = mkOption {
@@ -63,6 +62,8 @@ in {
             "marpa" = [
               "DP-1, 3440x1440@144, 1080x550, 1"
               "DP-2, 2560x1080@60, 0x0, 1, transform, 1"
+              # "DP-2, 1366x768@60, 0x0, 1"
+              # "DP-2, 1829x1143@60, 0x0, 1"
             ];
             "gampo" = [];
           }."${cfg.host}";
