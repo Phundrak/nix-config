@@ -272,19 +272,13 @@ in {
     };
     services = {
       blueman-applet.enable = true;
-      wpaperd = {
+      hyprpaper = {
         enable = true;
         settings = {
-          default = {
-            path = "/home/phundrak/Pictures/Wallpapers/nord";
-            duration = "5m";
-            sorting = "random";
-            mode = "center";
-            recursive = true;
-          };
-          DP-3 = {
-            mode = "fit-border-color";
-          };
+          ipc = "on";
+          splash = false;
+          preload = "/home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
+          wallpaper = ", /home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
         };
       };
     };
