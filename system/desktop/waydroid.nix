@@ -10,6 +10,6 @@ in {
   options.mySystem.desktop.waydroid.enable = mkEnableOption "Enables Waydroid";
   config = mkIf cfg.enable {
     virtualisation.waydroid.enable = cfg.enable;
-    environment.systemPackages = [ pkgs.waydroid-helper ];
+    environment.systemPackages = [pkgs.waydroid-helper];
   };
 }
