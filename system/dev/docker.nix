@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 with lib; let
@@ -14,6 +15,9 @@ in {
   };
 
   config = {
+    environment.systemPackages = mkIf cfg.podman.enable [
+      pkgs.podman-desktop
+    ];
     virtualisation = {
       docker = mkIf (cfg.enable && !cfg.podman.enable) {
         enable = true;
