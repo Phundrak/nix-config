@@ -45,6 +45,9 @@ in {
         default-command = "st";
         pager = ":builtin";
         show-cryptographic-signatures = true;
+        conflict-marker-style = "git"; # Support for vc-jj.el
+        diff-formatter = ":git"; # Support for vc-jj.el
+        diff-editor = ":builtin";
         inherit (cfg) editor;
       };
       signing = mkIf cfg.signing.enable {
