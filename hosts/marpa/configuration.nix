@@ -21,6 +21,7 @@
     desktop = {
       hyprland.enable = true;
       niri.enable = true;
+      waydroid.enable = true;
       xserver = {
         enable = true;
         de = "gnome";

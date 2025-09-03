@@ -1,3 +1,8 @@
 {
-  imports = [./hyprland.nix ./niri.nix ./xserver.nix];
+  imports = [
+    ./hyprland.nix
+    ./niri.nix
+    ./waydroid.nix
+    ./xserver.nix
+  ];
 }
