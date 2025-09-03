@@ -26,10 +26,13 @@
         de = "gnome";
       };
     };
-    dev.docker = {
-      enable = true;
-      podman.enable = true;
-      autoprune.enable = true;
+    dev = {
+      docker = {
+        enable = true;
+        podman.enable = true;
+        autoprune.enable = true;
+      };
+      qemu.enable = true;
     };
     hardware = {
       amdgpu.enable = true;

@@ -75,7 +75,6 @@ with lib; {
     grype # Vulnerability scanner for container images and filesystems
     kicad # Working on my custom keyboard
     tectonic # better LaTeX engine
-    virt-manager
     zeal
 
     ## LSP servers
