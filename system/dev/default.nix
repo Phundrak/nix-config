@@ -1,3 +1,3 @@
 {
-  imports = [./docker.nix];
+  imports = [./docker.nix ./qemu.nix];
 }
