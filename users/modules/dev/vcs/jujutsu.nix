@@ -55,11 +55,40 @@ in {
         backends."ssh.program" = "${pkgs.openssh}/bin/ssh-keygen";
       };
       aliases = {
+        blame = ["file" "annotate"];
+        consume = ["squash" "--into" "@" "--from"];
+        eject = ["squash" "--from" "@" "--into"];
+        d = ["diff"];
+        dm = ["desc" "-m"];
         l = ["log"];
         lc = ["log" "-r" "(remote_bookmarks()..@)::"];
+        ll = ["log" "-T" "builtin_log_detailed"];
+        open = ["log" "-r" "open()"];
         n = ["new"];
-        dm = ["desc" "-m"];
+        nd = ["new" "dev()"];
+        nt = ["new" "trunk()"];
+        s = ["show"];
         tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
+      };
+      revset-aliases = {
+        "user(x)" = "author(x) | committer(x)";
+        "gh_pages()" = "ancestors(remote_bookmarks(exact:\"gh-pages\"))";
+        "trunk()" = "latest((present(main) | present(master)) & remote_bookmarks())";
+        "dev()" = "latest((present(dev) | present(develop)) & remote_bookmarks())";
+        "wip()" = "description(glob:\"wip:*\")";
+        "private()" = "description(glob:\"private:*\")";
+        "blacklist()" = "wip() | private()";
+        # stack(x, n) is the set of mutable commits reachable from
+        # 'x', with 'n' parents. 'n' is often useful to customize the
+        # display and return set for certain operations. 'x' can be
+        # used to target the set of 'roots' to traverse, e.g. @ is the
+        # current stack.
+        "stack()" = "ancestors(reachable(@, mutable()), 2)";
+        "stack(x)" = "ancestors(reachable(x, mutable()), 2)";
+        "stack(x, n)" = "ancestors(reachable(x, mutable()), n)";
+
+        "open()" = "stack(dev().. & mine(), 1)";
+        "ready()" = "open() ~ blacklist()::";
       };
     };
   };
