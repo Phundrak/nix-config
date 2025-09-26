@@ -54,7 +54,6 @@ with lib; {
     openmw
     openttd-jgrpp
     moonlight-qt
-    modrinth-app
 
     # Gnome stuff
     gnome-tweaks
@@ -73,7 +72,6 @@ with lib; {
     devenv
     dive # A tool for exploring each layer in a docker image
     grype # Vulnerability scanner for container images and filesystems
-    kicad # Working on my custom keyboard
     tectonic # better LaTeX engine
     zeal
 
