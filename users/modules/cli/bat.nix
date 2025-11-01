@@ -19,7 +19,6 @@ in {
     extraPackages = mkIf cfg.extras (with pkgs.bat-extras; [
       batman
       batpipe
-      batgrep
     ]);
   };
 }

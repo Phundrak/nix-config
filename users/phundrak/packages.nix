@@ -36,11 +36,11 @@ with lib; {
     signal-desktop-bin
 
     # Misc
-    bitwarden
+    bitwarden-desktop
     gplates
     libnotify
     nextcloud-client
-    onlyoffice-bin
+    onlyoffice-desktopeditors
     scrcpy
     syncthing
     watchmate

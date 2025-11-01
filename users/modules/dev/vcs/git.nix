@@ -90,9 +90,47 @@ in {
         else cfg.sendmail.user;
     in {
       enable = true;
-      userEmail = cfg.email;
-      userName = cfg.name;
-      extraConfig = {
+      ignores = [
+        ".env"
+        ".direnv/"
+
+        "*~"
+        "\#*\#"
+        "*.elc"
+        "auto-save-list"
+        ".\#*"
+        "*_flymake.*"
+        "/auto/"
+        ".projectile"
+        ".dir-locals.el"
+
+        "# Org mode files"
+        ".org-id-locations"
+        "*_archive"
+
+        "*.out"
+        "*.o"
+        "*.so"
+
+        "# Archives"
+        "*.7zz"
+        "*.dmg"
+        "*.gz"
+        "*.iso"
+        "*.jar"
+        "*.rar"
+        "*.tar"
+        "*.zip"
+
+        "*.log"
+        "*.sqlite"
+
+        "dist/"
+      ];
+      settings = {
+        user = {
+          inherit (cfg) name email;
+        };
         color.ui = "auto";
         column.ui = "auto";
         tag.sort = "version:refname";
@@ -180,99 +218,62 @@ in {
             insteadOf = "labs:";
           };
         };
-      };
-      ignores = [
-        ".env"
-        ".direnv/"
-
-        "*~"
-        "\#*\#"
-        "*.elc"
-        "auto-save-list"
-        ".\#*"
-        "*_flymake.*"
-        "/auto/"
-        ".projectile"
-        ".dir-locals.el"
-
-        "# Org mode files"
-        ".org-id-locations"
-        "*_archive"
-
-        "*.out"
-        "*.o"
-        "*.so"
-
-        "# Archives"
-        "*.7zz"
-        "*.dmg"
-        "*.gz"
-        "*.iso"
-        "*.jar"
-        "*.rar"
-        "*.tar"
-        "*.zip"
-
-        "*.log"
-        "*.sqlite"
-
-        "dist/"
-      ];
-      aliases = {
-        a = "add --all";
-        aca = "!git add --all && git commit --amend";
-        acan = "!git add --all && git commit --amend --no-edit";
-        ap = "add --patch";
-        b = "branch";
-        bd = "branch -d";
-        bdd = "branch -D";
-        c = "commit -S";
-        ca = "commit -Sa";
-        can = "commit -Sa --no-edit";
-        cm = "commit -Sm";
-        cam = "commit -Sam";
-        co = "checkout";
-        cob = "checkout -b";
-        cod = "checkout develop";
-        cl = "clone";
-        cl1 = "clone --depth 1";
-        f = "fetch";
-        fp = "fetch --prune";
-        ps = "push";
-        psf = "push --force-with-lease";
-        pso = "push origin";
-        psfo = "push --force-with-lease origin";
-        pushall = "!git remote \vert{} xargs -L1 git push";
-        psl = "!git remote \vert{} xargs -L1 git push";
-        pullall = "!git remote \vert{} xargs -L1 git pull";
-        pll = "!git remote \vert{} xargs -L1 git pull";
-        pl = "pull";
-        pb = "pull --rebase";
-        r = "rebase";
-        ra = "rebase --abort";
-        rc = "rebase --continue";
-        rd = "rebase develop";
-        ri = "rebase -i";
-        rmf = "rm -f";
-        rmd = "rm -r";
-        rmdf = "rm -rf";
-        sm = "submodule";
-        sms = "submodule status";
-        sma = "submodule add";
-        smu = "submodule update";
-        smui = "submodule update --init";
-        smuir = "submodule update --init --recursive";
-        st = "stash";
-        stc = "stash clear";
-        stp = "stash pop";
-        stw = "stash show";
-        u = "reset --";
-        d = "diff -w";
-        l = "log --all --oneline --graph --decorate --pretty=format':%C(magenta)%h %C(white) %an %ar%C(auto) %D%n%s%n'";
-        s = "status";
-        staged = "diff --cached";
-        upstream = "!git push -u origin HEAD";
-        unstage = "reset --";
+        alias = {
+          a = "add --all";
+          aca = "!git add --all && git commit --amend";
+          acan = "!git add --all && git commit --amend --no-edit";
+          ap = "add --patch";
+          b = "branch";
+          bd = "branch -d";
+          bdd = "branch -D";
+          c = "commit -S";
+          ca = "commit -Sa";
+          can = "commit -Sa --no-edit";
+          cm = "commit -Sm";
+          cam = "commit -Sam";
+          co = "checkout";
+          cob = "checkout -b";
+          cod = "checkout develop";
+          cl = "clone";
+          cl1 = "clone --depth 1";
+          f = "fetch";
+          fp = "fetch --prune";
+          ps = "push";
+          psf = "push --force-with-lease";
+          pso = "push origin";
+          psfo = "push --force-with-lease origin";
+          pushall = "!git remote \vert{} xargs -L1 git push";
+          psl = "!git remote \vert{} xargs -L1 git push";
+          pullall = "!git remote \vert{} xargs -L1 git pull";
+          pll = "!git remote \vert{} xargs -L1 git pull";
+          pl = "pull";
+          pb = "pull --rebase";
+          r = "rebase";
+          ra = "rebase --abort";
+          rc = "rebase --continue";
+          rd = "rebase develop";
+          ri = "rebase -i";
+          rmf = "rm -f";
+          rmd = "rm -r";
+          rmdf = "rm -rf";
+          sm = "submodule";
+          sms = "submodule status";
+          sma = "submodule add";
+          smu = "submodule update";
+          smui = "submodule update --init";
+          smuir = "submodule update --init --recursive";
+          st = "stash";
+          stc = "stash clear";
+          stp = "stash pop";
+          stw = "stash show";
+          u = "reset --";
+          d = "diff -w";
+          l = "log --all --oneline --graph --decorate --pretty=format':%C(magenta)%h %C(white) %an %ar%C(auto) %D%n%s%n'";
+          s = "status";
+          staged = "diff --cached";
+          upstream = "!git push -u origin HEAD";
+          unstage = "reset --";
+        };
       };
     };
   };
