@@ -9,16 +9,16 @@ in {
   options.mySystem.services.jellyfin = {
     enable = mkEnableOption "Enable Jellyfin";
     dataDir = mkOption {
-      type = types.string;
+      type = types.str;
       default = "/tank/jellyfin/data";
       example = "/tank/jellyfin/data";
     };
     user = mkOption {
-      type = types.string;
+      type = types.str;
       default = "phundrak";
     };
     group = mkOption {
-      type = types.string;
+      type = types.str;
       default = "users";
     };
   };
