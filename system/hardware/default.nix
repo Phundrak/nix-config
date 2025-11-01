@@ -1,3 +1,4 @@
+{lib, ...}:
 {
   imports = [
     ./amdgpu.nix
@@ -7,4 +8,5 @@
     ./opentablet.nix
     ./sound.nix
   ];
+  hardware.enableRedistributableFirmware = lib.mkDefault true;
 }

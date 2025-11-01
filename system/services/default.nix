@@ -9,5 +9,6 @@
     ./printing.nix
     ./ssh.nix
     ./sunshine.nix
+    ./traefik.nix
   ];
 }

@@ -9,6 +9,13 @@ with lib; let
 in {
   options.mySystem.dev.docker = {
     enable = mkEnableOption "Enable Docker";
+    extraDaemonSettings = mkOption {
+      type = types.nullOr (types.attrsOf types.str);
+      default = {};
+      example = {
+        data-root = "/custom/path";
+      };
+    };
     podman.enable = mkEnableOption "Enable Podman rather than Docker";
     nvidia.enable = mkEnableOption "Activate Nvidia support";
     autoprune.enable = mkEnableOption "Enable autoprune";

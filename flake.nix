@@ -132,6 +132,13 @@
           inputs.sops-nix.nixosModules.sops
         ];
       };
+      elcafe = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules = [
+          ./hosts/elcafe/configuration.nix
+          inputs.sops-nix.nixosModules.sops
+        ];
+      };
       gampo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = [
