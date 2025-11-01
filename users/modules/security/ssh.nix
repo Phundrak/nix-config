@@ -17,6 +17,7 @@ in {
   config = {
     programs.ssh = mkIf cfg.enable {
       enable = true;
+      enableDefaultConfig = false;
       includes = lists.optional (cfg.hosts != null) cfg.hosts;
     };
   };

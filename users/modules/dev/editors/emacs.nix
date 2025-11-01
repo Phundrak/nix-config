@@ -5,7 +5,7 @@
   ...
 }:
 with lib; let
-  emacsDefaultPackage = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
+  emacsDefaultPackage = with pkgs; ((emacsPackagesFor emacs).emacsWithPackages (
     epkgs: [
       epkgs.mu4e
       epkgs.pdf-tools

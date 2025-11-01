@@ -11,7 +11,7 @@
   ];
 
   config = let
-    emacsPkg = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
+    emacsPkg = with pkgs; ((emacsPackagesFor emacs).emacsWithPackages (
       epkgs: [
         epkgs.mu4e
         epkgs.pdf-tools
