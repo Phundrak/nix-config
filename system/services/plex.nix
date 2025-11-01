@@ -9,17 +9,17 @@ in {
   options.mySystem.services.plex = {
     enable = mkEnableOption "Enable Plex";
     group = mkOption {
-      type = types.string;
+      type = types.str;
       default = "users";
       example = "users";
       description = "Group under which Plex runs";
     };
     dataDir = mkOption {
-      type = types.string;
+      type = types.str;
       example = "/tank/plex-config";
     };
     user = mkOption {
-      type = types.string;
+      type = types.str;
       default = "phundrak";
     };
   };
