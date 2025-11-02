@@ -6,10 +6,36 @@
 }:
 with lib; let
   emacsDefaultPackage = with pkgs; ((emacsPackagesFor emacs).emacsWithPackages (
-    epkgs: [
-      epkgs.mu4e
-      epkgs.pdf-tools
-    ]
+    epkgs:
+      with epkgs; [
+        mu4e
+        pdf-tools
+        tree-sitter
+        tree-sitter-langs
+        (treesit-grammars.with-grammars (grammar:
+          with grammar; [
+            tree-sitter-bash
+            tree-sitter-c
+            tree-sitter-cpp
+            tree-sitter-css
+            tree-sitter-dockerfile
+            tree-sitter-http
+            tree-sitter-javascript
+            tree-sitter-jsdoc
+            tree-sitter-json
+            tree-sitter-just
+            tree-sitter-markdown
+            tree-sitter-markdown-inline
+            tree-sitter-nix
+            tree-sitter-rust
+            tree-sitter-sql
+            tree-sitter-toml
+            tree-sitter-typescript
+            tree-sitter-typst
+            tree-sitter-vue
+            tree-sitter-yaml
+          ]))
+      ]
   ));
   cfg = config.home.dev.editors.emacs;
 in {
@@ -25,7 +51,10 @@ in {
   };
 
   config = {
-    home.packages = [pkgs.emacs-all-the-icons-fonts];
+    home.packages = with pkgs; [
+      emacs-all-the-icons-fonts
+      emacs-lsp-booster
+    ];
     programs.emacs = mkIf cfg.enable {
       enable = true;
       inherit (cfg) package;
