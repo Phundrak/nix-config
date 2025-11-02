@@ -6,7 +6,6 @@
 }:
 with lib; let
   cfg = config.home.desktop.hyprland;
-  rofi-emoji = import ../cli/scripts/rofi-emoji.nix {inherit pkgs;};
   laptops = ["gampo"];
 in {
   imports = [
@@ -34,13 +33,13 @@ in {
 
   config = mkIf cfg.enable {
     home.desktop = {
+      rofi.enable = mkDefault true;
       swaync.enable = mkDefault true;
       waybar = {
         enable = mkDefault true;
         battery = mkDefault (builtins.elem cfg.host laptops);
       };
       wlsunset.enable = mkDefault true;
-      wofi.enable = mkDefault true;
     };
     wayland.windowManager.hyprland = {
       enable = true;
@@ -112,7 +111,7 @@ in {
         $right = r
         $up = s
         $down = t
-        $menu = ${pkgs.wofi}/bin/wofi --show drun
+        $menu = rofi -combi-modi drun,calc -show combi
 
         bind = SUPER, Return, exec, ${pkgs.kitty}/bin/kitty ${pkgs.tmux}/bin/tmux
         bind = SUPER, Space, submap, leader
@@ -159,9 +158,13 @@ in {
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
         submap = rofi
-        bind = , e, exec, ${rofi-emoji}/bin/rofi-emoji
+        bind = , b, exec, rofi-bluetooth
+        bind = , b, submap, reset
+        bind = , e, exec, rofi -show emoji
         bind = , e, submap, reset
         bind = , r, exec, $menu
+        bind = , r, submap, reset
+        bind = , s, exec, rofi -show ssh
         bind = , r, submap, reset
         bind = , y, exec, ytplay
         bind = , y, submap, reset
@@ -273,13 +276,15 @@ in {
     };
     services = {
       blueman-applet.enable = true;
-      hyprpaper = {
+      hyprpaper = let
+        img = "/home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
+      in {
         enable = true;
         settings = {
           ipc = "on";
           splash = false;
-          preload = "/home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
-          wallpaper = ", /home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
+          preload = img;
+          wallpaper = ", ${img}";
         };
       };
     };
