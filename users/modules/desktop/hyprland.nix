@@ -117,8 +117,8 @@ in {
         $menu = rofi -combi-modi drun,calc -show combi
 
         bind = SUPER, Return, exec, ${pkgs.kitty}/bin/kitty ${pkgs.tmux}/bin/tmux
-        bind = SUPER, Space, submap, leader
-        bind = , Print, submap, screenshot
+        bind = SUPER, Space,  exec, ${pkgs.wlr-which-key}/bin/wlr-which-key
+        bind =      , Print,  exec, ${pkgs.wlr-which-key}/bin/wlr-which-key -k s
 
         submap = leader
         bind = , l, exec, plock
@@ -147,11 +147,13 @@ in {
         bind = , u, submap, reset
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
+
         submap = buffers
         bind = , d, killactive,
         bind = , d, submap, reset
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
+
         submap = resize
         binde = , $left, resizeactive, -10 0
         binde = , $right, resizeactive, 10 0
@@ -160,6 +162,7 @@ in {
         bind = , q, submap, reset
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
+
         submap = rofi
         bind = , b, exec, rofi-bluetooth
         bind = , b, submap, reset
@@ -173,6 +176,7 @@ in {
         bind = , y, submap, reset
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
+
         submap = screenshot
         bind = , Print, exec, screenshot
         bind = , Print, submap, reset
@@ -188,6 +192,7 @@ in {
         bind = Shift, s, submap, reset
         bind = , escape, submap, reset
         bind = CTRL, g, submap, reset
+
         submap = windows
         bind = , period, submap, resize
         bind = , $left, movefocus, l
