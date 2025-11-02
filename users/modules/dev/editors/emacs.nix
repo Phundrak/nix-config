@@ -10,31 +10,6 @@ with lib; let
       with epkgs; [
         mu4e
         pdf-tools
-        tree-sitter
-        tree-sitter-langs
-        (treesit-grammars.with-grammars (grammar:
-          with grammar; [
-            tree-sitter-bash
-            tree-sitter-c
-            tree-sitter-cpp
-            tree-sitter-css
-            tree-sitter-dockerfile
-            tree-sitter-http
-            tree-sitter-javascript
-            tree-sitter-jsdoc
-            tree-sitter-json
-            tree-sitter-just
-            tree-sitter-markdown
-            tree-sitter-markdown-inline
-            tree-sitter-nix
-            tree-sitter-rust
-            tree-sitter-sql
-            tree-sitter-toml
-            tree-sitter-typescript
-            tree-sitter-typst
-            tree-sitter-vue
-            tree-sitter-yaml
-          ]))
       ]
   ));
   cfg = config.home.dev.editors.emacs;

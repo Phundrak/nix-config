@@ -6,8 +6,8 @@
 
     Sent from GNU/Emacs
 
-    *** Sauvez un arbre, mangez un castor ***
-    ***     Save a tree, eat a beaver     ***
+    @@@ Sauvez un arbre, mangez un castor @@@
+    @@@     Save a tree, eat a beaver     @@@
   '';
 in {
   home.file.".signature" = {

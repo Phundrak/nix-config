@@ -16,6 +16,7 @@ in {
     ./rofi
     ./swaync.nix
     ./waybar.nix
+    ./wlr-which-key.nix
     ./wlsunset.nix
   ];
 
@@ -28,5 +29,6 @@ in {
     obs.enable = mkDefault cfg.fullDesktop;
     qt.enable = mkDefault cfg.fullDesktop;
     rofi.enable = mkDefault cfg.fullDesktop;
+    wlr-which-key.enable = mkDefault cfg.fullDesktop;
   };
 }
