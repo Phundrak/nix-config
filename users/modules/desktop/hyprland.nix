@@ -12,6 +12,7 @@ in {
     ./swaync.nix
     ./waybar.nix
     ./wlsunset.nix
+    ./hyprpaper.nix
   ];
 
   options.home.desktop.hyprland = {
@@ -33,6 +34,7 @@ in {
 
   config = mkIf cfg.enable {
     home.desktop = {
+      hyprpaper.enable = true;
       rofi.enable = mkDefault true;
       swaync.enable = mkDefault true;
       waybar = {
@@ -41,6 +43,7 @@ in {
       };
       wlsunset.enable = mkDefault true;
     };
+    services.blueman-applet.enable = true;
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
@@ -273,20 +276,6 @@ in {
         bind = SUPER_SHIFT, slash, movetoworkspace, 9
         bind = SUPER_SHIFT, asterisk, movetoworkspace, 10
       '';
-    };
-    services = {
-      blueman-applet.enable = true;
-      hyprpaper = let
-        img = "/home/phundrak/Pictures/Wallpapers/nord/Nordic6.jpg";
-      in {
-        enable = true;
-        settings = {
-          ipc = "on";
-          splash = false;
-          preload = img;
-          wallpaper = ", ${img}";
-        };
-      };
     };
   };
 }
