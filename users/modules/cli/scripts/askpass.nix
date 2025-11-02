@@ -1,3 +1,3 @@
 {pkgs, ...}:
 pkgs.writeShellScriptBin "askpass" ''
-  ${pkgs.wofi}/bin/wofi -d -P -L 1 -p "$(printf $1 | sed s/://)"''
+  ${pkgs.rofi}/bin/rofi -dmenu -password -no-fixed-num-lines -p $(printf \"$*\" | sed 's/://')''
