@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: {
   imports = [
@@ -69,6 +70,17 @@
         vcs.jj.signing.enable = true;
       };
       fullDesktop = true;
+      file."${config.home.homeDirectory}/.ssh/allowed_signers" = {
+        enable = true;
+        text = lib.strings.join "\n" (
+          map (file: let
+            content = lib.strings.trim (builtins.readFile file);
+            parts = lib.strings.splitString " " content;
+            email = lib.lists.last parts;
+          in "${email} namespaces=\"git\" ${content}")
+          (lib.filesystem.listFilesRecursive ../../keys)
+        );
+      };
     };
 
     manual = {

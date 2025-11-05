@@ -29,8 +29,8 @@ in {
       sshKey = mkOption {
         type = with types; nullOr (either path str);
         example = "~/.ssh/id_ed25519.pub";
-        default = "~/.ssh/id_ed25519.pub";
-        description = "Path to the public SSH key or its content.";
+        default = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
+        description = "Path to the private SSH key for signing.";
       };
     };
   };
@@ -54,8 +54,8 @@ in {
         behavior = "own";
         backend = "ssh";
         key = cfg.signing.sshKey;
-        backends."ssh.allowed-signers" = "~/.ssh/allowed_signers";
-        backends."ssh.program" = "${pkgs.openssh}/bin/ssh-keygen";
+        backends.ssh.allowed-signers = "${config.home.homeDirectory}/.ssh/allowed_signers";
+        backends.ssh.program = "${pkgs.openssh}/bin/ssh-keygen";
       };
       aliases = {
         blame = ["file" "annotate"];
