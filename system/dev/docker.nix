@@ -14,11 +14,16 @@ in {
     autoprune.enable = mkEnableOption "Enable autoprune";
   };
 
-  config = {
-    environment.systemPackages = mkIf cfg.podman.enable [
-      pkgs.podman-desktop
-      pkgs.podman-compose
-    ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs;
+      [
+        dive # A tool for exploring each layer in a docker image
+        grype # Vulnerability scanner for container images and filesystems
+      ]
+      ++ lists.optionals cfg.podman.enable [
+        podman-compose
+        podman-desktop
+      ];
     virtualisation = mkIf cfg.enable {
       docker = mkIf (!cfg.podman.enable) {
         enable = true;

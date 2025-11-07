@@ -69,8 +69,6 @@ with lib; {
 
     # Dev
     devenv
-    dive # A tool for exploring each layer in a docker image
-    grype # Vulnerability scanner for container images and filesystems
     tectonic # better LaTeX engine
     zeal
 
