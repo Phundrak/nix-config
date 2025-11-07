@@ -82,7 +82,7 @@ in {
           new_status = "inherit";
         };
         workspace = [
-          "4, layoutopt:orientation:bottom"
+          "10, layoutopt:orientation:bottom"
           "1, layoutopt:orientation:bottom"
         ];
         decoration = {
