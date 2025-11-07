@@ -68,16 +68,22 @@ with lib; {
     gimpPlugins.gmic
 
     # Dev
+    dbeaver-bin
     devenv
+    nodejs
+    sqlite
     tectonic # better LaTeX engine
+    wakatime-cli
     zeal
 
     ## LSP servers
     bash-language-server
     docker-language-server
     kdePackages.qtdeclarative # For QML LSP
-    nil # Nix
+    nixd
+    marksman
     python3 # for Emacs and LSP
+    vscode-json-languageserver
     yaml-language-server # Yaml (Docker, GitHub Actions, ...)
   ];
 }
