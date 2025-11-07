@@ -40,6 +40,16 @@ with lib; let
     dcud = "docker compose up -d";
     dcudp = "docker compose up -d --pull=always";
     dcr = "docker compose restart";
+    pc = "podman compose";
+    pcd = "podman compose down";
+    pcl = "podman compose logs";
+    pclf = "podman compose logs -f";
+    pcp = "podman compose pull";
+    pcu = "podman compose up";
+    pcud = "podman compose up -d";
+    pcudp = "podman compose up -d --pull=always";
+    pcr = "podman compose restart";
+
     enw = "emacsclient -nw";
     e = "emacsclient -n -c";
 
