@@ -1,4 +1,4 @@
 {pkgs, ...}:
 pkgs.writeShellScriptBin "focus-urgent" ''
-  pidof -x Hyprland && hyprctl dispatch focusurgentorlast
+  ${pkgs.procps}/bin/pidof -x Hyprland && ${pkgs.hyprland}/bin/hyprctl dispatch focusurgentorlast
 ''

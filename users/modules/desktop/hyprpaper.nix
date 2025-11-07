@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; let
@@ -43,7 +44,7 @@ in {
         };
         Service = {
           Type = "oneshot";
-          ExecCondition = "pidof Hyprland";
+          ExecCondition = "${pkgs.procps}/bin/pidof Hyprland";
           ExecStart = "${config.home.homeDirectory}/.config/hypr/hyprpaper-rotate.sh";
         };
       };
@@ -79,7 +80,7 @@ in {
         echo "Setting wallpaper to: $WP"
 
         # Load and set the wallpaper
-        hyprctl hyprpaper preload "$WP" && hyprctl hyprpaper wallpaper ",$WP"
+        ${pkgs.hyprland}/bin/hyprctl hyprpaper preload "$WP" && ${pkgs.hyprland}/bin/hyprctl hyprpaper wallpaper ",$WP"
       '';
       executable = true;
     };

@@ -75,6 +75,11 @@
                 cmd = "${pkgs.rofi-bluetooth}/bin/rofi-bluetooth";
               }
               {
+                key = "c";
+                desc = "calc";
+                cmd = "rofi -show calc";
+              }
+              {
                 key = "e";
                 desc = "Emoji";
                 cmd = "rofi -show emoji";
@@ -82,7 +87,7 @@
               {
                 key = "r";
                 desc = "App Menu";
-                cmd = "rofi -combi-modi drun,calc -show combi";
+                cmd = "rofi -show drun";
               }
               {
                 key = "s";

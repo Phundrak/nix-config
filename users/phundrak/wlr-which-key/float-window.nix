@@ -1,5 +1,4 @@
 {pkgs, ...}:
 pkgs.writeShellScriptBin "float" ''
-  pidof -x Hyprland && hyprctl dispatch togglefloating
-  echo test
+  ${pkgs.procps}/bin/pidof -x Hyprland && ${pkgs.hyprland}/bin/hyprctl dispatch togglefloating
 ''

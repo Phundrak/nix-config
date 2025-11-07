@@ -1,4 +1,4 @@
 {pkgs, ...}:
 pkgs.writeShellScriptBin "fullscreen" ''
-  pidof -x Hyprland && hyprctl dispatch fullscreen
+  ${pkgs.procps}/bin/pidof -x Hyprland && ${pkgs.hyprland}/bin/hyprctl dispatch fullscreen
 ''

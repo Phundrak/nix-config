@@ -1,4 +1,4 @@
 {pkgs, ...}:
 pkgs.writeShellScriptBin "close-window" ''
-  pidof -x Hyprland && hyprctl dispatch killactive
+  ${pkgs.procps}/bin/pidof -x Hyprland && ${pkgs.hyprland}/bin/hyprctl dispatch killactive
 ''
