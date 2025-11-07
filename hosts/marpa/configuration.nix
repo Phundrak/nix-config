@@ -38,8 +38,10 @@
     hardware = {
       amdgpu.enable = true;
       bluetooth.enable = true;
-      corne.allowHidAccess = true;
-      opentablet.enable = true;
+      input = {
+        corne.allowHidAccess = true;
+        opentablet.enable = true;
+      };
       sound = {
         enable = true;
         jack = true;
@@ -89,6 +91,11 @@
     owner = config.users.users.phundrak.name;
     mode = "0440";
   };
+
+  services.udev.extraHwdb = ''
+    mouse:usb:047d:80a6:*
+     LIBINPUT_MIDDLE_EMULATION_ENABLED=1
+  '';
 
   security = {
     polkit.enable = true;

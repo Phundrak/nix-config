@@ -34,9 +34,11 @@
     };
     hardware = {
       bluetooth.enable = true;
-      corne.allowHidAccess = true;
-      ibmTrackpoint.disable = true;
-      opentablet.enable = true;
+      input = {
+        corne.allowHidAccess = true;
+        ibmTrackpoint.disable = true;
+        opentablet.enable = true;
+      };
       sound.enable = true;
     };
     misc.keymap = "fr-bepo";
