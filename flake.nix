@@ -91,67 +91,51 @@
     homeConfigurations = let
       extraSpecialArgs = {inherit inputs outputs system;};
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      defaultUserModules = [
+        inputs.sops-nix.homeManagerModules.sops
+      ];
+      withUserModules = modules: nixpkgs.lib.lists.flatten (defaultUserModules ++ [modules]);
     in {
       "phundrak@alys" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = [
-          ./users/phundrak/host/alys.nix
-          inputs.sops-nix.homeManagerModules.sops
-        ];
+        modules = withUserModules ./users/phundrak/host/alys.nix;
       };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = [
-          ./users/phundrak/host/marpa.nix
-          inputs.sops-nix.homeManagerModules.sops
-        ];
+        modules = withUserModules ./users/phundrak/host/marpa.nix;
       };
       "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = [
-          ./users/phundrak/host/gampo.nix
-          inputs.sops-nix.homeManagerModules.sops
-        ];
+        modules = withUserModules ./users/phundrak/host/gampo.nix;
       };
       "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = [
-          ./users/phundrak/host/tilo.nix
-          inputs.sops-nix.homeManagerModules.sops
-        ];
+        modules = withUserModules ./users/phundrak/host/tilo.nix;
       };
     };
 
     nixosConfigurations = let
       specialArgs = {inherit inputs outputs;};
+      defaultSystemModules = [
+        inputs.sops-nix.nixosModules.sops
+      ];
+      withSystemModules = modules: nixpkgs.lib.lists.flatten (defaultSystemModules ++ [modules]);
     in {
       alys = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
-        modules = [
-          ./hosts/alys/configuration.nix
-          inputs.sops-nix.nixosModules.sops
-        ];
+        modules = withSystemModules ./hosts/alys/configuration.nix;
       };
       gampo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
-        modules = [
-          ./hosts/gampo/configuration.nix
-          inputs.sops-nix.nixosModules.sops
-        ];
+        modules = withSystemModules ./hosts/gampo/configuration.nix;
       };
       marpa = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
-        modules = [
-          ./hosts/marpa/configuration.nix
-          inputs.sops-nix.nixosModules.sops
-        ];
+        modules = withSystemModules ./hosts/marpa/configuration.nix;
       };
       tilo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
-        modules = [
-          ./hosts/tilo/configuration.nix
-          inputs.sops-nix.nixosModules.sops
-        ];
+        modules = withSystemModules ./hosts/tilo/configuration.nix;
       };
     };
   };
