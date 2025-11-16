@@ -51,8 +51,8 @@ in {
       importantPrefixes = ["$left" "$right" "$up" "$down" "$menu"];
       settings = {
         input = {
-          kb_layout = "fr";
-          kb_variant = "bepo_afnor";
+          kb_layout = "fr,us";
+          kb_variant = "bepo_afnor,";
           # kb_options = "caps:ctrl_modifier";
           numlock_by_default = true;
           follow_mouse = 1;
@@ -239,6 +239,7 @@ in {
         bindl = , XF86MonBrightnessDown, exec, xbacklight -perceived -dec 2
         bindl = , XF86KbdBrightnessUp, exec, xbacklight -perceived -inc 2
         bindl = , XF86KbdBrightnessDown, exec, xbacklight -perceived -dec 2
+        bind = SUPER, a, exec, hyprctl switchxkblayout glove80-keyboard next
         bind = SUPER, $left, movefocus, l
         bind = SUPER, $right, movefocus, r
         bind = SUPER, $up, movefocus, u
