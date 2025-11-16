@@ -21,7 +21,7 @@ in {
       phundrak = mkIf cfg.phundrak.enable {
         isNormalUser = true;
         description = "Lucien Cartier-Tilet";
-        extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman"];
+        extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman" "plugdev" "games" "audio" "input"];
         shell = pkgs.zsh;
         openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ../../keys;
       };
