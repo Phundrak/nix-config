@@ -59,7 +59,7 @@
           {
             key = "n";
             desc = "Nemo";
-            cmd = "${pkgs.nemo}/bin/nemo";
+            cmd = "${pkgs.nemo-with-extensions}/bin/nemo";
           }
           {
             key = "N";
