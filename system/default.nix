@@ -36,5 +36,9 @@ in {
     boot.tmp.cleanOnBoot = true;
     time.timeZone = cfg.timezone;
     console.keyMap = cfg.keymap;
+    services = {
+      orca.enable = false;
+      envfs.enable = true;
+    };
   };
 }
