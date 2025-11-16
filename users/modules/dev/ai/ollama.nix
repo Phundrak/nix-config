@@ -16,11 +16,17 @@ in {
     };
   };
 
-  config.services.ollama = mkIf cfg.enable {
-    inherit (cfg) enable;
-    acceleration = cfg.gpu;
-    environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "8192";
+  config = {
+    services.ollama = mkIf cfg.enable {
+      inherit (cfg) enable;
+      acceleration = cfg.gpu;
+      host = "0.0.0.0";
+      environmentVariables = {
+        OLLAMA_CONTEXT_LENGTH = "8192";
+        OLLAMA_MAX_LOADED_MODELS = "1";
+        OLLAMA_KEEP_ALIVE = "10m";
+      };
     };
+    home.sessionVariables.OLLAMA_API_BASE = "http://${config.services.ollama.host}:11434/";
   };
 }

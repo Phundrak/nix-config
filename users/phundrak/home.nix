@@ -62,6 +62,7 @@
         LAUNCH_EDITOR = "${launchWithEmacsclient}/bin/launch-with-emacsclient";
         SUDO_ASKPASS = "${askpass}/bin/askpass";
         LSP_USE_PLISTS = "true";
+        OPENAI_API_URL = "http://localhost:1234/";
       };
       desktop.waybar.style = ./config/waybar/style.css;
       dev = {
