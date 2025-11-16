@@ -9,6 +9,36 @@
     ../../system
   ];
 
+  fileSystems = {
+    "/home".options = [
+      "compress=zstd:3" # Good balance of compression vs speed
+      "space_cache=v2" # Better performance
+      "noatime" # Don't update access times (less writes)
+    ];
+    "/mnt/ai" = {
+      device = "/dev/disk/by-uuid/47e87286-caaa-4e43-b2fd-b9eceac90fe9";
+      fsType = "btrfs";
+      options = [
+        "compress=zstd:3" # Good balance of compression vs speed
+        "space_cache=v2" # Better performance
+        "noatime" # Don't update access times (less writes)
+      ];
+    };
+    "/mnt/games" = {
+      device = "/dev/disk/by-uuid/a8453133-76dc-44bd-a825-444c3305fd9b";
+      fsType = "btrfs";
+      options = [
+        "compress=zstd:3" # Good balance of compression vs speed
+        "space_cache=v2" # Better performance
+        "noatime" # Don't update access times (less writes)
+      ];
+    };
+    "/games" = {
+      device = "/dev/disk/by-uuid/77d32db8-2e85-4593-b6b8-55d4f9d14e1a";
+      fsType = "ext4";
+    };
+  };
+
   mySystem = {
     boot = {
       extraModprobeConfig = ''
@@ -100,11 +130,6 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-  };
-
-  fileSystems."/games" = {
-    device = "/dev/disk/by-uuid/77d32db8-2e85-4593-b6b8-55d4f9d14e1a";
-    fsType = "ext4";
   };
 
   # This value determines the NixOS release from which the default
