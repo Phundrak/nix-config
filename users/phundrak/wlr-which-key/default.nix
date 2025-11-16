@@ -24,6 +24,7 @@
       float-window = import ./float-window.nix {inherit pkgs;};
       focus-urgent = import ./focus-urgent.nix {inherit pkgs;};
       fullscreen = import ./fullscreen.nix {inherit pkgs;};
+      logout = import ./logout.nix {inherit pkgs;};
       ytplay = import ../../modules/cli/scripts/ytplay.nix {inherit pkgs;};
     in [
       {
@@ -168,6 +169,11 @@
         key = "p";
         desc = "Power";
         submenu = [
+          {
+            key = "l";
+            desc = "Logout";
+            cmd = "";
+          }
           {
             key = "s";
             desc = "Suspend";
