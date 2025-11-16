@@ -107,6 +107,7 @@ in {
           "pactl load-module module-switch-on-connect"
           "${pkgs.mpc}/bin/mpc stop"
           "${pkgs.networkmanagerapplet}/bin/nm-applet"
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         ];
       };
       extraConfig = ''
