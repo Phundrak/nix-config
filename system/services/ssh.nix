@@ -18,9 +18,14 @@ in {
       example = true;
       default = false;
     };
+    port = mkOption {
+      type = types.int;
+      default = 22;
+    };
   };
   config.services.openssh = mkIf cfg.enable {
     inherit (cfg) enable;
+    ports = [cfg.port];
     settings = {
       AllowUsers = cfg.allowedUsers;
       PermitRootLogin = "no";

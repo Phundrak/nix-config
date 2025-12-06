@@ -38,8 +38,16 @@ in {
     };
     systemd-boot = mkOption {
       type = types.bool;
-      default = true;
+      default = !cfg.grub.enable;
       description = "Does the system use systemd-boot?";
+    };
+    grub = {
+      enable = mkEnableOption "Does the system use GRUB? (Disables systemd-boot)";
+      device = mkOption {
+        type = types.str;
+        description = "The GRUB device";
+        default = "";
+      };
     };
     zfs = {
       enable = mkEnableOption "Enables ZFS";
@@ -55,6 +63,9 @@ in {
     loader = {
       systemd-boot.enable = cfg.systemd-boot;
       efi.canTouchEfiVariables = cfg.systemd-boot;
+      grub = mkIf cfg.grub.enable {
+        inherit (cfg.grub) enable device;
+      };
     };
     supportedFilesystems = mkIf cfg.zfs.enable ["zfs"];
     zfs.extraPools = mkIf cfg.zfs.enable cfg.zfs.pools;

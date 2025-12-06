@@ -5,6 +5,8 @@ keys:
   - &marpa-host age1cnnpnglkvgw5ffv8qpgwpqvj203lh4uwt698y9mxjwklxt8nysmsa8hepn
   - &tilo age1g68hxv73llkyc7etzh499ztcrt93pwawy0n8p93px4taqu58mehsp88vjq
   - &tilo-host age1awytvphvty4f9wmdn86xnjg9kgetqjx8qlwj5d2882t4fyyzy58s3vg5k4
+  - &NaroMk3 age1erkn7dd022e90ktyj66aux9j9xvl0uzd6ru5cmrjsvcm5rtr5pfs7q6k9h
+  - &NaroMk3-host age16crkeglm3j3f6rveylytuerptjf9mwtv3hl89ywkmnnvdkntfchsuvrsk5
 creation_rules:
   - path_regex: secrets/secrets.yaml$
     key_groups:
@@ -15,3 +17,5 @@ creation_rules:
       - *marpa-host
       - *tilo
       - *tilo-host
+      - *NaroMk3
+      - *NaroMk3-host
