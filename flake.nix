@@ -34,6 +34,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    srvos.url = "github:nix-community/srvos";
+
     claude-desktop = {
       url = "github:k3d3/claude-desktop-linux-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,6 +57,7 @@
     nixpkgs,
     home-manager,
     devenv,
+    srvos,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -100,13 +103,17 @@
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/alys.nix;
       };
+      "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
+        inherit extraSpecialArgs pkgs;
+        modules = withUserModules ./users/phundrak/host/gampo.nix;
+      };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/marpa.nix;
       };
-      "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
+      "phundrak@NaroMk3" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = withUserModules ./users/phundrak/host/gampo.nix;
+        modules = withUserModules ./users/phundrak/host/naromk3.nix;
       };
       "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
@@ -132,6 +139,15 @@
       marpa = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = withSystemModules ./hosts/marpa/configuration.nix;
+      };
+      NaroMk3 = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules = withSystemModules [
+          srvos.nixosModules.server
+          srvos.nixosModules.hardware-hetzner-cloud
+          srvos.nixosModules.mixins-terminfo
+          ./hosts/naromk3/configuration.nix
+        ];
       };
       tilo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
