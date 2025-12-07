@@ -33,24 +33,49 @@
         "type": "github"
       }
     },
-    "claude-desktop": {
+    "caelestia-cli": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "caelestia-shell": [
+          "caelestia-shell"
+        ],
         "nixpkgs": [
+          "caelestia-shell",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1764098187,
-        "narHash": "sha256-H6JjWXhKqxZ8QLMoqndZx9e5x0Sv5AiipSmqvIxIbgo=",
-        "owner": "k3d3",
-        "repo": "claude-desktop-linux-flake",
-        "rev": "b2b040cb68231d2118906507d9cc8fd181ca6308",
+        "lastModified": 1766195958,
+        "narHash": "sha256-YGawjW7RDzzOEiovrRGyRoXfjISbgLz4BVN9ZMb8LEc=",
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "rev": "8c83ae1e6a60de7d496d346bf3623f789a9f53e3",
         "type": "github"
       },
       "original": {
-        "owner": "k3d3",
-        "repo": "claude-desktop-linux-flake",
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "type": "github"
+      }
+    },
+    "caelestia-shell": {
+      "inputs": {
+        "caelestia-cli": "caelestia-cli",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "quickshell": "quickshell"
+      },
+      "locked": {
+        "lastModified": 1766280311,
+        "narHash": "sha256-Ty4GT6EaQFaL9E/dKcJB1Q30ByGkxXV6U1eu8+PS5Dc=",
+        "owner": "caelestia-dots",
+        "repo": "shell",
+        "rev": "66e509ae488b2c0468f2c803fd34c2625ca725dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "caelestia-dots",
+        "repo": "shell",
         "type": "github"
       }
     },
@@ -119,24 +144,6 @@
     "flake-utils": {
       "inputs": {
         "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_2": {
-      "inputs": {
-        "systems": "systems_2"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -314,7 +321,7 @@
     },
     "pumo-system-info": {
       "inputs": {
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -337,6 +344,7 @@
     "quickshell": {
       "inputs": {
         "nixpkgs": [
+          "caelestia-shell",
           "nixpkgs"
         ]
       },
@@ -347,22 +355,21 @@
         "rev": "26531fc46ef17e9365b03770edd3fb9206fcb460",
         "revCount": 713,
         "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
       },
       "original": {
         "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
       }
     },
     "root": {
       "inputs": {
-        "claude-desktop": "claude-desktop",
+        "caelestia-shell": "caelestia-shell",
         "devenv": "devenv",
         "home-manager": "home-manager",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
         "pumo-system-info": "pumo-system-info",
-        "quickshell": "quickshell",
         "sops-nix": "sops-nix",
         "srvos": "srvos",
         "zen-browser": "zen-browser"
@@ -428,21 +435,6 @@
       }
     },
     "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

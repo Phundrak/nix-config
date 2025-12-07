@@ -7,6 +7,7 @@
 with lib; let
   cfg = config.home.desktop.hyprland;
   laptops = ["gampo"];
+  caelestiaEnabled = config.home.desktop.caelestia.enable;
 in {
   imports = [
     ./swaync.nix
@@ -34,16 +35,16 @@ in {
 
   config = mkIf cfg.enable {
     home.desktop = {
-      hyprpaper.enable = true;
+      hyprpaper.enable = mkDefault (! caelestiaEnabled);
       rofi.enable = mkDefault true;
-      swaync.enable = mkDefault true;
+      swaync.enable = mkDefault (! caelestiaEnabled);
       waybar = {
-        enable = mkDefault true;
+        enable = mkDefault (! caelestiaEnabled);
         battery = mkDefault (builtins.elem cfg.host laptops);
       };
       wlsunset.enable = mkDefault true;
     };
-    services.blueman-applet.enable = true;
+    services.blueman-applet.enable = ! caelestiaEnabled;
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
@@ -103,12 +104,13 @@ in {
           pseudotile = true;
           preserve_split = true;
         };
-        exec-once = [
-          "pactl load-module module-switch-on-connect"
-          "${pkgs.mpc}/bin/mpc stop"
-          "${pkgs.networkmanagerapplet}/bin/nm-applet"
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-        ];
+        exec-once =
+          [
+            "pactl load-module module-switch-on-connect"
+            "${pkgs.mpc}/bin/mpc stop"
+            "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+          ]
+          ++ lib.lists.optional (! caelestiaEnabled) "${pkgs.networkmanagerapplet}/bin/nm-applet";
       };
       extraConfig = ''
         $left = c

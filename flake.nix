@@ -24,8 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -100,11 +100,17 @@
       };
       "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = withUserModules ./users/phundrak/host/gampo.nix;
+        modules = withUserModules [
+          inputs.caelestia-shell.homeManagerModules.default
+          ./users/phundrak/host/marpa.nix
+        ];
       };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = withUserModules ./users/phundrak/host/marpa.nix;
+        modules = withUserModules [
+          inputs.caelestia-shell.homeManagerModules.default
+          ./users/phundrak/host/marpa.nix
+        ];
       };
       "phundrak@NaroMk3" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;

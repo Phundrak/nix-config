@@ -7,6 +7,7 @@ with lib; let
   cfg = config.home.desktop;
 in {
   imports = [
+    ./caelestia.nix
     ./eww.nix
     ./hyprland.nix
     ./kdeconnect.nix

@@ -49,7 +49,6 @@ in {
     watchmate
     inputs.zen-browser.packages.${system}.default
     inputs.pumo-system-info.packages.${system}.default
-    inputs.quickshell.packages.${system}.default
 
     # Games
     atlauncher

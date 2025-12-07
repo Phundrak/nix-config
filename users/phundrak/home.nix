@@ -64,7 +64,7 @@
         LSP_USE_PLISTS = "true";
         OPENAI_API_URL = "http://localhost:1234/";
       };
-      desktop.waybar.style = ./config/waybar/style.css;
+      desktop.caelestia.enable = true;
       dev = {
         ai.claude.enable = true;
         editors.emacs.package = emacsPackage;
