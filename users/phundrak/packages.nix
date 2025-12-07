@@ -4,7 +4,10 @@
   lib,
   ...
 }:
-with lib; {
+with lib; let
+  system = pkgs.stdenv.hostPlatform.system;
+in {
+  programs.bun.enable = true;
   home.packages = with pkgs; [
     # Terminal stuff
     duf
@@ -56,9 +59,6 @@ with lib; {
     moonlight-qt
 
     # Gnome stuff
-    gnome-tweaks
-    gnomeExtensions.docker
-    gnomeExtensions.syncthing-indicator
     gnomeExtensions.tray-icons-reloaded
     gthumb
 
@@ -81,6 +81,7 @@ with lib; {
     docker-language-server
     kdePackages.qtdeclarative # For QML LSP
     nixd
+    nixfmt
     marksman
     python3 # for Emacs and LSP
     vscode-json-languageserver
