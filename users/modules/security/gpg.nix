@@ -11,10 +11,7 @@ in {
     enable = mkEnableOption "Enable GPG";
     pinentry.package = mkOption {
       type = types.package;
-      default =
-        if config.home.dev.editors.emacs.enable
-        then pkgs.pinentry-emacs
-        else pkgs.pinentry-gtk2;
+      default = pkgs.pinentry-gnome3;
     };
   };
   config = mkIf cfg.enable {
@@ -25,7 +22,7 @@ in {
     };
     services.gpg-agent = {
       enable = true;
-      enableSshSupport = true;
+      enableSshSupport = false;
       pinentry.package = cfg.pinentry.package;
     };
   };
