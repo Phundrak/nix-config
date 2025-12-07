@@ -12,5 +12,12 @@ in {
       default = true;
     };
   };
-  config.services.tailscale.enable = cfg.enable;
+  config.services.tailscale = {
+    enable = cfg.enable;
+    extraSetFlags = [
+      "--accept-dns"
+      "--accept-routes"
+      "--ssh"
+    ];
+  };
 }
