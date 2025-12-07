@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; let
@@ -12,8 +13,11 @@ in {
   ];
 
   options.home.dev.ai.enable = mkEnableOption "Enables AI features";
-  config.home.dev.ai = mkIf cfg.enable {
-    ollama.enable = mkDefault cfg.enable;
-    claude.enable = mkDefault cfg.enable;
+  config.home = mkIf cfg.enable {
+    dev.ai = {
+      ollama.enable = mkDefault cfg.enable;
+      claude.enable = mkDefault cfg.enable;
+    };
+    packages = [pkgs.opencode];
   };
 }

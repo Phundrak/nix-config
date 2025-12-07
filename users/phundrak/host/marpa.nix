@@ -2,9 +2,9 @@
   imports = [../home.nix];
   home = {
     cli.nh.flake = "${config.home.homeDirectory}/.dotfiles";
-    dev.ai.ollama = {
+    dev.ai = {
       enable = true;
-      gpu = "rocm";
+      ollama.gpu = "rocm";
     };
     desktop.hyprland.host = "marpa";
     phundrak.sshKey = {
