@@ -4,7 +4,7 @@
   ...
 }:
 with lib; let
-  aliases = {
+  defaultAliases = {
     df = "df -H";
     diskspace = "sudo df -h | grep -E \"sd|lv|Size\"";
     du = "du -ch";
@@ -81,19 +81,26 @@ in {
     ./zsh.nix
     ./zoxide.nix
   ];
-  options.home.shell.fullDesktop = mkEnableOption "Enable all shells";
+  options.home.shell = {
+    fullDesktop = mkEnableOption "Enable all shells";
+    aliases = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      example = {la = "ls -a";};
+    };
+  };
   config.home.shell = {
     enableShellIntegration = cfg.bash.enable or cfg.zsh.enable or cfg.fish.enable;
     bash = {
-      aliases = mkDefault aliases;
+      aliases = cfg.aliases // defaultAliases;
       enable = mkDefault cfg.fullDesktop;
     };
     fish = {
-      abbrs = mkDefault aliases;
+      abbrs = cfg.aliases // defaultAliases;
       enable = mkDefault cfg.fullDesktop;
     };
     zsh = {
-      abbrs = mkDefault aliases;
+      abbrs = cfg.aliases // defaultAliases;
       enable = mkDefault cfg.fullDesktop;
     };
   };
