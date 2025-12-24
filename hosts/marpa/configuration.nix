@@ -39,6 +39,11 @@
     };
   };
 
+  services.displayManager.autoLogin = {
+    user = "phundrak";
+    enable = true;
+  };
+
   mySystem = {
     boot = {
       extraModprobeConfig = ''
