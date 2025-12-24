@@ -1,13 +1,11 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
   ...
 }:
 with lib; let
   cfg = config.home.dev.ai.claude;
-  system = pkgs.stdenv.hostPlatform.system;
 in {
   options.home.dev.ai.claude.enable = mkEnableOption "Enables Claude-related packages";
   config = mkIf cfg.enable {
