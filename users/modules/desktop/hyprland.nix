@@ -47,7 +47,6 @@ in {
     services.blueman-applet.enable = ! caelestiaEnabled;
     wayland.windowManager.hyprland = {
       enable = true;
-      xwayland.enable = true;
       systemd.enable = false;
       importantPrefixes = ["$left" "$right" "$up" "$down" "$menu"];
       settings = {
@@ -87,7 +86,7 @@ in {
           "1, layoutopt:orientation:bottom"
         ];
         decoration = {
-          rounding = 5;
+          rounding = 20;
         };
         animations = {
           enabled = true;
