@@ -18,6 +18,6 @@ in {
       ollama.enable = mkDefault cfg.enable;
       claude.enable = mkDefault cfg.enable;
     };
-    packages = [pkgs.opencode];
+    packages = [pkgs.lmstudio];
   };
 }
