@@ -172,7 +172,7 @@
           {
             key = "l";
             desc = "Logout";
-            cmd = "";
+            cmd = "${logout}/bin/logout";
           }
           {
             key = "s";
