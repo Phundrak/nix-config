@@ -15,6 +15,7 @@ in {
     ./obs.nix
     ./qt.nix
     ./rofi
+    ./spotify.nix
     ./swaync.nix
     ./waybar.nix
     ./wlr-which-key.nix
@@ -30,6 +31,8 @@ in {
     obs.enable = mkDefault cfg.fullDesktop;
     qt.enable = mkDefault cfg.fullDesktop;
     rofi.enable = mkDefault cfg.fullDesktop;
+    spotify.enable = mkDefault cfg.fullDesktop;
+    spotify.spicetify.enable = mkDefault cfg.fullDesktop;
     wlr-which-key.enable = mkDefault cfg.fullDesktop;
   };
 }

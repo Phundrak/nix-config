@@ -34,6 +34,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    spicetify.url = "github:Gerg-L/spicetify-nix";
+
     srvos.url = "github:nix-community/srvos";
 
     zen-browser = {
@@ -91,6 +93,7 @@
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       defaultUserModules = [
         inputs.sops-nix.homeManagerModules.sops
+        inputs.spicetify.homeManagerModules.default
       ];
       withUserModules = modules: nixpkgs.lib.lists.flatten (defaultUserModules ++ [modules]);
     in {

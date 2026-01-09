@@ -30,7 +30,6 @@ in {
     plexamp
     plex-desktop
     spicetify-cli
-    spotify
     pavucontrol # Volume control
 
     # Social
