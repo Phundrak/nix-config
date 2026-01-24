@@ -17,6 +17,7 @@ in {
     ./rofi
     ./spotify.nix
     ./swaync.nix
+    ./theme.nix
     ./waybar.nix
     ./wlr-which-key.nix
     ./wlsunset.nix

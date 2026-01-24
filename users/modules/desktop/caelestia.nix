@@ -67,6 +67,9 @@ in {
         reboot = ["systemctl" "reboot"];
       };
     };
-    cli.enable = true;
+    cli = {
+      enable = true;
+      settings.theme.enableGtk = true;
+    };
   };
 }
