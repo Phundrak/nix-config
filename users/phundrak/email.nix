@@ -8,6 +8,7 @@
 
     @@@ Sauvez un arbre, mangez un castor @@@
     @@@     Save a tree, eat a beaver     @@@
+    @@@       Bjarg tré, et bjórr         @@@
   '';
 in {
   home.file.".signature" = {
