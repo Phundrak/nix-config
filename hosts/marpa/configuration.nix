@@ -87,7 +87,6 @@
     networking = {
       hostname = "marpa";
       id = "7EA4A111";
-      hostFiles = [config.sops.secrets.extraHosts.path];
       firewall.openPortRanges = [
         {
           # Sunshine

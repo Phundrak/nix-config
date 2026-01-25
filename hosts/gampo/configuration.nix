@@ -45,7 +45,6 @@
     networking = {
       hostname = "gampo";
       id = "0630b33f";
-      hostFiles = [config.sops.secrets.extraHosts.path];
     };
     packages = {
       appimage.enable = true;
