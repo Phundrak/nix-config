@@ -172,6 +172,8 @@ in {
         bind = SUPER_SHIFT, minus, movetoworkspace, 8
         bind = SUPER_SHIFT, slash, movetoworkspace, 9
         bind = SUPER_SHIFT, asterisk, movetoworkspace, 10
+
+        env = XCURSOR_SIZE,12
       '';
     };
   };
