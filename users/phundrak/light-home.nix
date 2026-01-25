@@ -46,6 +46,7 @@ in {
       username = "phundrak";
       homeDirectory = "/home/phundrak";
       packages = [pkgs.tree pkgs.ncdu];
+      preferXdgDirectories = true;
 
       phundrak.sshKey.file = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
 
