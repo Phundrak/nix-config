@@ -1,6 +1,18 @@
-# NixOS Configuration
+<h1 align="center">NixOS Configuration</h1>
+<div align="center">
+ <strong>
+   Personal NixOS configuration for my machines, using Nix Flakes for reproducible and shareable setups.
+ </strong>
+</div>
+<br/>
 
-Personal NixOS configuration for my machines, using Nix Flakes for reproducible and shareable setups.
+<div align="center">
+  <!-- Wakapi -->
+  <img alt="Coding Time Badge" src="https://clock.phundrak.com/api/badge/phundrak/interval:any/project:.dotfiles">
+  <!-- Emacs -->
+  <a href="https://www.gnu.org/software/emacs/"><img src="https://img.shields.io/badge/Emacs-30.2-blueviolet.svg?style=flat-square&logo=GNU%20Emacs&logoColor=white" /></a>
+</div>
+
 
 ## Repository Structure
 
