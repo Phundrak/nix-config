@@ -1,6 +1,7 @@
 {config, ...}: {
   imports = [../home.nix];
   home = {
+    gpuType = "amd";
     cli.nh.flake = "${config.home.homeDirectory}/.dotfiles";
     dev.ai = {
       enable = true;

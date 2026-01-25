@@ -15,7 +15,7 @@ in {
       force-seekable = true; # force streams to be seekable
       slang = "jpn,jp,eng,en,fra,fr";
       alang = "eng,en,fra,fr";
-      gpu-api = "vulkan";
+      gpu-api = "auto";
       osc = true;
       profile = "gpu-hq";
       # geometry = "50%x50%";

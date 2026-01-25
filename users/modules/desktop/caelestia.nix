@@ -59,7 +59,9 @@ in {
         };
         tray.compact = true;
       };
-      services.gpuType = "amd";
+      services = mkIf (config.home.gpuType != null) {
+        inherit (config.home) gpuType;
+      };
       session.commands = {
         logout = ["uwsm" "stop"];
         shutdown = ["systemctl" "poweroff"];

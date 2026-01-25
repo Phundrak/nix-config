@@ -1,10 +1,20 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: let
+  inherit (config.home) gpuType;
+in {
   programs.btop = {
     enable = true;
-    package = pkgs.btop.override {
-      rocmSupport = true;
-      cudaSupport = true;
-    };
+    package =
+      if gpuType != null
+      then
+        pkgs.btop.override {
+          rocmSupport = gpuType == "amd";
+          cudaSupport = gpuType == "nvidia";
+        }
+      else pkgs.btop;
     settings = {
       color_theme = "${pkgs.btop}/share/btop/themes/nord.theme";
       cpu_bottom = false;

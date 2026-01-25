@@ -17,7 +17,14 @@ in {
     ./shell
   ];
 
-  options.home.fullDesktop = mkEnableOption "Enable most modules";
+  options.home = {
+    fullDesktop = mkEnableOption "Enable most modules";
+    gpuType = mkOption {
+      type = types.nullOr (types.enum ["nvidia" "amd" "intel"]);
+      default = null;
+      example = "amd";
+    };
+  };
   config.home = {
     cli.fullDesktop = mkDefault cfg.fullDesktop;
     desktop.fullDesktop = mkDefault cfg.fullDesktop;
