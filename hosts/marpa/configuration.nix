@@ -106,13 +106,13 @@
     programs.steam.enable = true;
     services = {
       fwupd.enable = true;
+      languagetool.enable = true;
       printing.enable = true;
       ssh.enable = true;
       sunshine = {
         enable = true;
         autostart = true;
       };
-      languagetool.enable = true;
     };
     users = {
       root.disablePassword = true;
