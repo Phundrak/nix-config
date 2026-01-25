@@ -63,7 +63,13 @@
         LSP_USE_PLISTS = "true";
         OPENAI_API_URL = "http://localhost:1234/";
       };
-      desktop.caelestia.enable = true;
+      desktop = {
+        caelestia.enable = true;
+        spotify = {
+          enable = true;
+          spicetify.enable = false;
+        };
+      };
       dev = {
         ai.claude.enable = true;
         editors.emacs.package = emacsPackage;
