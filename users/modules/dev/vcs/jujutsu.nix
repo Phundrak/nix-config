@@ -45,9 +45,8 @@ in {
         default-command = "st";
         pager = ":builtin";
         show-cryptographic-signatures = true;
-        conflict-marker-style = "git"; # Support for vc-jj.el
-        diff-formatter = ":git"; # Support for vc-jj.el
         diff-editor = ":builtin";
+        merge-editort = ":builtin";
         inherit (cfg) editor;
       };
       signing = mkIf cfg.signing.enable {
@@ -63,24 +62,41 @@ in {
         eject = ["squash" "--from" "@" "--into"];
         d = ["diff"];
         dm = ["desc" "-m"];
+        gc = ["git" "clone"];
+        gcc = ["git" "clone" "--colocate"];
         l = ["log"];
+        la = ["log" "-r" "::"];
         lc = ["log" "-r" "(remote_bookmarks()..@)::"];
         ll = ["log" "-T" "builtin_log_detailed"];
         open = ["log" "-r" "open()"];
         n = ["new"];
         nd = ["new" "dev()"];
         nt = ["new" "trunk()"];
+        revlog = ["evolog"];
         s = ["show"];
         tug = ["bookmark" "move" "--from" "heads(::@- & bookmarks())" "--to" "@-"];
       };
+      colors.working_copy.underline = true;
+      git = {
+        private-commits = "blacklist()";
+        colocate = true;
+        subprocess = true;
+      };
       revset-aliases = {
+        "immutable_heads()" = "present(trunk()) | tags()";
+        # Resolves by default to latest main/master remote bookmarks
+        "trunk()" = "latest((present(main) | present(master)) & remote_bookmarks())";
+        # Same as trunk() but for `dev` or `develop` bookmarks
+        "dev()" = "latest((present(dev) | present(develop)) & remote_bookmarks())";
+
         "user(x)" = "author(x) | committer(x)";
         "gh_pages()" = "ancestors(remote_bookmarks(exact:\"gh-pages\"))";
-        "trunk()" = "latest((present(main) | present(master)) & remote_bookmarks())";
-        "dev()" = "latest((present(dev) | present(develop)) & remote_bookmarks())";
+
+        #Private and WIP commits that should never be pushed
         "wip()" = "description(glob:\"wip:*\")";
         "private()" = "description(glob:\"private:*\")";
         "blacklist()" = "wip() | private()";
+
         # stack(x, n) is the set of mutable commits reachable from
         # 'x', with 'n' parents. 'n' is often useful to customize the
         # display and return set for certain operations. 'x' can be
@@ -93,6 +109,7 @@ in {
         "open()" = "stack(dev().. & mine(), 1)";
         "ready()" = "open() ~ blacklist()::";
       };
+      remotes.origin.auto-track-bookmarks = "*";
     };
   };
 }
