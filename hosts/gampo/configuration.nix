@@ -16,7 +16,6 @@
       kernel = {
         cpuVendor = "intel";
         package = pkgs.linuxPackages;
-        modules = ["i915"];
       };
       systemd-boot = true;
     };

@@ -59,7 +59,11 @@ in {
   };
 
   config.boot = {
-    initrd.kernelModules = lists.optional config.mySystem.hardware.amdgpu.enable "amdgpu";
+    initrd.kernelModules = lib.lists.singleton (
+      if config.mySystem.hardware.amdgpu.enable
+      then "amdgpu"
+      else "i915"
+    );
     loader = {
       systemd-boot.enable = cfg.systemd-boot;
       efi.canTouchEfiVariables = cfg.systemd-boot;
