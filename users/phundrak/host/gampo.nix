@@ -5,4 +5,5 @@
     desktop.hyprland.host = "gampo";
     phundrak.sshKey.content = builtins.readFile ../keys/id_gampo.pub;
   };
+  programs.caelestia.settings.bar.persistent = false;
 }

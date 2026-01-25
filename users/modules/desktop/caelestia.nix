@@ -52,6 +52,7 @@ in {
           wallpapers = true;
         };
       };
+      osd.enableMicrophone = true;
       bar = {
         status = {
           showAudio = true;

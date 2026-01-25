@@ -10,4 +10,8 @@
     desktop.hyprland.host = "marpa";
     phundrak.sshKey.content = builtins.readFile ../keys/id_marpa.pub;
   };
+  programs.caelestia.settings.bar = {
+    showBattery = false;
+    showWifi = false;
+  };
 }
