@@ -2,7 +2,7 @@
   description = "Home Manager configuration of phundrak";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
     devenv = {
       url = "github:cachix/devenv";
@@ -34,9 +34,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    spicetify.url = "github:Gerg-L/spicetify-nix";
+    spicetify = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    srvos.url = "github:nix-community/srvos";
+    srvos = {
+      url = "github:nix-community/srvos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
