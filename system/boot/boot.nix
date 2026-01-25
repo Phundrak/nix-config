@@ -8,13 +8,6 @@ with lib; let
   cfg = config.mySystem.boot;
 in {
   options.mySystem.boot = {
-    extraModprobeConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
-      '';
-    };
     kernel = {
       package = mkOption {
         type = types.raw;
@@ -29,12 +22,15 @@ in {
         type = types.enum ["intel" "amd"];
         default = "amd";
       };
-      v4l2loopback = mkOption {
-        description = "Enables v4l2loopback";
-        type = types.bool;
-        default = true;
-      };
+      v4l2loopback.enable = mkEnableOption "Enables v4l2loopback kernel module";
       hardened = mkEnableOption "Enables hardened Linux kernel";
+      extraModprobeConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
+        '';
+      };
     };
     systemd-boot = mkOption {
       type = types.bool;
@@ -64,6 +60,10 @@ in {
       then "amdgpu"
       else "i915"
     );
+    extraModprobeConfig =
+      strings.concatLines
+      ([cfg.kernel.extraModprobeConfig]
+        ++ lists.optional cfg.kernel.v4l2loopback.enable ''options v4l2loopback exclusive_caps=1 devices=1 video_nr=0 card_label="OBS Studio"'');
     loader = {
       systemd-boot.enable = cfg.systemd-boot;
       efi.canTouchEfiVariables = cfg.systemd-boot;
@@ -80,7 +80,6 @@ in {
     kernelModules =
       cfg.kernel.modules
       ++ ["kvm-${cfg.kernel.cpuVendor}"]
-      ++ lists.optional cfg.kernel.v4l2loopback "v4l2loopback"
       ++ lists.optional cfg.kernel.hardened "tcp_bbr";
     kernel.sysctl = mkIf cfg.kernel.hardened {
       "kernel.sysrq" = 0; # Disable magic SysRq key

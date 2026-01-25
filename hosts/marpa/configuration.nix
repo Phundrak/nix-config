@@ -46,11 +46,14 @@
 
   mySystem = {
     boot = {
-      extraModprobeConfig = ''
-        options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
-      '';
       plymouth.enable = true;
-      kernel.cpuVendor = "amd";
+      kernel = {
+        cpuVendor = "amd";
+        v4l2loopback.enable = true;
+        extraModprobeConfig = ''
+          options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
+        '';
+      };
       systemd-boot = true;
     };
     desktop = {
