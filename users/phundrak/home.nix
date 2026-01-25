@@ -58,7 +58,6 @@
 
     home = {
       sessionVariables = {
-        EDITOR = "${config.home.dev.editors.emacs.package}/bin/emacsclient -c -a ${config.home.dev.editors.emacs.package}/bin/emacs";
         LAUNCH_EDITOR = "${launchWithEmacsclient}/bin/launch-with-emacsclient";
         SUDO_ASKPASS = "${askpass}/bin/askpass";
         LSP_USE_PLISTS = "true";

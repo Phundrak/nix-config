@@ -37,7 +37,12 @@ in {
     services.emacs = mkIf cfg.service {
       enable = true;
       inherit (cfg) package;
+      defaultEditor = true;
       startWithUserSession = "graphical";
+      client = {
+        enable = true;
+        arguments = ["-c" "-a" "${cfg.package}/bin/emacs"];
+      };
     };
 
     xdg.desktopEntries.mu4e = mkIf cfg.mu4eMime {
