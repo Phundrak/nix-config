@@ -34,8 +34,9 @@ in {
 
   config = {
     boot.tmp.cleanOnBoot = true;
-    time.timeZone = cfg.timezone;
     console.keyMap = cfg.keymap;
+    time.timeZone = cfg.timezone;
+    environment.pathsToLink = ["/share/bash-completion" "/share/zsh"];
     services = {
       orca.enable = false;
       envfs.enable = true;

@@ -88,6 +88,10 @@ in {
       default = {};
       example = {la = "ls -a";};
     };
+    autocompletion = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
   config.home.shell = {
     enableShellIntegration = cfg.bash.enable or cfg.zsh.enable or cfg.fish.enable;

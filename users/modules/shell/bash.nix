@@ -16,6 +16,11 @@ in {
         lns = "ln -si";
       };
     };
+    autocompletion = mkOption {
+      type = types.bool;
+      default = config.home.shell.autocompletion;
+      example = true;
+    };
     eatIntegration = mkEnableOption "Enable Emacs Eat integration";
     bashrcExtra = mkOption {
       type = types.lines;
@@ -33,6 +38,7 @@ in {
           (strings.optionalString cfg.eatIntegration ''[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"'')
           cfg.bashrcExtra
         ];
+      enableCompletion = cfg.autocompletion;
       shellAliases = cfg.aliases;
       shellOptions = [
         "histappend"

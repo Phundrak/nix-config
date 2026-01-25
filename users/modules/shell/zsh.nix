@@ -17,6 +17,11 @@ in {
         lns = "ln -si";
       };
     };
+    autocompletion = mkOption {
+      type = types.bool;
+      default = config.home.shell.autocompletion;
+      example = true;
+    };
     eatIntegration = mkEnableOption "Enable Emacs Eat integration";
     zshrcExtra = lib.mkOption {
       type = types.lines;
@@ -32,7 +37,7 @@ in {
         enable = true;
         strategy = ["match_prev_cmd" "completion"];
       };
-      enableCompletion = true;
+      enableCompletion = cfg.autocompletion;
       enableVteIntegration = true;
       history = {
         findNoDups = true;

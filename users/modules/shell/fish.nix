@@ -17,6 +17,11 @@ in {
         lns = "ln -si";
       };
     };
+    autocompletion = mkOption {
+      type = types.bool;
+      default = config.home.shell.autocompletion;
+      example = true;
+    };
     extraShellInit = mkOption {
       type = types.lines;
       default = "";
@@ -26,6 +31,7 @@ in {
   config = lib.mkIf cfg.enable {
     programs.fish = {
       enable = true;
+      generateCompletions = cfg.autocompletion;
       shellAbbrs = cfg.abbrs;
       preferAbbrs = true;
       shellInit = with lib;
