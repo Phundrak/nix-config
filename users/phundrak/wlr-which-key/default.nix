@@ -26,6 +26,7 @@
       fullscreen = import ./fullscreen.nix {inherit pkgs;};
       logout = import ./logout.nix {inherit pkgs;};
       ytplay = import ../../modules/cli/scripts/ytplay.nix {inherit pkgs;};
+      plock = import ../../modules/cli/scripts/plock.nix {inherit pkgs;};
     in [
       {
         key = "a";
@@ -164,6 +165,11 @@
             ];
           }
         ];
+      }
+      {
+        key = "l";
+        desc = "Lock session";
+        cmd = "${plock}/bin/plock";
       }
       {
         key = "p";
