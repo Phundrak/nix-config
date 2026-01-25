@@ -58,6 +58,11 @@
             cmd = "${pkgs.gimp}/bin/gimp";
           }
           {
+            key = "h";
+            desc = "Handy";
+            cmd = "pkill -USR2 -n handy";
+          }
+          {
             key = "n";
             desc = "Nemo";
             cmd = "${pkgs.nemo-with-extensions}/bin/nemo";

@@ -6,6 +6,9 @@
 }:
 with lib; let
   inherit (pkgs.stdenv.hostPlatform) system;
+  handy = pkgs.callPackage ../../packages/handy.nix {};
+  pumo-system-info = inputs.pumo-system-info.packages.${system}.default;
+  zen = inputs.zen-browser.packages.${system}.default;
 in {
   programs.bun.enable = true;
   home.packages = with pkgs; [
@@ -40,14 +43,15 @@ in {
     # Misc
     bitwarden-desktop
     gplates
+    handy
     libnotify
     nextcloud-client
     onlyoffice-desktopeditors
+    pumo-system-info
     scrcpy
     syncthing
     watchmate
-    inputs.zen-browser.packages.${system}.default
-    inputs.pumo-system-info.packages.${system}.default
+    zen
 
     # Games
     atlauncher
