@@ -58,6 +58,10 @@
         enable = true;
         trusted = true;
       };
+      creug = {
+        enable = true;
+        sudo = true;
+      };
     };
   };
 
