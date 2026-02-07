@@ -3,8 +3,6 @@
   home = {
     cli.nh.flake = "${config.home.homeDirectory}/.dotfiles";
     desktop.hyprland.host = "gampo";
-    phundrak.sshKey = {
-      content = builtins.readFile ../../../keys/id_gampo.pub;
-    };
+    phundrak.sshKey.content = builtins.readFile ../keys/id_gampo.pub;
   };
 }

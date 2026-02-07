@@ -29,10 +29,7 @@
         ];
       };
     };
-    packages.nix = {
-      gc.automatic = true;
-      trusted-users = ["phundrak"];
-    };
+    packages.nix.gc.automatic = true;
     services = {
       endlessh.enable = false;
       ssh = {
@@ -44,7 +41,10 @@
     };
     users = {
       root.disablePassword = true;
-      phundrak.enable = true;
+      phundrak = {
+        enable = true;
+        trusted = true;
+      };
     };
   };
 

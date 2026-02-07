@@ -101,6 +101,10 @@
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/alys.nix;
       };
+      "phundrak@elcafe" = home-manager.lib.homeManagerConfiguration {
+        inherit extraSpecialArgs pkgs;
+        modules = withUserModules ./users/phundrak/host/elcafe.nix;
+      };
       "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
         modules = withUserModules [
@@ -135,6 +139,10 @@
       alys = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = withSystemModules ./hosts/alys/configuration.nix;
+      };
+      elcafe = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules = withSystemModules ./hosts/elcafe/configuration.nix;
       };
       gampo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;

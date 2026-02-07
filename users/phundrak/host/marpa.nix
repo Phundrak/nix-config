@@ -7,8 +7,6 @@
       ollama.gpu = "rocm";
     };
     desktop.hyprland.host = "marpa";
-    phundrak.sshKey = {
-      content = builtins.readFile ../../../keys/id_marpa.pub;
-    };
+    phundrak.sshKey.content = builtins.readFile ../keys/id_marpa.pub;
   };
 }

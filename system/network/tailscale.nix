@@ -13,7 +13,7 @@ in {
     };
   };
   config.services.tailscale = {
-    enable = cfg.enable;
+    inherit (cfg) enable;
     extraSetFlags = [
       "--accept-dns"
       "--accept-routes"

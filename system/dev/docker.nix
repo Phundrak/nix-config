@@ -12,6 +12,11 @@ in {
     podman.enable = mkEnableOption "Enable Podman rather than Docker";
     nvidia.enable = mkEnableOption "Activate Nvidia support";
     autoprune.enable = mkEnableOption "Enable autoprune";
+    storage = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/path/to/docker/storage";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -29,6 +34,9 @@ in {
         enable = true;
         enableNvidia = cfg.nvidia.enable;
         autoPrune.enable = cfg.autoprune.enable;
+        daemon.settings = mkIf (cfg.storage != null) {
+          "data-root" = cfg.storage;
+        };
       };
       podman = mkIf cfg.podman.enable {
         enable = true;

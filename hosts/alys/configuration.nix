@@ -20,10 +20,7 @@
       domain = "phundrak.com";
       id = "41157110";
     };
-    packages.nix = {
-      gc.automatic = true;
-      trusted-users = ["root" "phundrak"];
-    };
+    packages.nix.gc.automatic = true;
     services = {
       endlessh.enable = true;
       ssh = {
@@ -34,7 +31,10 @@
     };
     users = {
       root.disablePassword = true;
-      phundrak.enable = true;
+      phundrak = {
+        enable = true;
+        trusted = true;
+      };
     };
   };
   system.stateVersion = "23.11";
