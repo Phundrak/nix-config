@@ -6,8 +6,8 @@
   ...
 }:
 with lib; let
+  inherit (pkgs.stdenv.hostPlatform) system;
   cfg = config.home.desktop.spotify;
-  system = pkgs.stdenv.hostPlatform.system;
   spicePkgs = inputs.spicetify.legacyPackages.${system};
 in {
   options.home.desktop.spotify = {

@@ -1,4 +1,6 @@
 keys:
+  - &elcafe age1tkywsvddjj6r6ukuqgz9aql92jfx85rz57dhmkkndysh6yx6p5rs0zj0qr
+  - &elcafe-host age17p69ktg7yfzgdsk00f32mupe4n4fevdpw2wsv7ft30yvpeseau6s7t0zdg
   - &gampo age1ajemtm502nn2n4q7v4j8meyd5mxtcqngkkedxq2pqzuwu78zp93qnw8q48
   - &gampo-host age197lfdanym647wdaz9uy8hrfqjwj9fs8rm7vs3fsrctceu8mr9gms2jedhz
   - &marpa age17pn6suvz2f7zmrm9zxj5hr0putvcvdamqxqt7ewhncgg6ccgmp2qr00xm2
@@ -19,3 +21,5 @@ creation_rules:
       - *tilo-host
       - *NaroMk3
       - *NaroMk3-host
+      - *elcafe
+      - *elcafe-host

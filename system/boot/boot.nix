@@ -44,7 +44,7 @@ in {
     grub = {
       enable = mkEnableOption "Does the system use GRUB? (Disables systemd-boot)";
       device = mkOption {
-        type = types.str;
+        type = types.path;
         description = "The GRUB device";
         default = "";
       };

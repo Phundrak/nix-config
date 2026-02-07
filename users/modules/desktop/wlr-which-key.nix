@@ -21,7 +21,7 @@
   # Recursively filter out null values and convert kebab-case keys to snake_case
   filterNulls = value:
     if lib.isAttrs value
-    then lib.mapAttrs' (n: v: lib.nameValuePair (toSnakeCase n) (filterNulls v)) (lib.filterAttrs (n: v: v != null) value)
+    then lib.mapAttrs' (n: v: lib.nameValuePair (toSnakeCase n) (filterNulls v)) (lib.filterAttrs (_: v: v != null) value)
     else if lib.isList value
     then map filterNulls value
     else value;

@@ -78,7 +78,7 @@
             parts = lib.strings.splitString " " content;
             email = lib.lists.last parts;
           in "${email} namespaces=\"git\" ${content}")
-          (lib.filesystem.listFilesRecursive ../../keys)
+          (lib.filesystem.listFilesRecursive ./keys)
         );
       };
     };

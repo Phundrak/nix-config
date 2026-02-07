@@ -8,18 +8,28 @@ with lib; let
 in {
   options.mySystem.services.traefik = {
     enable = mkEnableOption "Enable Traefik";
-    dataDir = mkOption {
-      type = types.path;
-      default = "/tank/traefik";
-    };
     email = mkOption {
       type = types.str;
       default = "";
     };
+    dataDir = mkOption {
+      type = types.path;
+      default = "/tank/traefik";
+      example = "/path/to/traefik/data";
+    };
+    environmentFiles = mkOption {
+      type = types.listOf types.path;
+      example = ["/var/traefik/traefik.env"];
+      default = [];
+    };
+    dynamicConfigFile = mkOption {
+      type = types.path;
+      default = "${cfg.dataDir}/traefik.yaml";
+      example = "/var/traefik/dynamic.yaml";
+    };
   };
   config.services.traefik = {
-    inherit (cfg) enable;
-    dynamicConfigFile = "${cfg.dataDir}/dynamic_config.toml";
+    inherit (cfg) enable dynamicConfigFile environmentFiles;
     staticConfigOptions = {
       api.dashboard = true;
       log = {
@@ -29,18 +39,18 @@ in {
       };
       accessLog.filePath = "${cfg.dataDir}/access.log";
       entryPoints = {
-        http = {
+        web = {
           address = ":80";
           asDefault = true;
           http.redirections.entrypoint = {
-            to = "https";
+            to = "websecure";
             scheme = "https";
           };
         };
-        https = {
+        websecure = {
           address = ":443";
           asDefault = true;
-          httpChallenge.entryPoint = "https";
+          httpChallenge.entryPoint = "websecure";
         };
       };
       providers.docker = {
@@ -53,6 +63,7 @@ in {
         dnsChallenge = {
           provider = "cloudflare";
           resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
+          propagation.delayBeforeChecks = 60;
         };
       };
     };

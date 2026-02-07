@@ -49,8 +49,8 @@
       appimage.enable = true;
       flatpak.enable = true;
       nix = {
+        gc.automatic = true;
         nix-ld.enable = true;
-        trusted-users = ["root" "phundrak"];
       };
     };
     programs.steam.enable = true;
@@ -60,7 +60,10 @@
     };
     users = {
       root.disablePassword = true;
-      phundrak.enable = true;
+      phundrak = {
+        enable = true;
+        trusted = true;
+      };
     };
   };
 

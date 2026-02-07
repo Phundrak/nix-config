@@ -15,7 +15,12 @@ in {
     autoStart = cfg.autostart;
     capSysAdmin = true;
     openFirewall = true;
-    settings.sunshine_name = config.mySystem.networking.hostname;
+    settings = {
+      sunshine_name = config.mySystem.networking.hostname;
+      locale = "en_GB";
+      system_tray = "enabled";
+      output_name = 1;
+    };
     applications.apps = [
       {
         name = "Desktop";
@@ -42,6 +47,12 @@ in {
       {
         name = "OpenMW";
         cmd = "openmw";
+        image-path = "/home/phundrak/.config/sunshine/covers/igdb_24775.png";
+      }
+      {
+        name = "Vintage Story";
+        cmd = "flatpak run at.vintagestory.VintageStory";
+        image-path = "/home/phundrak/.config/sunshine/covers/igdb_69547.png";
       }
     ];
   };

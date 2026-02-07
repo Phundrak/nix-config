@@ -13,7 +13,6 @@ in {
     ./kdeconnect.nix
     ./kitty.nix
     ./obs.nix
-    ./qt.nix
     ./rofi
     ./spotify.nix
     ./swaync.nix
@@ -30,10 +29,10 @@ in {
     kdeconnect.enable = mkDefault cfg.fullDesktop;
     kitty.enable = mkDefault cfg.fullDesktop;
     obs.enable = mkDefault cfg.fullDesktop;
-    qt.enable = mkDefault cfg.fullDesktop;
     rofi.enable = mkDefault cfg.fullDesktop;
     spotify.enable = mkDefault cfg.fullDesktop;
     spotify.spicetify.enable = mkDefault cfg.fullDesktop;
+    theme.enable = mkDefault cfg.fullDesktop;
     wlr-which-key.enable = mkDefault cfg.fullDesktop;
   };
 }

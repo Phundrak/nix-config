@@ -20,7 +20,6 @@
 - **hosts/**: Contains the host-specific NixOS configurations.
 - **system/**: Holds system-wide configuration modules that can be shared across different hosts. This includes things like boot settings, desktop environments, hardware configurations, networking, packages, security, and system services.
 - **users/**: Manages user-specific configurations. It's split into `modules` for reusable home-manager configurations and `phundrak` for my personal configuration.
-- **keys/**: Public keys for various machines.
 - **secrets/**: Encrypted secrets managed with `sops-nix`.
 
 ## Usage

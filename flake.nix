@@ -94,6 +94,7 @@
       defaultUserModules = [
         inputs.sops-nix.homeManagerModules.sops
         inputs.spicetify.homeManagerModules.default
+        inputs.caelestia-shell.homeManagerModules.default
       ];
       withUserModules = modules: nixpkgs.lib.lists.flatten (defaultUserModules ++ [modules]);
     in {
@@ -101,19 +102,17 @@
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/alys.nix;
       };
+      "phundrak@elcafe" = home-manager.lib.homeManagerConfiguration {
+        inherit extraSpecialArgs pkgs;
+        modules = withUserModules ./users/phundrak/host/elcafe.nix;
+      };
       "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = withUserModules [
-          inputs.caelestia-shell.homeManagerModules.default
-          ./users/phundrak/host/marpa.nix
-        ];
+        modules = withUserModules ./users/phundrak/host/marpa.nix;
       };
       "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
-        modules = withUserModules [
-          inputs.caelestia-shell.homeManagerModules.default
-          ./users/phundrak/host/marpa.nix
-        ];
+        modules = withUserModules ./users/phundrak/host/marpa.nix;
       };
       "phundrak@NaroMk3" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
@@ -135,6 +134,10 @@
       alys = nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = withSystemModules ./hosts/alys/configuration.nix;
+      };
+      elcafe = nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules = withSystemModules ./hosts/elcafe/configuration.nix;
       };
       gampo = nixpkgs.lib.nixosSystem {
         inherit specialArgs;

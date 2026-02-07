@@ -5,27 +5,23 @@
   ...
 }:
 with lib; let
-  cfg = config.mySystem.users;
+  cfg = config.mySystem.users.phundrak;
 in {
-  options.mySystem.users = {
-    root.disablePassword = mkEnableOption "Disables root password";
-    phundrak.enable = mkEnableOption "Enables users phundrak";
+  options.mySystem.users.phundrak = {
+    enable = mkEnableOption "Enables user phundrak";
+    trusted = mkEnableOption "Mark the user as trusted by Nix";
   };
 
   config = {
-    users.users = {
-      root = {
-        hashedPassword = mkIf cfg.root.disablePassword "*";
-        shell = pkgs.zsh;
-      };
-      phundrak = mkIf cfg.phundrak.enable {
-        isNormalUser = true;
-        description = "Lucien Cartier-Tilet";
-        extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman" "plugdev" "games" "audio" "input"];
-        shell = pkgs.zsh;
-        openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ../../keys;
-      };
+    users.users.phundrak = mkIf cfg.enable {
+      isNormalUser = true;
+      description = "Lucien Cartier-Tilet";
+      extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman" "plugdev" "games" "audio" "input"];
+      shell = pkgs.zsh;
+      openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ../../users/phundrak/keys;
     };
-    programs.zsh.enable = true;
+    nix.settings = mkIf cfg.trusted {
+      trusted-users = ["phundrak"];
+    };
   };
 }
