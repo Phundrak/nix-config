@@ -13,7 +13,7 @@ in {
     sshKey = {
       content = mkOption {
         type = types.nullOr types.str;
-        example = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGj+J6N6SO+4P8dOZqfR1oiay2yxhhHnagH52avUqw5h";
+        example = "ssh-ed25519 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
         default = null;
       };
       file = mkOption {

@@ -102,6 +102,10 @@
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/alys.nix;
       };
+      "creug@elcafe" = home-manager.lib.homeManagerConfiguration {
+        inherit extraSpecialArgs pkgs;
+        modules = withUserModules ./users/creug/host/elcafe.nix;
+      };
       "phundrak@elcafe" = home-manager.lib.homeManagerConfiguration {
         inherit extraSpecialArgs pkgs;
         modules = withUserModules ./users/phundrak/host/elcafe.nix;
