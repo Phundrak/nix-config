@@ -2,6 +2,7 @@
   imports = [
     ./amdgpu.nix
     ./bluetooth.nix
+    ./fingerprint.nix
     ./sound.nix
     ./input
   ];

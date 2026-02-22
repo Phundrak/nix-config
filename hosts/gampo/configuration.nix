@@ -33,6 +33,7 @@
     };
     hardware = {
       bluetooth.enable = true;
+      fingerprint.enable = true;
       input = {
         corne.allowHidAccess = true;
         ibmTrackpoint.disable = true;
