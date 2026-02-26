@@ -7,6 +7,7 @@
 with lib; let
   inherit (pkgs.stdenv.hostPlatform) system;
   handy = pkgs.callPackage ../../packages/handy.nix {};
+  inkdrop = pkgs.callPackage ../../packages/inkdrop.nix {};
   pumo-system-info = inputs.pumo-system-info.packages.${system}.default;
   zen = inputs.zen-browser.packages.${system}.default;
 in {
@@ -72,6 +73,7 @@ in {
     # Dev
     dbeaver-bin
     devenv
+    inkdrop
     nodejs
     sqlite
     tectonic # better LaTeX engine
