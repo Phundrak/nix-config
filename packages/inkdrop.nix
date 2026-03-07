@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   # Ignore musl dependency since we're using glibc
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+  autoPatchelfIgnoreMissingDeps = ["libc.musl-x86_64.so.1"];
 
   unpackPhase = ''
     runHook preUnpack
@@ -142,8 +142,8 @@ stdenv.mkDerivation rec {
     description = "Notebook app for Markdown lovers";
     homepage = "https://www.inkdrop.app/";
     license = licenses.unfree;
-    maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = [];
+    platforms = ["x86_64-linux"];
     mainProgram = "inkdrop";
   };
 }

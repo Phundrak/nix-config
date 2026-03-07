@@ -12,6 +12,14 @@
   sops.secrets = {
     "elcafe/traefik/env".restartUnits = ["traefik.service"];
     "elcafe/traefik/dynamic".restartUnits = ["traefik.service"];
+    "elcafe/copyparty/passwords/creug" = {
+      restartUnits = ["copyparty.service"];
+      owner = "creug";
+    };
+    "elcafe/copyparty/passwords/phundrak" = {
+      restartUnits = ["copyparty.service"];
+      owner = "phundrak";
+    };
   };
 
   mySystem = {
@@ -62,6 +70,13 @@
         enable = true;
         sudo = true;
       };
+    };
+  };
+
+  services.copyparty = import ./copyparty.nix {
+    passwordFiles = {
+      creug = config.sops.secrets."elcafe/copyparty/passwords/creug".path;
+      phundrak = config.sops.secrets."elcafe/copyparty/passwords/phundrak".path;
     };
   };
 

@@ -19,13 +19,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    pumo-system-info = {
-      url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    caelestia-shell = {
-      url = "github:caelestia-dots/shell";
+    copyparty = {
+      url = "github:9001/copyparty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pumo-system-info = {
+      url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -138,6 +143,7 @@
       specialArgs = {inherit inputs outputs;};
       defaultSystemModules = [
         inputs.sops-nix.nixosModules.sops
+        inputs.copyparty.nixosModules.default
       ];
       withSystemModules = modules: nixpkgs.lib.lists.flatten (defaultSystemModules ++ [modules]);
     in {
