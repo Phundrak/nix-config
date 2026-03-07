@@ -39,11 +39,11 @@ in {
     # Social
     vesktop # Discord alternative that works well with wayland
     element-desktop
-    signal-desktop-bin
+    signal-desktop
 
     # Misc
     bitwarden-desktop
-    gplates
+    # gplates
     handy
     libnotify
     nextcloud-client
