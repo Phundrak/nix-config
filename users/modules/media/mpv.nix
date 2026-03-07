@@ -44,7 +44,7 @@ in {
       encode
       inhibit-gnome
       mpris
-      mpv-cheatsheet
+      mpv-cheatsheet-ng
       quality-menu
       sponsorblock
       thumbfast
