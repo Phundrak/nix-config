@@ -78,6 +78,7 @@ in {
     ./fish.nix
     ./starship.nix
     ./tmux.nix
+    ./zellij.nix
     ./zsh.nix
     ./zoxide.nix
   ];

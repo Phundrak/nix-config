@@ -7,7 +7,7 @@
 with lib; let
   cfg = config.home.phundrak;
 in {
-  imports = [../modules];
+  imports = [../modules ./zellij.nix];
 
   options.home.phundrak = {
     sshKey = {
