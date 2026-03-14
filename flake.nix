@@ -29,6 +29,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    jj-cz = {
+      url = "git+https://labs.phundrak.com/phundrak/jj-cz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     pumo-system-info = {
       url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
       inputs.nixpkgs.follows = "nixpkgs";

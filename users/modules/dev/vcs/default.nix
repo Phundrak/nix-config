@@ -48,6 +48,10 @@ in {
       enable = mkDefault true;
       inherit (cfg) name email editor;
       signing.sshKey = mkDefault (cfg.publicKey.file or cfg.publicKey.content);
+      cz = {
+        enable = mkDefault true;
+        alias = mkDefault true;
+      };
     };
   };
 }
