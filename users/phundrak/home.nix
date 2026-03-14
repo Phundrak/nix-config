@@ -67,7 +67,7 @@
         caelestia.enable = true;
         spotify = {
           enable = true;
-          spicetify.enable = false;
+          spicetify.enable = true;
         };
       };
       dev = {
