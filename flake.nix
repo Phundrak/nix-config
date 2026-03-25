@@ -61,8 +61,22 @@
   };
 
   nixConfig = {
-    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-    extra-substituters = "https://devenv.cachix.org";
+    extra-trusted-public-keys = [
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      "phundrak.cachix.org-1:osJAkYO0ioTOPqaQCIXMfIRz1/+YYlVFkup3R2KSexk="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+    extra-substituters = [
+      "https://nix-community.cachix.org?priority=10"
+      "https://devenv.cachix.org?priority=20"
+      "https://phundrak.cachix.org?priority=30"
+      "https://cache.nixos.org?priority=40"
+    ];
+    extra-experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    http-connections = 128;
   };
 
   outputs = {
