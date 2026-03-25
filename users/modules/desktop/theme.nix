@@ -20,6 +20,7 @@ in {
         package = pkgs.nordic;
         name = "Nordic";
       };
+      gtk4.theme = config.gtk.theme;
     };
     home.pointerCursor = {
       enable = true;

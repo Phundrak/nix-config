@@ -127,6 +127,11 @@ in {
 
         "dist/"
       ];
+      signing = {
+        format = if cfg.publicKeyFile != null then "ssh" else "openpgp";
+        key = cfg.publicKeyFile;
+        signByDefault = true;
+      };
       settings = {
         user = {
           inherit (cfg) name email;
@@ -151,8 +156,6 @@ in {
           renames = "copy";
           interHunkContext = 10;
         };
-        commit.gpgsign = cfg.publicKeyFile != null;
-        gpg.format = "ssh";
         gpg.ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
         init.defaultBranch = "main";
         pull.rebase = true;
@@ -168,7 +171,6 @@ in {
           updateRefs = true;
         };
         help.autocorrect = "prompt";
-        user.signingkey = mkIf (cfg.publicKeyFile != null) cfg.publicKeyFile;
         web.browser = mkIf (cfg.browser != null) cfg.browser;
         sendemail = mkIf cfg.sendmail.enable {
           smtpserver = cfg.sendmail.server;
