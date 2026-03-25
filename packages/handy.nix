@@ -6,10 +6,10 @@
 }: let
   name = "Handy";
   pname = lib.strings.toLower name;
-  version = "0.7.7";
+  version = "0.8.0";
   src = fetchurl {
     url = "https://github.com/cjpais/${name}/releases/download/v${version}/${name}_${version}_amd64.AppImage";
-    hash = "sha256-76Hno39I3+46blnVW6XWwg944vF5n7IdMYXGMlYMNb0=";
+    hash = "sha256-PLcssfd6iMx51mglAJ7D4+67HFazwfhJMImgU9WiNDk=";
   };
   appimageContent = appimageTools.extractType2 {inherit pname version src;};
 in
