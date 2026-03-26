@@ -45,6 +45,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
     programs.firefox = {
       inherit (cfg) enable;
       package =
@@ -52,6 +53,7 @@ in {
         then zen
         else pkgs.firefox;
       nativeMessagingHosts = lists.optional cfg.tridactyl.enable pkgs.tridactyl-native;
+      configPath = ".mozilla/firefox";
     };
     xdg.configFile."tridactyl/tridactylrc" = mkIf cfg.tridactyl.enable {
       text = concatStringsSep "\n" (filter (s: s != "") [

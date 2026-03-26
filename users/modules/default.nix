@@ -31,6 +31,6 @@ in {
     dev.fullDesktop = mkDefault cfg.fullDesktop;
     media.fullDesktop = mkDefault cfg.fullDesktop;
     security.fullDesktop = mkDefault cfg.fullDesktop;
-    services.fullDesktop = mkDefault cfg.fullDesktop;
+    myServices.fullDesktop = mkDefault cfg.fullDesktop;
   };
 }

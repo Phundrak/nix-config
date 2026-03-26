@@ -4,7 +4,7 @@
   ...
 }:
 with lib; let
-  cfg = config.home.services;
+  cfg = config.home.myServices;
 in {
   imports = [
     ./blanket.nix
@@ -12,8 +12,12 @@ in {
     ./mpris-proxy.nix
     ./playerctld.nix
   ];
-  options.home.services.fullDesktop = mkEnableOption "Enable all modules";
-  config.home.services = {
+  options.home.myServices.fullDesktop = mkOption {
+    description = "Enable all modules";
+    type = types.bool;
+    default = config.home.fullDesktop;
+  };
+  config.home.myServices = {
     blanket.enable = mkDefault cfg.fullDesktop;
     mbsync.enable = mkDefault cfg.fullDesktop;
     mpris-proxy.enable = mkDefault cfg.fullDesktop;

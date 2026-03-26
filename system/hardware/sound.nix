@@ -32,13 +32,16 @@ in {
 
   config = {
     environment.systemPackages = mkIf cfg.scarlett.enable [pkgs.alsa-scarlett-gui];
-    services.pipewire = mkIf cfg.enable {
-      enable = true;
-      alsa = mkIf cfg.alsa {
-        enable = mkDefault true;
-        support32Bit = mkDefault true;
+    services = {
+      pipewire = mkIf cfg.enable {
+        enable = true;
+        alsa = mkIf cfg.alsa {
+          enable = mkDefault true;
+          support32Bit = mkDefault true;
+        };
+        jack.enable = mkDefault cfg.jack;
       };
-      jack.enable = mkDefault cfg.jack;
+      pulseaudio.enable = false;
     };
     programs.noisetorch = mkIf cfg.enable {
       inherit (cfg) enable;
