@@ -8,7 +8,6 @@ with lib; let
 in {
   imports = [
     ./caelestia.nix
-    ./eww.nix
     ./firefox.nix
     ./hyprland.nix
     ./kdeconnect.nix
@@ -26,7 +25,6 @@ in {
 
   options.home.desktop.fullDesktop = mkEnableOption "Enable options for graphical environments";
   config.home.desktop = {
-    eww.enable = mkDefault cfg.fullDesktop;
     firefox.enable = mkDefault cfg.fullDesktop;
     hyprland.enable = mkDefault cfg.fullDesktop;
     kdeconnect.enable = mkDefault cfg.fullDesktop;
