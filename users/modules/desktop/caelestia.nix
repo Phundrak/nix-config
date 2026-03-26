@@ -13,9 +13,7 @@ in {
     systemd = {
       enable = true;
       target = "graphical-session.target";
-      environment = [
-        "QT3_QPA_PLATFORMTHEME=gtk3"
-      ];
+      environment = ["QT3_QPA_PLATFORMTHEME=gtk3"];
     };
     settings = {
       paths.wallpaperDir = "~/Pictures/Wallpapers/nord";

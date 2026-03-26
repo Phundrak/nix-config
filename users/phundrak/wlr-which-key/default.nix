@@ -26,8 +26,9 @@
       focus-urgent = import ./focus-urgent.nix {inherit pkgs;};
       fullscreen = import ./fullscreen.nix {inherit pkgs;};
       logout = import ./logout.nix {inherit pkgs;};
-      ytplay = import ../../modules/cli/scripts/ytplay.nix {inherit pkgs;};
+      app-launcher = import ../../modules/cli/scripts/launcher.nix {inherit pkgs;};
       plock = import ../../modules/cli/scripts/plock.nix {inherit pkgs;};
+      ytplay = import ../../modules/cli/scripts/ytplay.nix {inherit pkgs;};
     in
       [
         {
@@ -96,7 +97,7 @@
                 {
                   key = "r";
                   desc = "App Menu";
-                  cmd = "rofi -show drun";
+                  cmd = "${app-launcher}/bin/app-launcher";
                 }
                 {
                   key = "s";
