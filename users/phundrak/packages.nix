@@ -40,6 +40,7 @@ in {
 
     # Misc
     # gplates
+    kicad-small
     qgis
     handy
     libnotify
