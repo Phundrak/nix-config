@@ -4,8 +4,8 @@
   ...
 }:
 with lib; let
-  cfg = config.home.services.blanket;
+  cfg = config.home.myServices.blanket;
 in {
-  options.home.services.blanket.enable = mkEnableOption "Enable blanket";
+  options.home.myServices.blanket.enable = mkEnableOption "Enable blanket";
   config.services.blanket.enable = cfg.enable;
 }

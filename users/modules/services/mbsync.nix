@@ -4,9 +4,9 @@
   ...
 }:
 with lib; let
-  cfg = config.home.services.mbsync;
+  cfg = config.home.myServices.mbsync;
 in {
-  options.home.services.mbsync = {
+  options.home.myServices.mbsync = {
     enable = mkEnableOption "Enables mbsync";
     service.enable = mkOption {
       type = types.bool;

@@ -2,6 +2,7 @@
   description = "Home Manager configuration of phundrak";
 
   inputs = {
+    nixpkgsStable.url = "nixpkgs/nixos-25.11";
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -30,14 +31,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    opencode = {
-      url = "github:anomalyco/opencode/v1.3.15";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     pumo-system-info = {
       url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    rockchip = {
+      url = "github:raboof/nixos-rockchip/pinetab-linux-7.0";
+      inputs.utils.follows = "flake-utils";
+      inputs.nixpkgsStable.follows = "nixpkgsStable";
+      inputs.nixpkgsUnstable.follows = "nixpkgs";
     };
 
     sops-nix = {
@@ -86,6 +89,7 @@
     nixpkgs,
     flake-utils,
     home-manager,
+    rockchip,
     srvos,
     ...
   } @ inputs:
@@ -138,6 +142,10 @@
               inherit extraSpecialArgs pkgs;
               modules = withUserModules ./users/phundrak/host/naromk3.nix;
             };
+            "phundrak@pinetab2" = home-manager.lib.homeManagerConfiguration {
+              inherit extraSpecialArgs pkgs;
+              modules = withUserModules ./users/phundrak/host/pinetab2.nix;
+            };
             "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
               inherit extraSpecialArgs pkgs;
               modules = withUserModules ./users/phundrak/host/tilo.nix;
@@ -151,6 +159,10 @@
               inputs.copyparty.nixosModules.default
             ];
             withSystemModules = modules: nixpkgs.lib.lists.flatten (defaultSystemModules ++ [modules]);
+            pinetabConfig = import ./utils/pinetab.nix {
+              inherit nixpkgs rockchip specialArgs;
+              additionalModules = defaultSystemModules;
+            };
           in {
             alys = nixpkgs.lib.nixosSystem {
               inherit specialArgs;
@@ -177,6 +189,7 @@
                 ./hosts/naromk3/configuration.nix
               ];
             };
+            pinetab2 = pinetabConfig "x86_64-linux" ./hosts/pinetab2/gnome.nix;
             tilo = nixpkgs.lib.nixosSystem {
               inherit specialArgs;
               modules = withSystemModules ./hosts/tilo/configuration.nix;

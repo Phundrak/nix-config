@@ -32,9 +32,7 @@ in {
       secrets."ssh/hosts" = {};
       age = {
         # automatically import user SSH keys as age keys
-        sshKeyPaths = [
-          "${config.home.homeDirectory}/.ssh/id_ed25519"
-        ];
+        sshKeyPaths = ["${config.home.homeDirectory}/.ssh/id_ed25519"];
         # this will use an age key that is expected to already be in the filesystem
         keyFile = "${config.home.homeDirectory}/.local/sops-nix/key.txt";
         # generate a new key if the key specified above does not exist

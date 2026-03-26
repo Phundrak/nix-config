@@ -51,12 +51,20 @@ in {
         default = null;
       };
     };
+    wifi.disablePowersave = mkEnableOption ''
+      Disables powersave for Wifi.
+
+        Used mainly for the PineTab2, as leaving WiFi powersave with the bes2600 can cause stability issues.
+    '';
   };
 
   config.networking = {
     hostName = cfg.hostname; # Define your hostname.
     hostId = cfg.id;
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      wifi.powersave = ! cfg.wifi.disablePowersave;
+    };
     inherit (cfg) hostFiles domain;
     firewall = {
       enable = true;

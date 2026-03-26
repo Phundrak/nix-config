@@ -27,7 +27,7 @@ in {
     trusted-users = mkOption {
       type = types.listOf types.str;
       example = ["alice" "bob"];
-      default = [];
+      default = ["@wheel" "root"];
     };
   };
 
