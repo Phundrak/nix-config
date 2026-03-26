@@ -27,9 +27,10 @@ in {
           explorer = ["${pkgs.nemo-with-extensions}/bin/nemo"];
         };
         idle = {
+          inhibitWhenAudio = true;
           timeouts = [
             {
-              timeout = 300;
+              timeout = 3600;
               idleAction = "lock";
             }
           ];
