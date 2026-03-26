@@ -32,17 +32,15 @@ in {
     audacity
     plexamp
     plex-desktop
-    spicetify-cli
     pavucontrol # Volume control
 
     # Social
     vesktop # Discord alternative that works well with wayland
-    element-desktop
     signal-desktop
 
     # Misc
-    bitwarden-desktop
     # gplates
+    qgis
     handy
     libnotify
     nextcloud-client
