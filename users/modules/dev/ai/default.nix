@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 with lib; let
@@ -12,6 +11,7 @@ in {
   imports = [
     ./claude.nix
     ./ollama.nix
+    ./opencode.nix
   ];
 
   options.home.dev.ai = {
@@ -29,8 +29,9 @@ in {
           mcpServers = mkDefault cfg.mcpServers;
         };
         ollama.enable = mkDefault cfg.enable;
+        opencode.enable = mkDefault cfg.enable;
       };
-      packages = [pkgs.lmstudio pkgs.opencode];
+      packages = [pkgs.lmstudio];
     };
     programs.mcp = mkIf (cfg.mcpServers != {}) {
       enable = true;

@@ -5,6 +5,7 @@
   ...
 }: {
   imports = [
+    ./ai.nix
     ./light-home.nix
     ./packages.nix
     ./email.nix
@@ -56,6 +57,7 @@
       emailPassword = {};
       "mopidy/bandcamp" = {};
       "mopidy/spotify" = {};
+      "opencode/cors" = {};
     };
 
     home = {
@@ -86,7 +88,6 @@
         };
       };
       dev = {
-        ai.claude.enable = true;
         editors.emacs.package = emacsPackage;
         vcs.jj.signing.enable = true;
       };
