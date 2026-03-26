@@ -26,7 +26,7 @@
     };
 
     jj-cz = {
-      url = "git+https://labs.phundrak.com/phundrak/jj-cz";
+      url = "git+https://labs.phundrak.com/phundrak/jj-cz?ref=develop";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

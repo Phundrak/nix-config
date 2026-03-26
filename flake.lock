@@ -398,15 +398,16 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1775400071,
-        "narHash": "sha256-uFoqOUB1wbqqDKRdHNEYdgyRQECYWhJBq4Oxjm3Dx9M=",
-        "ref": "refs/heads/develop",
-        "rev": "3da214ae4c14f57dc5f6ecd480330936f00e1a4f",
-        "revCount": 35,
+        "lastModified": 1776813492,
+        "narHash": "sha256-gydjnWdoZm++hK0B1vpXerwKJQdCeUcxrbBr9iEUTTA=",
+        "ref": "develop",
+        "rev": "9a6b94276b68263ad5b2ffebb64354b3bb4cc92a",
+        "revCount": 38,
         "type": "git",
         "url": "https://labs.phundrak.com/phundrak/jj-cz"
       },
       "original": {
+        "ref": "develop",
         "type": "git",
         "url": "https://labs.phundrak.com/phundrak/jj-cz"
       }
