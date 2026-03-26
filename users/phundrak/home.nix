@@ -8,6 +8,7 @@
     ./light-home.nix
     ./packages.nix
     ./email.nix
+    ./tmux.nix
     ./wlr-which-key
     ../modules
   ];
