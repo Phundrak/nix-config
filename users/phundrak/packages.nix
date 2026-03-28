@@ -9,7 +9,6 @@ with lib; let
   handy = pkgs.callPackage ../../packages/handy.nix {};
   inkdrop = pkgs.callPackage ../../packages/inkdrop.nix {};
   pumo-system-info = inputs.pumo-system-info.packages.${system}.default;
-  zen = inputs.zen-browser.packages.${system}.default;
 in {
   programs.bun.enable = true;
   home.packages = with pkgs; [
@@ -52,7 +51,6 @@ in {
     scrcpy
     syncthing
     watchmate
-    zen
 
     # Games
     atlauncher
