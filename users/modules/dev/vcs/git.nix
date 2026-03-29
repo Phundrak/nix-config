@@ -128,7 +128,10 @@ in {
         "dist/"
       ];
       signing = {
-        format = if cfg.publicKeyFile != null then "ssh" else "openpgp";
+        format =
+          if cfg.publicKeyFile != null
+          then "ssh"
+          else "openpgp";
         key = cfg.publicKeyFile;
         signByDefault = true;
       };
