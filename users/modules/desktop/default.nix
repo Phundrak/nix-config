@@ -19,6 +19,7 @@ in {
     ./swaync.nix
     ./theme.nix
     ./waybar.nix
+    ./wl-kbptr.nix
     ./wlr-which-key.nix
     ./wlsunset.nix
   ];

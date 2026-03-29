@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   config.home.desktop.wlr-which-key.settings = {
@@ -27,217 +28,223 @@
       logout = import ./logout.nix {inherit pkgs;};
       ytplay = import ../../modules/cli/scripts/ytplay.nix {inherit pkgs;};
       plock = import ../../modules/cli/scripts/plock.nix {inherit pkgs;};
-    in [
-      {
-        key = "a";
-        desc = "Apps";
-        submenu = [
-          {
-            key = "b";
-            desc = "Browser";
-            cmd = "zen";
-          }
-          {
-            key = "B";
-            desc = "Qutebrowser";
-            cmd = "${pkgs.qutebrowser}/bin/qutebrowser";
-          }
-          {
-            key = "d";
-            desc = "Discord";
-            cmd = "${pkgs.vesktop}/bin/vesktop";
-          }
-          {
-            key = "e";
-            desc = "Emacs";
-            cmd = "${config.home.dev.editors.emacs.package}/bin/emacsclient -c -n";
-          }
-          {
-            key = "g";
-            desc = "Gimp";
-            cmd = "${pkgs.gimp}/bin/gimp";
-          }
-          {
-            key = "h";
-            desc = "Handy";
-            cmd = "pkill -USR2 -n handy";
-          }
-          {
-            key = "n";
-            desc = "Nemo";
-            cmd = "${pkgs.nemo-with-extensions}/bin/nemo";
-          }
-          {
-            key = "N";
-            desc = "Nextcloud";
-            cmd = "${pkgs.nextcloud-client}/bin/nextcloud";
-          }
-          {
-            key = "r";
-            desc = "Rofi";
-            submenu = [
-              {
-                key = "b";
-                desc = "Bluetooth";
-                cmd = "${pkgs.rofi-bluetooth}/bin/rofi-bluetooth";
-              }
-              {
-                key = "c";
-                desc = "calc";
-                cmd = "rofi -show calc";
-              }
-              {
-                key = "e";
-                desc = "Emoji";
-                cmd = "rofi -show emoji";
-              }
-              {
-                key = "r";
-                desc = "App Menu";
-                cmd = "rofi -show drun";
-              }
-              {
-                key = "s";
-                desc = "SSH";
-                cmd = "rofi -show ssh";
-              }
-              {
-                key = "y";
-                desc = "YouTube";
-                cmd = "${ytplay}/bin/ytplay";
-              }
-            ];
-          }
-        ];
-      }
-      {
-        key = "b";
-        desc = "Buffers";
-        submenu = [
-          {
-            key = "c";
-            desc = "Center";
-            cmd = "${center-window}/bin/center-window";
-          }
-          {
-            key = "d";
-            desc = "Close";
-            cmd = "${close-window}/bin/close-window";
-          }
-          {
-            key = "f";
-            desc = "Fullscreen";
-            cmd = "${fullscreen}/bin/fullscreen";
-          }
-          {
-            key = "F";
-            desc = "Float";
-            cmd = "${float-window}/bin/float-window";
-          }
-          {
-            key = "u";
-            desc = "Urgent";
-            cmd = "${focus-urgent}/bin/focus-urgent";
-          }
-          {
-            key = ".";
-            desc = "Resize";
-            submenu = [
-              {
-                key = left;
-                desc = "Decrease Width";
-                cmd = "echo decrease width";
-                keep-open = true;
-              }
-              {
-                key = down;
-                desc = "Increase Height";
-                cmd = "echo decrease height";
-                keep-open = true;
-              }
-              {
-                key = up;
-                desc = "Decrease Height";
-                cmd = "echo decrease height";
-                keep-open = true;
-              }
-              {
-                key = right;
-                desc = "Increase Width";
-                cmd = "echo increase width";
-                keep-open = true;
-              }
-            ];
-          }
-        ];
-      }
-      {
-        key = "l";
-        desc = "Lock session";
-        cmd = "${plock}/bin/plock";
-      }
-      {
-        key = "p";
-        desc = "Power";
-        submenu = [
-          {
-            key = "l";
-            desc = "Logout";
-            cmd = "${logout}/bin/logout";
-          }
-          {
-            key = "s";
-            desc = "Suspend";
-            cmd = "systemctl suspend";
-          }
-          {
-            key = "r";
-            desc = "Reboot";
-            cmd = "systemctl reboot";
-          }
-          {
-            key = "o";
-            desc = "Poweroff";
-            cmd = "systemctl poweroff";
-          }
-        ];
-      }
-      {
-        key = "s";
-        desc = "Screenshots";
-        submenu = [
-          {
-            key = "Print";
-            desc = "Screenshot";
-            cmd = "screenshot";
-          }
-          {
-            key = "d";
-            desc = "Delayed";
-            cmd = "screenshot -d 3";
-          }
-          {
-            key = "D";
-            desc = "Select, Delay, Edit, and Copy";
-            cmd = "screenshot -secd 3";
-          }
-          {
-            key = "e";
-            desc = "Select, Edit, and Copy";
-            cmd = "screenshot -sec";
-          }
-          {
-            key = "g";
-            desc = "Select, Gimp, and Copy";
-            cmd = "screenshot -sgc";
-          }
-          {
-            key = "s";
-            desc = "Select and Copy";
-            cmd = "screenshot -sc";
-          }
-        ];
-      }
-    ];
+    in
+      [
+        {
+          key = "a";
+          desc = "Apps";
+          submenu = [
+            {
+              key = "b";
+              desc = "Browser";
+              cmd = "zen";
+            }
+            {
+              key = "B";
+              desc = "Qutebrowser";
+              cmd = "${pkgs.qutebrowser}/bin/qutebrowser";
+            }
+            {
+              key = "d";
+              desc = "Discord";
+              cmd = "${pkgs.vesktop}/bin/vesktop";
+            }
+            {
+              key = "e";
+              desc = "Emacs";
+              cmd = "${config.home.dev.editors.emacs.package}/bin/emacsclient -c -n";
+            }
+            {
+              key = "g";
+              desc = "Gimp";
+              cmd = "${pkgs.gimp}/bin/gimp";
+            }
+            {
+              key = "h";
+              desc = "Handy";
+              cmd = "pkill -USR2 -n handy";
+            }
+            {
+              key = "n";
+              desc = "Nemo";
+              cmd = "${pkgs.nemo-with-extensions}/bin/nemo";
+            }
+            {
+              key = "N";
+              desc = "Nextcloud";
+              cmd = "${pkgs.nextcloud-client}/bin/nextcloud";
+            }
+            {
+              key = "r";
+              desc = "Rofi";
+              submenu = [
+                {
+                  key = "b";
+                  desc = "Bluetooth";
+                  cmd = "${pkgs.rofi-bluetooth}/bin/rofi-bluetooth";
+                }
+                {
+                  key = "c";
+                  desc = "calc";
+                  cmd = "rofi -show calc";
+                }
+                {
+                  key = "e";
+                  desc = "Emoji";
+                  cmd = "rofi -show emoji";
+                }
+                {
+                  key = "r";
+                  desc = "App Menu";
+                  cmd = "rofi -show drun";
+                }
+                {
+                  key = "s";
+                  desc = "SSH";
+                  cmd = "rofi -show ssh";
+                }
+                {
+                  key = "y";
+                  desc = "YouTube";
+                  cmd = "${ytplay}/bin/ytplay";
+                }
+              ];
+            }
+          ];
+        }
+        {
+          key = "b";
+          desc = "Buffers";
+          submenu = [
+            {
+              key = "c";
+              desc = "Center";
+              cmd = "${center-window}/bin/center-window";
+            }
+            {
+              key = "d";
+              desc = "Close";
+              cmd = "${close-window}/bin/close-window";
+            }
+            {
+              key = "f";
+              desc = "Fullscreen";
+              cmd = "${fullscreen}/bin/fullscreen";
+            }
+            {
+              key = "F";
+              desc = "Float";
+              cmd = "${float-window}/bin/float-window";
+            }
+            {
+              key = "u";
+              desc = "Urgent";
+              cmd = "${focus-urgent}/bin/focus-urgent";
+            }
+            {
+              key = ".";
+              desc = "Resize";
+              submenu = [
+                {
+                  key = left;
+                  desc = "Decrease Width";
+                  cmd = "echo decrease width";
+                  keep-open = true;
+                }
+                {
+                  key = down;
+                  desc = "Increase Height";
+                  cmd = "echo decrease height";
+                  keep-open = true;
+                }
+                {
+                  key = up;
+                  desc = "Decrease Height";
+                  cmd = "echo decrease height";
+                  keep-open = true;
+                }
+                {
+                  key = right;
+                  desc = "Increase Width";
+                  cmd = "echo increase width";
+                  keep-open = true;
+                }
+              ];
+            }
+          ];
+        }
+        {
+          key = "l";
+          desc = "Lock session";
+          cmd = "${plock}/bin/plock";
+        }
+        {
+          key = "p";
+          desc = "Power";
+          submenu = [
+            {
+              key = "l";
+              desc = "Logout";
+              cmd = "${logout}/bin/logout";
+            }
+            {
+              key = "s";
+              desc = "Suspend";
+              cmd = "systemctl suspend";
+            }
+            {
+              key = "r";
+              desc = "Reboot";
+              cmd = "systemctl reboot";
+            }
+            {
+              key = "o";
+              desc = "Poweroff";
+              cmd = "systemctl poweroff";
+            }
+          ];
+        }
+        {
+          key = "s";
+          desc = "Screenshots";
+          submenu = [
+            {
+              key = "Print";
+              desc = "Screenshot";
+              cmd = "screenshot";
+            }
+            {
+              key = "d";
+              desc = "Delayed";
+              cmd = "screenshot -d 3";
+            }
+            {
+              key = "D";
+              desc = "Select, Delay, Edit, and Copy";
+              cmd = "screenshot -secd 3";
+            }
+            {
+              key = "e";
+              desc = "Select, Edit, and Copy";
+              cmd = "screenshot -sec";
+            }
+            {
+              key = "g";
+              desc = "Select, Gimp, and Copy";
+              cmd = "screenshot -sgc";
+            }
+            {
+              key = "s";
+              desc = "Select and Copy";
+              cmd = "screenshot -sc";
+            }
+          ];
+        }
+      ]
+      ++ lib.lists.optional config.home.desktop.wl-kbptr.enable {
+        key = "m";
+        desc = "Mouse Warp";
+        cmd = "wl-kbptr";
+      };
   };
 }

@@ -139,6 +139,17 @@
           enable = true;
           spicetify.enable = true;
         };
+        wl-kbptr = {
+          enable = true;
+          config = {
+            general = {
+              # first eight chars to select areas, last three chars
+              # for left, right, middle click
+              home_row_keys = "auiectsrtsr";
+              modes = "tile,bisect";
+            };
+          };
+        };
       };
       dev = {
         ai.claude.enable = true;
