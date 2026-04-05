@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 with lib; let
@@ -29,7 +30,10 @@ in {
         };
         ollama.enable = mkDefault cfg.enable;
       };
-      packages = [pkgs.lmstudio];
+      packages = let
+        inherit (pkgs.stdenv.hostPlatform) system;
+        inherit (inputs.opencode.packages.${system}) opencode;
+      in [pkgs.lmstudio opencode];
     };
     programs.mcp = mkIf (cfg.mcpServers != {}) {
       enable = true;

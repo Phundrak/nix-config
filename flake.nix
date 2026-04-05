@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    opencode = {
+      url = "github:anomalyco/opencode/v1.3.15";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     pumo-system-info = {
       url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
       inputs.nixpkgs.follows = "nixpkgs";
