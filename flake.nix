@@ -95,7 +95,11 @@
       in {
         formatter = pkgs.alejandra;
         devShells.default = pkgs.mkShell {
-          buildInputs = [pkgs.nh];
+          buildInputs = [
+            pkgs.nh
+            pkgs.jujutsu
+            pkgs.git
+          ];
         };
 
         packages = {
