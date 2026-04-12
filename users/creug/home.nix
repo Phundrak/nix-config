@@ -34,7 +34,16 @@ in {
       creug.sshKey.file = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
 
       dev.vcs = {
-        jj.enable = false;
+        name = "Creug";
+        email = "gregory.foulachon@gmail.com";
+        editor = "${pkgs.nano}/bin/nano";
+        jj = {
+          enable = true;
+          cz = {
+            enable = true;
+            alias = true;
+          };
+        };
         git.enable = true;
         publicKey = cfg.sshKey;
       };
