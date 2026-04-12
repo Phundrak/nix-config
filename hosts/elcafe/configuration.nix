@@ -12,14 +12,14 @@
   sops.secrets = {
     "elcafe/traefik/env".restartUnits = ["traefik.service"];
     "elcafe/traefik/dynamic".restartUnits = ["traefik.service"];
-    "elcafe/copyparty/passwords/creug" = {
-      restartUnits = ["copyparty.service"];
-      owner = "creug";
-    };
-    "elcafe/copyparty/passwords/phundrak" = {
-      restartUnits = ["copyparty.service"];
-      owner = "phundrak";
-    };
+    # "elcafe/copyparty/passwords/creug" = {
+    #   restartUnits = ["copyparty.service"];
+    #   owner = "creug";
+    # };
+    # "elcafe/copyparty/passwords/phundrak" = {
+    #   restartUnits = ["copyparty.service"];
+    #   owner = "phundrak";
+    # };
   };
 
   mySystem = {
@@ -73,12 +73,12 @@
     };
   };
 
-  services.copyparty = import ./copyparty.nix {
-    passwordFiles = {
-      creug = config.sops.secrets."elcafe/copyparty/passwords/creug".path;
-      phundrak = config.sops.secrets."elcafe/copyparty/passwords/phundrak".path;
-    };
-  };
+  # services.copyparty = import ./copyparty.nix {
+  #   passwordFiles = {
+  #     creug = config.sops.secrets."elcafe/copyparty/passwords/creug".path;
+  #     phundrak = config.sops.secrets."elcafe/copyparty/passwords/phundrak".path;
+  #   };
+  # };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
