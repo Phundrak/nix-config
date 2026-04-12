@@ -73,10 +73,7 @@ in {
     };
     supportedFilesystems = mkIf cfg.zfs.enable ["zfs"];
     zfs.extraPools = mkIf cfg.zfs.enable cfg.zfs.pools;
-    kernelPackages =
-      if cfg.kernel.hardened
-      then pkgs.linuxPackages_hardened
-      else cfg.kernel.package;
+    kernelPackages = cfg.kernel.package;
     kernelModules =
       cfg.kernel.modules
       ++ ["kvm-${cfg.kernel.cpuVendor}"]
