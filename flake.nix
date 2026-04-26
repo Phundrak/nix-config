@@ -127,7 +127,7 @@
             };
             "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
               inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/marpa.nix;
+              modules = withUserModules ./users/phundrak/host/gampo.nix;
             };
             "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
               inherit extraSpecialArgs pkgs;
