@@ -50,10 +50,13 @@ in {
       systemd.enable = false;
       importantPrefixes = ["$left" "$right" "$up" "$down" "$menu"];
       settings = {
+        env = [
+          "XMODIFIERS,@im=fcitx"
+          "XCURSOR_SIZE,12"
+        ];
         input = {
           kb_layout = "fr,us";
           kb_variant = "bepo_afnor,";
-          # kb_options = "caps:ctrl_modifier";
           numlock_by_default = true;
           follow_mouse = 1;
           touchpad.natural_scroll = false;
@@ -106,6 +109,8 @@ in {
             "pactl load-module module-switch-on-connect"
             "${pkgs.mpc}/bin/mpc stop"
             "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+            "${pkgs.mozc}/lib/mozc/mozc_server"
+            "${pkgs.fcitx5}/bin/fcitx5 -d"
           ]
           ++ lib.lists.optional (! caelestiaEnabled) "${pkgs.networkmanagerapplet}/bin/nm-applet";
       };
@@ -170,8 +175,6 @@ in {
         bind = SUPER_SHIFT, minus, movetoworkspace, 8
         bind = SUPER_SHIFT, slash, movetoworkspace, 9
         bind = SUPER_SHIFT, asterisk, movetoworkspace, 10
-
-        env = XCURSOR_SIZE,12
       '';
     };
   };

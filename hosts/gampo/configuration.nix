@@ -41,6 +41,7 @@
       };
       sound.enable = true;
     };
+    i18n.input.enable = true;
     misc.keymap = "fr-bepo";
     networking = {
       hostname = "gampo";
