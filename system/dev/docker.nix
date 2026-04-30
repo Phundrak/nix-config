@@ -20,6 +20,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    mySystem.users.phundrak = mkIf config.mySystem.users.phundrak.enable {
+      extraGroups = ["docker"] ++ lists.optional cfg.podman.enable "podman";
+    };
     environment.systemPackages = with pkgs;
       [
         dive # A tool for exploring each layer in a docker image
@@ -29,7 +32,7 @@ in {
         podman-compose
         podman-desktop
       ];
-    virtualisation = mkIf cfg.enable {
+    virtualisation = {
       docker = mkIf (!cfg.podman.enable) {
         enable = true;
         enableNvidia = cfg.nvidia.enable;
