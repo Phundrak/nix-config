@@ -82,6 +82,7 @@
       };
       sound = {
         enable = true;
+        noisetorch = true;
         jack = true;
         scarlett.enable = true;
       };

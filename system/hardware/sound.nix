@@ -9,6 +9,7 @@ with lib; let
 in {
   options.mySystem.hardware.sound = {
     enable = mkEnableOption "Whether to enable sounds with Pipewire";
+    noisetorch = mkEnableOption "Whether to activate noisetorch support";
     scarlett.enable = mkEnableOption "Activate support for Scarlett sound card";
     alsa = mkOption {
       type = types.bool;
@@ -44,7 +45,7 @@ in {
       pulseaudio.enable = false;
     };
     programs.noisetorch = mkIf cfg.enable {
-      inherit (cfg) enable;
+      enable = cfg.noisetorch;
     };
   };
 }
