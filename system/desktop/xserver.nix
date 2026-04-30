@@ -30,6 +30,7 @@ in {
       games.enable = false;
       gnome-remote-desktop.enable = true;
       gnome-online-accounts.enable = true;
+      gnome-keyring.enable = true;
       sushi.enable = true;
     };
 

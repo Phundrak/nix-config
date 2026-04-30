@@ -41,6 +41,7 @@ in {
     # Misc
     # gplates
     qgis
+    kicad
     handy
     libnotify
     nextcloud-client

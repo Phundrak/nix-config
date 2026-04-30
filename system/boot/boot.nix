@@ -54,7 +54,7 @@ in {
     };
   };
 
-  config.boot = {
+  config.boot = mkIf (! config.mySystem.misc.mobile) {
     initrd.kernelModules = lib.lists.singleton (
       if config.mySystem.hardware.amdgpu.enable
       then "amdgpu"

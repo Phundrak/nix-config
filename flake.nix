@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mobile-nixos = {
+      url = "github:mobile-nixos/mobile-nixos";
+      flake = false; # It is not as a flake
+    };
+
     opencode = {
       url = "github:anomalyco/opencode/v1.3.15";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -86,6 +91,7 @@
     nixpkgs,
     flake-utils,
     home-manager,
+    mobile-nixos,
     srvos,
     ...
   } @ inputs:
@@ -175,6 +181,14 @@
                 srvos.nixosModules.hardware-hetzner-cloud
                 srvos.nixosModules.mixins-terminfo
                 ./hosts/naromk3/configuration.nix
+              ];
+            };
+            pumo = nixpkgs.lib.nixosSystem {
+              system = "aarch64-linux";
+              inherit specialArgs;
+              modules = withSystemModules [
+                (import "${mobile-nixos}/lib/configuration.nix" {device = "oneplus-enchilada";})
+                ./hosts/pumo
               ];
             };
             tilo = nixpkgs.lib.nixosSystem {

@@ -30,6 +30,7 @@ in {
       example = "fr-bepo";
       description = "Keymap to use in the TTY console";
     };
+    mobile = mkEnableOption "Enable if using Mobile NixOS";
   };
 
   config = {

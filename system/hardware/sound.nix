@@ -8,7 +8,8 @@ with lib; let
   cfg = config.mySystem.hardware.sound;
 in {
   options.mySystem.hardware.sound = {
-    enable = mkEnableOption "Whether to enable sounds with Pipewire";
+    enable = mkEnableOption "Whether to enable sounds";
+    usePulseaudio = mkEnableOption "Activate sound support with pulseaudio";
     scarlett.enable = mkEnableOption "Activate support for Scarlett sound card";
     alsa = mkOption {
       type = types.bool;
@@ -32,13 +33,14 @@ in {
 
   config = {
     environment.systemPackages = mkIf cfg.scarlett.enable [pkgs.alsa-scarlett-gui];
-    services.pipewire = mkIf cfg.enable {
-      enable = true;
-      alsa = mkIf cfg.alsa {
+    services = {
+      pipewire.enable = mkForce (cfg.enable && ! cfg.usePulseaudio);
+      pipewire.alsa = {
         enable = mkDefault true;
         support32Bit = mkDefault true;
       };
-      jack.enable = mkDefault cfg.jack;
+      pipewire.jack.enable = cfg.jack;
+      pulseaudio.enable = cfg.usePulseaudio;
     };
     programs.noisetorch = mkIf cfg.enable {
       inherit (cfg) enable;
