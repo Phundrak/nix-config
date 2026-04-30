@@ -11,12 +11,8 @@ in {
     enable = mkEnableOption "Enable Flatpak support";
     builder.enable = mkEnableOption "Enable Flatpak builder";
   };
-  config = {
-    services.flatpak = mkIf cfg.enable {
-      inherit (cfg) enable;
-    };
-    environment.systemPackages = mkIf cfg.builder.enable [
-      pkgs.flatpak-buildR
-    ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = lists.optional cfg.builder.enable pkgs.flatpak-builder;
+    services.flatpak.enable = true;
   };
 }
