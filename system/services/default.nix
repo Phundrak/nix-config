@@ -3,6 +3,7 @@
     ./calibre.nix
     ./endlessh.nix
     ./fwupd.nix
+    ./harmonia.nix
     ./jellyfin.nix
     ./languagetool.nix
     ./plex.nix

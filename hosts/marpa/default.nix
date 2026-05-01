@@ -107,6 +107,10 @@
     programs.steam.enable = true;
     services = {
       fwupd.enable = true;
+      harmonia = {
+        enable = true;
+        signKeyPaths = [config.sops.secrets."marpa/nix-cache-priv-key".path];
+      };
       languagetool.enable = true;
       printing.enable = true;
       ssh.enable = true;
@@ -124,10 +128,13 @@
     };
   };
 
-  sops.secrets.extraHosts = {
-    inherit (config.users.users.root) group;
-    owner = config.users.users.phundrak.name;
-    mode = "0440";
+  sops.secrets = {
+    "marpa/nix-cache-priv-key" = {};
+    extraHosts = {
+      inherit (config.users.users.root) group;
+      owner = config.users.users.phundrak.name;
+      mode = "0440";
+    };
   };
 
   services.udev.extraHwdb = ''
