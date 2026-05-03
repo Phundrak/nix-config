@@ -9,7 +9,10 @@ with lib; let
 in {
   options.mySystem.desktop.waydroid.enable = mkEnableOption "Enables Waydroid";
   config = mkIf cfg.enable {
-    virtualisation.waydroid.enable = cfg.enable;
+    virtualisation.waydroid = {
+      enable = cfg.enable;
+      package = pkgs.waydroid-nftables;
+    };
     environment.systemPackages = [pkgs.waydroid-helper];
   };
 }
