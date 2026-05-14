@@ -16,7 +16,7 @@ in {
     users.users.phundrak = mkIf cfg.enable {
       isNormalUser = true;
       description = "Lucien Cartier-Tilet";
-      extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman" "plugdev" "games" "audio" "input"];
+      extraGroups = ["networkmanager" "wheel" "docker" "dialout" "podman" "plugdev" "games" "audio" "input" "uinput"];
       shell = pkgs.zsh;
       openssh.authorizedKeys.keyFiles = lib.filesystem.listFilesRecursive ../../users/phundrak/keys;
     };

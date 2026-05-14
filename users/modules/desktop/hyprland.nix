@@ -62,6 +62,10 @@ in {
           touchpad.natural_scroll = false;
           sensitivity = "0";
         };
+        device = {
+          name = "wacom-usb-bamboo-pad-finger";
+          sensitivity = 0.5;
+        };
         monitor =
           {
             "marpa" = [
@@ -115,6 +119,12 @@ in {
           ++ lib.lists.optional (! caelestiaEnabled) "${pkgs.networkmanagerapplet}/bin/nm-applet";
       };
       extraConfig = ''
+        device {
+          name = wacom-usb-bamboo-pad-finger
+          sensitivity = 0.5
+          accel_profile = adaptive
+        }
+
         $left = c
         $right = r
         $up = s
