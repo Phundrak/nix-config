@@ -97,15 +97,15 @@ in {
   config.home.shell = {
     enableShellIntegration = cfg.bash.enable or cfg.zsh.enable or cfg.fish.enable;
     bash = {
-      aliases = cfg.aliases // defaultAliases;
+      aliases = defaultAliases // cfg.aliases;
       enable = mkDefault cfg.fullDesktop;
     };
     fish = {
-      abbrs = cfg.aliases // defaultAliases;
+      abbrs = defaultAliases // cfg.aliases;
       enable = mkDefault cfg.fullDesktop;
     };
     zsh = {
-      abbrs = cfg.aliases // defaultAliases;
+      abbrs = defaultAliases // cfg.aliases;
       enable = mkDefault cfg.fullDesktop;
     };
   };

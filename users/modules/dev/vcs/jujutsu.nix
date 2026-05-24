@@ -40,6 +40,12 @@ in {
       enable = mkEnableOption "Enables jj-cz";
       alias = mkEnableOption "Enable `jj cz` as an alias to `jj-cz`";
     };
+    # used in my shell .nix files
+    shellCompletion = mkOption {
+      description = "Enable Jujutsu shell completion";
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable {

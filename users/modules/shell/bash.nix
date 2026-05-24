@@ -36,6 +36,7 @@ in {
         concatLines
         [
           (strings.optionalString cfg.eatIntegration ''[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/bash"'')
+          (strings.optionalString config.home.dev.vcs.jj.shellCompletion "source <(jj util completion bash)")
           cfg.bashrcExtra
         ];
       enableCompletion = cfg.autocompletion;

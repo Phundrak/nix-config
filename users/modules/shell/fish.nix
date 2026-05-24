@@ -41,6 +41,7 @@ in {
               __fish_default_command_not_found_handler $argv
             end
           ''
+          (strings.optionalString config.home.dev.vcs.jj.shellCompletion "jj util completion fish | source")
           cfg.extraShellInit
         ];
       plugins = [

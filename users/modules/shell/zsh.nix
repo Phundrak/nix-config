@@ -62,6 +62,11 @@ in {
             zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza $realpath'
           ''
           (strings.optionalString cfg.eatIntegration ''[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && source "$EAT_SHELL_INTEGRATION_DIR/zsh"'')
+          (strings.optionalString config.home.dev.vcs.jj.shellCompletion ''
+            autoload -U compinit
+            compinit
+            source <(jj util completion zsh)
+          '')
           cfg.zshrcExtra
         ];
       oh-my-zsh = {
