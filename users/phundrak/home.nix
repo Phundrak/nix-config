@@ -77,8 +77,10 @@
             general = {
               # first eight chars to select areas, last three chars
               # for left, right, middle click
+              # First eigh chars to select areas: auiectsr
+              # last three chars for left, right, and middle click: tsr
               home_row_keys = "auiectsrtsr";
-              modes = "tile,bisect";
+              modes = "tile,bisect,click";
             };
           };
         };

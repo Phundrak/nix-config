@@ -242,10 +242,18 @@
           ];
         }
       ]
-      ++ lib.lists.optional config.home.desktop.wl-kbptr.enable {
-        key = "m";
-        desc = "Mouse Warp";
-        cmd = "wl-kbptr";
-      };
+      ++ lib.lists.optionals config.home.desktop.wl-kbptr.enable [
+        {
+          key = "m";
+          desc = "Mouse Warp";
+          cmd = "wl-kbptr";
+        }
+        {
+          key = "M";
+          desc = "Mouse click";
+          # cmd = "wl-kbptr -o modes=floating,click";
+          cmd = "wl-kbptr -o modes=floating,click -o mode_floating.source=detect";
+        }
+      ];
   };
 }
