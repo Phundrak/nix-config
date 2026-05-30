@@ -68,6 +68,11 @@ in {
         hibernate = ["systemctl" "hibernate"];
         reboot = ["systemctl" "reboot"];
       };
+      utilities.toasts = {
+        capsLockChanged = false;
+        numLockChanged = false;
+        kbLayoutChanged = false;
+      };
     };
     cli = {
       enable = true;
