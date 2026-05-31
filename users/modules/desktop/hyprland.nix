@@ -88,8 +88,9 @@ in {
           new_status = "inherit";
         };
         workspace = [
-          "10, layoutopt:orientation:bottom"
           "1, layoutopt:orientation:bottom"
+          "9, layoutopt:orientation:bottom"
+          "10, layoutopt:orientation:bottom"
         ];
         decoration = {
           rounding = 20;
