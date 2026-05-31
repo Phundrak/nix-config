@@ -11,6 +11,7 @@ in {
     ./mpd.nix
     ./mpd-mpris.nix
     ./mpv.nix
+    ./ncmpcpp.nix
   ];
 
   options.home.media.fullDesktop = mkEnableOption "Enables everything";
@@ -18,5 +19,6 @@ in {
     mopidy.enable = mkDefault cfg.fullDesktop;
     mpd.enable = mkDefault (cfg.fullDesktop or cfg.mpd-mpris.enable);
     mpv.enable = mkDefault cfg.fullDesktop;
+    ncmpcpp.enable = mkDefault config.home.media.mpd.enable;
   };
 }

@@ -20,6 +20,11 @@ in {
       auto_update "yes"
 
       audio_output {
+        type "pipewire"
+        name "PipeWire"
+      }
+
+      audio_output {
         type "fifo"
         name "my_fifo"
         path "/tmp/mpd.fifo"
