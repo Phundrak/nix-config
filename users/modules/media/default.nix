@@ -12,6 +12,7 @@ in {
     ./mpd-mpris.nix
     ./mpv.nix
     ./ncmpcpp.nix
+    ./streamlink.nix
   ];
 
   options.home.media.fullDesktop = mkEnableOption "Enables everything";
@@ -20,5 +21,6 @@ in {
     mpd.enable = mkDefault (cfg.fullDesktop or cfg.mpd-mpris.enable);
     mpv.enable = mkDefault cfg.fullDesktop;
     ncmpcpp.enable = mkDefault config.home.media.mpd.enable;
+    streamlink.enable = mkDefault config.home.media.mpv.enable;
   };
 }

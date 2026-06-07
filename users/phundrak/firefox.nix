@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   config.home.desktop.firefox = {
     enable = true;
     useZen = true;
@@ -13,6 +13,16 @@
         smothscroll = "true";
       };
       extraConfig = ''
+        command openTwitchInMpv js -d@\
+          const url = new URL(document.location.href);\
+          const cleanUrl = url.hostname + url.pathname;\
+          const token = document.cookie.split("; ")\
+                                .find(item => item.startsWith("auth-token="))?.split("=")[1];\
+          const auth = "--twitch-api-header=Authorization=OAuth " + token;\
+          const cmd = `${pkgs.streamlink}/bin/streamlink "''${auth}" "''${cleanUrl}" best`;\
+          tri.native.run(cmd)\
+        @
+
         unbind h
         unbind j
         unbind k
@@ -69,6 +79,7 @@
 
         bind < urlincrement -1
         bind > urlincrement 1
+        bind ypt openTwitchInMpv
         bind ypv js tri.native.run(`mpv --ytdl-format="[height >=? 480]" --ontop --fs "''${document.location.href}"`)
         bind ypm hint -JF e => tri.native.run(`mpv --ytdl-format="[height >=? 480]" --ontop --fs "''${e.href}"`)
       '';
