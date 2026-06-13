@@ -106,10 +106,7 @@ in {
             "workspaces, 1, 6, default"
           ];
         };
-        dwindle = {
-          pseudotile = true;
-          preserve_split = true;
-        };
+        dwindle.preserve_split = true;
         exec-once =
           [
             "pactl load-module module-switch-on-connect"
