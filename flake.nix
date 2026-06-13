@@ -186,7 +186,7 @@
                 srvos.nixosModules.server
                 srvos.nixosModules.hardware-hetzner-cloud
                 srvos.nixosModules.mixins-terminfo
-                ./hosts/naromk3/configuration.nix
+                ./hosts/naromk3
               ];
             };
             pinetab2 = pinetabConfig "x86_64-linux" ./hosts/pinetab2/gnome.nix;
