@@ -49,6 +49,7 @@ in {
     scrcpy
     syncthing
     watchmate
+    chatterino7
 
     # Games
     atlauncher
