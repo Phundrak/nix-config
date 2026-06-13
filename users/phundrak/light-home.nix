@@ -10,6 +10,10 @@ in {
   imports = [../modules ./zellij.nix];
 
   options.home.phundrak = {
+    username = mkOption {
+      default = "phundrak";
+      type = types.str;
+    };
     sshKey = {
       content = mkOption {
         type = types.nullOr types.str;
@@ -41,8 +45,8 @@ in {
     };
 
     home = {
-      username = "phundrak";
-      homeDirectory = "/home/phundrak";
+      username = cfg.username;
+      homeDirectory = "/home/${cfg.username}";
       packages = [pkgs.tree pkgs.ncdu];
       preferXdgDirectories = true;
 

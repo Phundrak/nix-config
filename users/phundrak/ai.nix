@@ -1,6 +1,6 @@
-{config, ...}: {
+{config, lib, ...}: {
   home.dev.ai = {
-    enable = true;
+    enable = lib.mkDefault true;
     opencode = {
       tui = {
         mouse = true;
@@ -32,12 +32,15 @@
           "*" = "ask";
           glob = "allow";
           grep = "allow";
+          skill = "allow";
+          question = "allow";
           read = {
             "*" = "allow";
             "*.env" = "deny";
             "*.env.*" = "deny";
             "*.env.example" = "allow";
           };
+          "doom_loop" = "deny";
         };
         formatter.nixfmt = {
           command = ["nix" "fmt" "$FILE"];

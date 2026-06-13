@@ -146,6 +146,10 @@
               inherit extraSpecialArgs pkgs;
               modules = withUserModules ./users/phundrak/host/pinetab2.nix;
             };
+            "deck@steamdeck" = home-manager.lib.homeManagerConfiguration {
+              inherit extraSpecialArgs pkgs;
+              modules = withUserModules ./users/phundrak/host/steamdeck.nix;
+            };
             "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
               inherit extraSpecialArgs pkgs;
               modules = withUserModules ./users/phundrak/host/tilo.nix;
