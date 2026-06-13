@@ -9,6 +9,7 @@ keys:
   - &tilo-host age1awytvphvty4f9wmdn86xnjg9kgetqjx8qlwj5d2882t4fyyzy58s3vg5k4
   - &NaroMk3 age1erkn7dd022e90ktyj66aux9j9xvl0uzd6ru5cmrjsvcm5rtr5pfs7q6k9h
   - &NaroMk3-host age16crkeglm3j3f6rveylytuerptjf9mwtv3hl89ywkmnnvdkntfchsuvrsk5
+  - &steamdeck age1ztuc996dapd7gpw5g7t4k3e9egv3dj6czxyslhnwula97w3cuytqlgzru0
 creation_rules:
   - path_regex: secrets/secrets.yaml$
     key_groups:
@@ -23,3 +24,4 @@ creation_rules:
       - *NaroMk3-host
       - *elcafe
       - *elcafe-host
+      - *steamdeck

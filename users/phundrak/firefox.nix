@@ -66,10 +66,11 @@
         " tabopen was on t → move to j (bépo's 'find char to' position)
         bind j fillcmdline tabopen
 
-        unbind ^http(s?)://youtube\.com f
-        unbind ^http(s?)://youtube\.com t
-        unbind ^http(s?)://youtube\.com l
-        unbind ^http(s?)://youtube\.com j
+        unbind ^http(s?)://(www\.)?youtube\.com c
+        unbind ^http(s?)://(www\.)?youtube\.com f
+        unbind ^http(s?)://(www\.)?youtube\.com t
+        unbind ^http(s?)://(www\.)?youtube\.com l
+        unbind ^http(s?)://(www\.)?youtube\.com j
         unbind ^http(s?)://twitch\.tv f
 
         bind n findnext

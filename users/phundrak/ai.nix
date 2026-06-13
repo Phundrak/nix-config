@@ -1,6 +1,6 @@
-{config, ...}: {
+{config, lib, ...}: {
   home.dev.ai = {
-    enable = true;
+    enable = lib.mkDefault true;
     opencode = {
       tui = {
         mouse = true;
@@ -18,9 +18,8 @@
         autoupdate = false;
         provider = {
           ollama = {
-            npm = "@ai-sdk/openai-compatible";
             name = "Ollama (marpa)";
-            options.baseURL = "http://marpa:11434/v1";
+            options.baseURL = "http://marpa:11434";
           };
           models = {
             "qwen3.5:9b".name = "Qwen 3.5 Medium";
@@ -32,12 +31,15 @@
           "*" = "ask";
           glob = "allow";
           grep = "allow";
+          skill = "allow";
+          question = "allow";
           read = {
             "*" = "allow";
             "*.env" = "deny";
             "*.env.*" = "deny";
             "*.env.example" = "allow";
           };
+          "doom_loop" = "deny";
         };
         formatter.nixfmt = {
           command = ["nix" "fmt" "$FILE"];

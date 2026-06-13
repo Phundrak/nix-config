@@ -47,7 +47,7 @@ in {
     services.blueman-applet.enable = ! caelestiaEnabled;
     wayland.windowManager.hyprland = {
       enable = true;
-      systemd.enable = false;
+      systemd.enable = true;
       importantPrefixes = ["$left" "$right" "$up" "$down" "$menu"];
       settings = {
         env = [
