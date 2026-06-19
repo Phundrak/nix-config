@@ -75,6 +75,7 @@ in {
     tectonic # better LaTeX engine
     wakatime-cli
     zeal
+    pandoc
 
     ## LSP servers
     bash-language-server
