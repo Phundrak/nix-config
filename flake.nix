@@ -104,6 +104,7 @@
             pkgs.nh
             pkgs.jujutsu
             pkgs.git
+            inputs.jj-cz.packages.${system}.default
           ];
         };
 
