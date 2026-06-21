@@ -16,6 +16,11 @@ in {
 
   options.home.dev.ai = {
     enable = mkEnableOption "Enables AI features";
+    lmStudio = mkOption {
+      default = cfg.enable;
+      example = true;
+      description = "Enables LM Studio. Enabled by default when AI is enabled.";
+    };
     mcpServers = mkOption {
       inherit (jsonFormat) type;
       default = {};
@@ -31,7 +36,7 @@ in {
         ollama.enable = mkDefault cfg.enable;
         opencode.enable = mkDefault cfg.enable;
       };
-      packages = [pkgs.lmstudio];
+      packages = lists.optional cfg.lmStudio pkgs.lmstudio;
     };
     programs.mcp = mkIf (cfg.mcpServers != {}) {
       enable = true;

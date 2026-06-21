@@ -1,6 +1,6 @@
 {config, ...}: {
   home.dev.ai = {
-    enable = true;
+    enable =  true;
     opencode = {
       tui = {
         mouse = true;
