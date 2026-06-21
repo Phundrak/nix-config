@@ -44,7 +44,7 @@ in {
       };
       launcher = {
         enabled = true;
-        showOnHover = true;
+        showOnHover = false;
         useFuzzy = {
           apps = true;
           schemes = true;
