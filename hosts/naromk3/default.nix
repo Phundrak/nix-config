@@ -23,9 +23,9 @@
       id = "0003beef";
       firewall = {
         openPorts = [
-          22  # Gitea SSH
-          25  # SMTP
-          80  # HTTP
+          22 # Gitea SSH
+          25 # SMTP
+          80 # HTTP
           443 # HTTPS
           465 # SMTPS
           993 # IMAPS

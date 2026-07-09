@@ -1,15 +1,30 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
   ...
 }:
 with lib; let
-  inherit (pkgs.stdenv.hostPlatform) system;
   cfg = config.home.dev.ai.opencode;
-  defaultPackageCli = inputs.opencode.packages.${system}.opencode;
-  defaultPackageDesktop = inputs.opencode.packages.${system}.desktop;
+
+  # On x86_64-linux CPUs without AVX2, use the baseline bun variant
+  # when building opencode - the regular `bun` from nixpkgs requires
+  # AVX2 and crashes on older hardware, such as my Thinkpad x220’s
+  # Intel Core i5 2640M.
+  needsBaselineBun =
+    pkgs.stdenv.hostPlatform.isx86_64 && !pkgs.stdenv.hostPlatform.avx2Support;
+  bunBaseline = pkgs.callPackage ../../../../packages/bun-baseline.nix {};
+
+  defaultPackageCli =
+    if needsBaselineBun
+    then pkgs.opencode.override {bun = bunBaseline;}
+    else pkgs.opencode;
+
+  defaultPackageDesktop =
+    if needsBaselineBun
+    then pkgs.opencode-desktop.override {bun = bunBaseline;}
+    else pkgs.opencode-desktop;
+
   corsList = domains: lists.remove "" (lists.forEach (strings.splitString "," domains) trim);
 in {
   options.home.dev.ai.opencode = {
@@ -66,9 +81,9 @@ in {
     };
   };
   config.programs.opencode = mkIf cfg.enable {
-    inherit (cfg) enable tui;
+    inherit (cfg) enable tui package;
     enableMcpIntegration = true;
-    extraPackages = with pkgs; [uv];
+    extraPackages = with pkgs; [uv] ++ lists.optional cfg.desktop.enable cfg.desktop.package;
     settings =
       {
         server = mkIf cfg.web.mdns.enable {

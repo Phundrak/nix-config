@@ -96,7 +96,8 @@
     flake-utils.lib.eachDefaultSystem (
       system: let
         inherit (self) outputs;
-        pkgs = nixpkgs.legacyPackages.${system};
+
+        pkgs = import nixpkgs {inherit system;};
       in {
         formatter = pkgs.alejandra;
         devShells.default = pkgs.mkShell {
@@ -111,7 +112,7 @@
         packages = {
           homeConfigurations = let
             extraSpecialArgs = {inherit inputs outputs system;};
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            pkgs = import nixpkgs {inherit system;};
             defaultUserModules = [
               inputs.sops-nix.homeManagerModules.sops
               inputs.spicetify.homeManagerModules.default
