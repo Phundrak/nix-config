@@ -106,6 +106,7 @@
           );
         };
       };
+      media.mopidy.enable = false;
     };
 
     manual = {
