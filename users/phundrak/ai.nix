@@ -38,6 +38,10 @@
             "*.env.*" = "deny";
             "*.env.example" = "allow";
           };
+          skill = "allow";
+          question = "allow";
+          task = "allow";
+          todowrite = "allow";
         };
         formatter.nixfmt = {
           command = ["nix" "fmt" "$FILE"];
