@@ -7,7 +7,10 @@
       enable = true;
       ollama.gpu = "rocm";
     };
-    desktop.hyprland.host = "marpa";
+    desktop = {
+      hyprland.host = "marpa";
+      caelestia.idleTimeout = 60 * 60 * 24; # a day
+    };
     phundrak.sshKey.content = builtins.readFile ../keys/id_marpa.pub;
   };
   programs.caelestia.settings.bar.status = {

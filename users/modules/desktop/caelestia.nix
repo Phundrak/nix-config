@@ -7,7 +7,14 @@
 with lib; let
   cfg = config.home.desktop.caelestia;
 in {
-  options.home.desktop.caelestia.enable = mkEnableOption "Enables Caelestia Shell";
+  options.home.desktop.caelestia = {
+    enable = mkEnableOption "Enables Caelestia Shell";
+    idleTimeout = mkOption {
+      description = "Idle duration in seconds before locking the session";
+      default = 60 * 60; # an hour
+      type = types.int;
+    };
+  };
   config.programs.caelestia = mkIf cfg.enable {
     inherit (cfg) enable;
     systemd = {
@@ -28,7 +35,7 @@ in {
           inhibitWhenAudio = true;
           timeouts = [
             {
-              timeout = 3600;
+              timeout = cfg.idleTimeout;
               idleAction = "lock";
             }
           ];
