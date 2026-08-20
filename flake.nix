@@ -1,203 +1,79 @@
+# DO-NOT-EDIT. This file was auto-generated using github:denful/flake-file.
+# Use `nix run .#write-flake` to regenerate it.
 {
-  description = "Home Manager configuration of phundrak";
+  description = "NixOS and Home Manager configuration of phundrak";
+
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+
+  nixConfig = {
+    extra-experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    extra-substituters = [
+      "https://phundrak.cachix.org?priority=10"
+      "https://nix-community.cachix.org?priority=20"
+      "https://cache.nixos.org?priority=40"
+    ];
+    extra-trusted-public-keys = [
+      "phundrak.cachix.org-1:osJAkYO0ioTOPqaQCIXMfIRz1/+YYlVFkup3R2KSexk="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
+    http-connections = 128;
+  };
 
   inputs = {
-    nixpkgsStable.url = "nixpkgs/nixos-25.11";
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     caelestia-shell = {
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    copyparty = {
-      url = "github:9001/copyparty";
+    flake-file.url = "github:vic/flake-file";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-utils.url = "github:numtide/flake-utils";
+    home-manager = {
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    import-tree.url = "github:vic/import-tree";
     jj-cz = {
       url = "git+https://labs.phundrak.com/phundrak/jj-cz?ref=develop";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgsPinetab2Kernel.url = "github:nixos/nixpkgs/e73de5be04e0eff4190a1432b946d469c794e7b4";
+    nixpkgsStable.url = "nixpkgs/nixos-25.11";
     pumo-system-info = {
       url = "git+https://labs.phundrak.com/phundrak/pumo-system-info";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     rockchip = {
       url = "github:raboof/nixos-rockchip/pinetab-linux-7.0";
-      inputs.utils.follows = "flake-utils";
-      inputs.nixpkgsStable.follows = "nixpkgsStable";
-      inputs.nixpkgsUnstable.follows = "nixpkgs";
+      inputs = {
+        nixpkgsStable.follows = "nixpkgsStable";
+        nixpkgsUnstable.follows = "nixpkgsPinetab2Kernel";
+        utils.follows = "flake-utils";
+      };
     };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     spicetify = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     srvos = {
       url = "github:nix-community/srvos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
-  nixConfig = {
-    extra-trusted-public-keys = [
-      "marpa-local:XoO+dFN4PeauF52pYuy3Vh4Sdtl2qIdxu5aUasWKv6Q="
-      "phundrak.cachix.org-1:osJAkYO0ioTOPqaQCIXMfIRz1/+YYlVFkup3R2KSexk="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    ];
-    extra-substituters = [
-      "http://marpa:5000?priority=5"
-      "https://phundrak.cachix.org?priority=10"
-      "https://nix-community.cachix.org?priority=20"
-      "https://cache.nixos.org?priority=40"
-    ];
-    extra-experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    http-connections = 128;
-  };
-
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    home-manager,
-    rockchip,
-    srvos,
-    ...
-  } @ inputs:
-    flake-utils.lib.eachDefaultSystem (
-      system: let
-        inherit (self) outputs;
-
-        pkgs = import nixpkgs {inherit system;};
-      in {
-        formatter = pkgs.alejandra;
-        devShells.default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.nh
-            pkgs.jujutsu
-            pkgs.git
-            inputs.jj-cz.packages.${system}.default
-          ];
-        };
-
-        packages = {
-          homeConfigurations = let
-            extraSpecialArgs = {inherit inputs outputs system;};
-            pkgs = import nixpkgs {inherit system;};
-            defaultUserModules = [
-              inputs.sops-nix.homeManagerModules.sops
-              inputs.spicetify.homeManagerModules.default
-              inputs.caelestia-shell.homeManagerModules.default
-            ];
-            withUserModules = modules: nixpkgs.lib.lists.flatten (defaultUserModules ++ [modules]);
-          in {
-            "phundrak@alys" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/alys.nix;
-            };
-            "creug@elcafe" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/creug/host/elcafe.nix;
-            };
-            "phundrak@elcafe" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/elcafe.nix;
-            };
-            "phundrak@gampo" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/gampo.nix;
-            };
-            "phundrak@marpa" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/marpa.nix;
-            };
-            "phundrak@NaroMk3" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/naromk3.nix;
-            };
-            "phundrak@pinetab2" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/pinetab2.nix;
-            };
-            "phundrak@tilo" = home-manager.lib.homeManagerConfiguration {
-              inherit extraSpecialArgs pkgs;
-              modules = withUserModules ./users/phundrak/host/tilo.nix;
-            };
-          };
-
-          nixosConfigurations = let
-            specialArgs = {inherit inputs outputs;};
-            defaultSystemModules = [
-              inputs.sops-nix.nixosModules.sops
-              inputs.copyparty.nixosModules.default
-            ];
-            withSystemModules = modules: nixpkgs.lib.lists.flatten (defaultSystemModules ++ [modules]);
-            pinetabConfig = import ./utils/pinetab.nix {
-              inherit nixpkgs rockchip specialArgs;
-              additionalModules = defaultSystemModules;
-            };
-          in {
-            alys = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules ./hosts/alys/configuration.nix;
-            };
-            elcafe = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules ./hosts/elcafe/configuration.nix;
-            };
-            gampo = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules ./hosts/gampo/configuration.nix;
-            };
-            marpa = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules ./hosts/marpa;
-            };
-            NaroMk3 = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules [
-                srvos.nixosModules.server
-                srvos.nixosModules.hardware-hetzner-cloud
-                srvos.nixosModules.mixins-terminfo
-                ./hosts/naromk3
-              ];
-            };
-            pinetab2 = pinetabConfig "x86_64-linux" ./hosts/pinetab2/gnome.nix;
-            tilo = nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = withSystemModules ./hosts/tilo/configuration.nix;
-            };
-          };
-        };
-      }
-    );
 }

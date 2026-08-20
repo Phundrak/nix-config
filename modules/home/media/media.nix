@@ -1,0 +1,30 @@
+{config, ...}: let
+  m = config.flake.modules.homeManager;
+in {
+  flake.modules.homeManager.media = {
+    config,
+    lib,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.media;
+    in {
+      imports = [
+        m.mopidy
+        m.mpd
+        m.mpd-mpris
+        m.mpv
+        m.ncmpcpp
+        m.streamlink
+      ];
+
+      options.home.media.fullDesktop = mkEnableOption "Enables everything";
+      config.home.media = {
+        mopidy.enable = mkDefault cfg.fullDesktop;
+        mpd.enable = mkDefault (cfg.fullDesktop or cfg.mpd-mpris.enable);
+        mpv.enable = mkDefault cfg.fullDesktop;
+        ncmpcpp.enable = mkDefault config.home.media.mpd.enable;
+        streamlink.enable = mkDefault config.home.media.mpv.enable;
+      };
+    };
+}

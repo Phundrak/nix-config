@@ -1,3 +1,0 @@
-{
-  imports = [./nextcloud-cron.nix];
-}

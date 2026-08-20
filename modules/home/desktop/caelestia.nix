@@ -1,0 +1,98 @@
+{inputs, ...}: {
+  flake-file.inputs.caelestia-shell = {
+    url = "github:caelestia-dots/shell";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  flake.modules.homeManager.caelestia = {
+    config,
+    lib,
+    pkgs,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.desktop.caelestia;
+    in {
+      imports = [inputs.caelestia-shell.homeManagerModules.default];
+
+      options.home.desktop.caelestia = {
+        enable = mkEnableOption "Enables Caelestia Shell";
+        idleTimeout = mkOption {
+          description = "Idle duration in seconds before locking the session";
+          default = 60 * 60; # an hour
+          type = types.int;
+        };
+      };
+      config.programs.caelestia = mkIf cfg.enable {
+        inherit (cfg) enable;
+        systemd = {
+          enable = true;
+          target = "graphical-session.target";
+          environment = ["QT3_QPA_PLATFORMTHEME=gtk3"];
+        };
+        settings = {
+          paths.wallpaperDir = "~/Pictures/Wallpapers/nord";
+          general = {
+            apps = {
+              terminal = ["kitty"];
+              audio = ["pavucontrol"];
+              playback = ["mpv"];
+              explorer = ["${pkgs.nemo-with-extensions}/bin/nemo"];
+            };
+            idle = {
+              inhibitWhenAudio = true;
+              timeouts = [
+                {
+                  timeout = cfg.idleTimeout;
+                  idleAction = "lock";
+                }
+              ];
+            };
+          };
+          background = {
+            desktopClock.enabled = true;
+            visualiser.enabled = true;
+          };
+          dashboard = {
+            enabled = true;
+            showOnHover = true;
+          };
+          launcher = {
+            enabled = true;
+            showOnHover = false;
+            useFuzzy = {
+              apps = true;
+              schemes = true;
+              wallpapers = true;
+            };
+          };
+          osd.enableMicrophone = true;
+          bar = {
+            status = {
+              showAudio = true;
+              showKbLayout = false;
+            };
+            tray.compact = true;
+          };
+          services = mkIf (config.home.gpuType != null) {
+            inherit (config.home) gpuType;
+          };
+          session.commands = {
+            logout = ["uwsm" "stop"];
+            shutdown = ["systemctl" "poweroff"];
+            hibernate = ["systemctl" "hibernate"];
+            reboot = ["systemctl" "reboot"];
+          };
+          utilities.toasts = {
+            capsLockChanged = false;
+            numLockChanged = false;
+            kbLayoutChanged = false;
+          };
+        };
+        cli = {
+          enable = true;
+          settings.theme.enableGtk = true;
+        };
+      };
+    };
+}

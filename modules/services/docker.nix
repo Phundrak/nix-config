@@ -1,0 +1,61 @@
+{
+  flake.modules.nixos.docker = {
+    lib,
+    config,
+    pkgs,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.dev.docker;
+      containerGroups = ["docker"] ++ lists.optional cfg.podman.enable "podman";
+    in {
+      options.mySystem.dev.docker = {
+        enable = mkEnableOption "Enable Docker";
+        podman.enable = mkEnableOption "Enable Podman rather than Docker";
+        nvidia.enable = mkEnableOption "Activate Nvidia support";
+        autoprune.enable = mkEnableOption "Enable autoprune";
+        storage = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/path/to/docker/storage";
+        };
+      };
+
+      config = mkIf cfg.enable {
+        users.users = {
+          phundrak = mkIf config.mySystem.users.phundrak.enable {
+            extraGroups = containerGroups;
+          };
+          creug = mkIf config.mySystem.users.creug.enable {
+            extraGroups = containerGroups;
+          };
+        };
+        environment.systemPackages = with pkgs;
+          [
+            dive # A tool for exploring each layer in a docker image
+            grype # Vulnerability scanner for container images and filesystems
+          ]
+          ++ lists.optionals cfg.podman.enable [
+            podman-compose
+            podman-desktop
+          ];
+        virtualisation = {
+          docker = mkIf (!cfg.podman.enable) {
+            enable = true;
+            enableNvidia = cfg.nvidia.enable;
+            autoPrune.enable = cfg.autoprune.enable;
+            daemon.settings = mkIf (cfg.storage != null) {
+              "data-root" = cfg.storage;
+            };
+          };
+          podman = mkIf cfg.podman.enable {
+            enable = true;
+            dockerCompat = cfg.enable;
+            enableNvidia = cfg.nvidia.enable;
+            dockerSocket.enable = cfg.enable;
+            autoPrune.enable = cfg.autoprune.enable;
+          };
+        };
+      };
+    };
+}
