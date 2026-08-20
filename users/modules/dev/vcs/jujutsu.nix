@@ -57,12 +57,15 @@ in {
           inherit (cfg) name email;
         };
         ui = {
+          inherit (cfg) editor;
           default-command = "st";
           pager = ":builtin";
           show-cryptographic-signatures = true;
           diff-editor = ":builtin";
           merge-editort = ":builtin";
-          inherit (cfg) editor;
+          # These are for vc-jj.el in Emacs
+          diff-formatter = ":git";
+          conflict-marker-style = "git";
         };
         signing = mkIf cfg.signing.enable {
           behavior = "own";
