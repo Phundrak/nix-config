@@ -168,6 +168,6 @@ in {
         else {};
       keybinds = makeKeybinds cfg.keybinds;
     in
-      cfg.settings // resetKeybinds // keybinds;
+      cfg.settings // (lib.recursiveUpdate resetKeybinds keybinds);
   };
 }
