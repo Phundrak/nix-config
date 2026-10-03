@@ -1,0 +1,45 @@
+#+title: Locale
+#+setupfile: ../headers
+
+* Locale
+I want my system messages in English, but everything else about how
+dates, money and paper sizes are formatted to reflect where I actually
+live. Here’s the =nixos.locale= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.locale = {
+    i18n = {
+      <<default-locale>>
+      <<extra-locale-settings>>
+    };
+  };
+}
+#+end_src
+
+** Default Locale
+=en_DK.UTF-8= is a well-known trick: English messages and collation, but
+ISO 8601 dates and sane metric units, instead of =en_US='s nonsense
+MM/DD/YYYY and imperial units.
+#+name: default-locale
+#+begin_src nix
+defaultLocale = "en_DK.UTF-8";
+#+end_src
+
+** Regional Settings
+Since I live in France, I want addresses, money, paper size, phone
+numbers and the like to follow French conventions instead of whatever
+=en_DK= would otherwise pick.
+#+name: extra-locale-settings
+#+begin_src nix
+extraLocaleSettings = {
+  LC_ADDRESS = "fr_FR.UTF-8";
+  LC_IDENTIFICATION = "fr_FR.UTF-8";
+  LC_MEASUREMENT = "fr_FR.UTF-8";
+  LC_MONETARY = "fr_FR.UTF-8";
+  LC_NAME = "fr_FR.UTF-8";
+  LC_NUMERIC = "fr_FR.UTF-8";
+  LC_PAPER = "fr_FR.UTF-8";
+  LC_TELEPHONE = "fr_FR.UTF-8";
+  LC_TIME = "fr_FR.UTF-8";
+};
+#+end_src

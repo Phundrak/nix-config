@@ -1,0 +1,73 @@
+#+title: Bootloaders and Filesystems
+#+setupfile: ../headers
+
+* Bootloaders and Filesystems
+This page sets up the bootloader of my machines. Whilst I generally
+prefer to use [[https://systemd.io/BOOT/][systemd-boot]], some of my VPS use GRUB. All that gets
+exposed with my module =nixos.loader=.
+
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.loader = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.boot;
+    in {
+      <<systemd-boot-options>>
+      <<grub-options>>
+
+      <<systemd-boot-config>>
+      <<grub-config>>
+    };
+}
+#+end_src
+
+By default, I want to use systemd-boot on my machines, but I need it
+to be disabled whenever I use something else. For now, this “something
+else” is only GRUB, but I’m not excluding using something else on yet
+another machine such as [[https://www.rodsbooks.com/refind/][rEFInd]]. To ensure a single source of truth
+regarding whether systemd-boot is to be used, I have an option for
+that.
+#+name: systemd-boot-options
+#+begin_src nix
+options.mySystem.boot.systemd-boot = mkOption {
+  type = types.bool;
+  default = !cfg.grub.enable;
+  description = "Does the system use systemd-boot?";
+};
+#+end_src
+
+I can now set some options depending on that, such as whether to
+enable systemd-boot itself (duh), and whether the installation process
+can touch my EFI variables.
+#+name: systemd-boot-config
+#+begin_src nix
+config.boot.loader = {
+  systemd-boot.enable = cfg.systemd-boot;
+  efi.canTouchEfiVariables = cfg.systemd-boot;
+};
+#+end_src
+
+But, I have a VPS that requires me to use GRUB. For this, I also have
+an option to enable it.
+#+name: grub-options
+#+begin_src nix
+options.mySystem.boot.grub = {
+  enable = mkEnableOption "Does the system use GRUB? (Disables systemd-boot)";
+  device = mkOption {
+    type = types.path;
+    description = "The GRUB device";
+  };
+};
+#+end_src
+
+I can no pass these options to the boot configuration of my machine.
+#+name: grub-config
+#+begin_src nix
+config.boot.loader.grub = mkIf cfg.grub.enable {
+  inherit (cfg.grub) enable device;
+};
+#+end_src

@@ -1,0 +1,122 @@
+#+title: Nix Settings
+#+setupfile: ../headers
+
+* Nix Settings
+This module gathers the Nix daemon settings I want tuned on every
+host: unfree packages, the build sandbox, garbage collection, trusted
+users, and a couple of things I just want on everywhere. Here’s the
+skeleton of the =nixos.nix-settings= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.nix-settings = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.packages.nix;
+    in {
+      options.mySystem.packages.nix = {
+        <<opt-allow-unfree>>
+        <<opt-disable-sandbox>>
+        <<opt-gc>>
+        <<opt-nix-ld>>
+        <<opt-trusted-users>>
+      };
+
+      config = {
+        <<cfg-allow-unfree>>
+        <<cfg-disable-sandbox>>
+        <<cfg-gc>>
+        <<cfg-nix-ld>>
+        <<cfg-trusted-users>>
+        <<fixed-settings>>
+      };
+    };
+}
+#+end_src
+
+** Unfree Packages
+#+name: opt-allow-unfree
+#+begin_src nix
+allowUnfree = mkEnableOption "Enable unfree packages";
+#+end_src
+#+name: cfg-allow-unfree
+#+begin_src nix
+nixpkgs.config.allowUnfree = true;
+#+end_src
+
+** Nix Sandbox
+#+name: opt-disable-sandbox
+#+begin_src nix
+disableSandbox = mkEnableOption "Disable Nix sandbox";
+#+end_src
+#+name: cfg-disable-sandbox
+#+begin_src nix
+nix.settings.sandbox = cfg.disableSandbox;
+#+end_src
+
+** Garbage Collection
+By default, this runs automatically once a week, early Monday morning,
+and deletes anything older than 30 days.
+#+name: opt-gc
+#+begin_src nix
+gc = {
+  automatic = mkOption {
+    type = types.bool;
+    default = true;
+  };
+  dates = mkOption {
+    type = types.str;
+    default = "Monday 01:00 UTC";
+  };
+  options = mkOption {
+    type = types.str;
+    default = "--delete-older-than 30d";
+  };
+};
+#+end_src
+#+name: cfg-gc
+#+begin_src nix
+nix.gc = cfg.gc;
+#+end_src
+
+** nix-ld
+=nix-ld= lets prebuilt binaries that weren’t built for NixOS — a
+downloaded compiler toolchain, a VS Code extension’s native binary —
+find the shared libraries they expect at the usual FHS paths.
+#+name: opt-nix-ld
+#+begin_src nix
+nix-ld.enable = mkEnableOption "Enable unpatched binaries support";
+#+end_src
+#+name: cfg-nix-ld
+#+begin_src nix
+programs.nix-ld = cfg.nix-ld;
+#+end_src
+
+** Trusted Users
+Trusted users can do things like point Nix at arbitrary substituters,
+which I need so my own binary cache and the nix-community one are
+actually trusted.
+#+name: opt-trusted-users
+#+begin_src nix
+trusted-users = mkOption {
+  type = types.listOf types.str;
+  example = ["alice" "bob"];
+  default = ["@wheel" "root"];
+};
+#+end_src
+#+name: cfg-trusted-users
+#+begin_src nix
+nix.settings.trusted-users = cfg.trusted-users;
+#+end_src
+
+** Always-On Settings
+=flakes= and the new =nix= command are on everywhere, since this whole
+configuration is itself a flake, and =auto-optimise-store= hardlinks
+identical files across store paths to save some disk space.
+#+name: fixed-settings
+#+begin_src nix
+nix.settings.experimental-features = ["nix-command" "flakes"];
+nix.settings.auto-optimise-store = true;
+#+end_src

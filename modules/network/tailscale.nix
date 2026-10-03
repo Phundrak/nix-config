@@ -1,25 +1,12 @@
-{...}: {
+{
   flake.modules.nixos.tailscale = {
-    lib,
-    config,
-    ...
-  }:
-    with lib; let
-      cfg = config.mySystem.network.tailscale;
-    in {
-      options.mySystem.network.tailscale = {
-        enable = mkOption {
-          type = types.bool;
-          default = true;
-        };
-      };
-      config.services.tailscale = {
-        inherit (cfg) enable;
-        extraSetFlags = [
-          "--accept-dns"
-          "--accept-routes"
-          "--ssh"
-        ];
-      };
+    services.tailscale = {
+      enable = true;
+      extraSetFlags = [
+        "--accept-dns"
+        "--accept-routes"
+        "--ssh"
+      ];
     };
+  };
 }

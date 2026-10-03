@@ -1,0 +1,39 @@
+#+title: MangoHud
+#+setupfile: ../../headers
+
+* MangoHud
+[[https://github.com/flightlessmango/MangoHud][MangoHud]] is the performance overlay I use to keep an eye on FPS, frame
+time and GPU/CPU usage while gaming. Here’s the =homeManager.mangohud=
+module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.homeManager.mangohud = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.games.mangohud;
+    in {
+      <<options>>
+      <<config>>
+    };
+}
+#+end_src
+
+** Declaring the Option
+#+name: options
+#+begin_src nix
+options.home.games.mangohud.enable = mkEnableOption "Enable MangoHud performance overlay";
+#+end_src
+
+** Enabling It Session-Wide
+=enableSessionWide= turns MangoHud on for my whole session. It
+auto-launches for any game or app that supports it.
+#+name: config
+#+begin_src nix
+config.programs.mangohud = mkIf cfg.enable {
+  enable = true;
+  enableSessionWide = true;
+};
+#+end_src

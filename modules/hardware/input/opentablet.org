@@ -1,0 +1,30 @@
+#+title: OpenTabletDriver
+#+setupfile: ../../headers
+
+* OpenTabletDriver
+Some of my machines are hooked up to a graphics tablet, a Wacom
+Bamboo, driven by [[https://opentabletdriver.net/][OpenTabletDriver]]. I remember buying it for 15€, what
+a deal that was! Anyway, since most of my hosts don’t have a tablet
+attached, this is exposed as a regular toggle rather than enabled
+unconditionally. Here’s the skeleton of the =nixos.opentablet= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.opentablet = {
+    <<config>>
+  };
+}
+#+end_src
+
+** Enabling the Driver
+Enabling OpenTabletDriver proper is just a matter of turning on the
+module and its daemon. I also need to explicitly load the =wacom=
+kernel module, since my tablet (like most of them) identifies itself
+as a Wacom device at the hardware level regardless of brand.
+#+name: config
+#+begin_src nix
+hardware.opentabletdriver = {
+  enable = true;
+  daemon.enable = true;
+};
+boot.kernelModules = ["wacom"];
+#+end_src

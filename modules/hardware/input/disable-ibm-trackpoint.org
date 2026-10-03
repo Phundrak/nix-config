@@ -1,0 +1,30 @@
+#+title: Disable the IBM TrackPoint
+#+setupfile: ../../headers
+
+* Disable the IBM TrackPoint
+My ThinkPads come with IBM’s TrackPoint, the little red nub sitting
+between the =G=, =H= and =B= keys. I don’t want it active, though, it has a
+drift and I cannot fix it unless I change my keyboard. Thus, this
+module exposes a way to turn it off. Here’s the skeleton of the
+=nixos.disable-ibm-trackpoint= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.disable-ibm-trackpoint = {
+    <<udev-rule>>
+  };
+}
+#+end_src
+
+** Disabling the TrackPoint
+The TrackPoint shows up to the input stack as a regular pointer
+device, so to disable it I can’t simply blacklist a driver — libinput
+and friends would still pick it up through =evdev=. Instead, I match it
+by its device name and clear the =ID_INPUT=, =ID_INPUT_MOUSE= and
+=ID_INPUT_POINTINGSTICK= udev properties on it, which tells the input
+stack to simply ignore the device as a pointing device.
+#+name: udev-rule
+#+begin_src nix
+services.udev.extraRules = ''
+  ATTRS{name}=="*TPPS/2 IBM TrackPoint", ENV{ID_INPUT}="", ENV{ID_INPUT_MOUSE}="", ENV{ID_INPUT_POINTINGSTICK}=""
+'';
+#+end_src

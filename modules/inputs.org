@@ -1,0 +1,82 @@
+#+title: Flake File Setup
+#+setupfile: headers
+
+* Flake File Setup
+This configuration uses [[https://flake-file.denful.dev/][flake-file]]. This means my =flake.nix= file is
+modular, as it allows me to define my inputs where I need them, and
+not necessarily all at the same place. This can be a bit unusual for
+people who are new to it, but trust me, it’s well worth it.
+
+I’ll simply set up the outputs, a single one named =dendritic=, and the
+description here, as nothing is too complicated.
+#+begin_src nix :tangle yes
+{
+  <<inputs>>
+  flake-file.outputs = "dendritic";
+  flake-file.description = "NixOS and Home Manager configuration of P'undrak";
+}
+#+end_src
+
+** Inputs
+Some flake imputs are required globally, as they are used by default
+by this configuration and some hosts.
+
+#+name: inputs
+#+begin_src nix
+flake-file.inputs = {
+  <<inputs-nixpkgs>>
+  <<inputs-flake-parts>>
+  <<inputs-flake-file>>
+  <<inputs-import-tree>>
+  <<inputs-home-manager>>
+};
+#+end_src
+
+First, we get to nixpkgs, which
+is quite necessary to get NixOS up and running: it gives access to
+Nix’s packages. I also have a =nixpkgsStable= input for the kernel of my
+PineTab 2 tablet. Otherwise, I use Nix unstable.
+
+#+name: inputs-nixpkgs
+#+begin_src nix
+nixpkgsStable.url = "nixpkgs/nixos-25.11";
+nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+#+end_src
+
+Next, I need some inputs for my dendritic config. =flake-parts= is the
+heart of it: it’s a framework for writing flake modules that can
+easily be put together as a single module defining an entire system,
+such as a home configuration or a host configuration.
+#+name: inputs-flake-parts
+#+begin_src nix
+flake-parts.url = "github:hercules-ci/flake-parts";
+#+end_src
+
+Next, we have flake-file, which permits the modularisation of my
+=flake.nix= file itself, as mentioned abve.
+#+name: inputs-flake-file
+#+begin_src nix
+flake-file.url = "github:vic/flake-file";
+#+end_src
+
+Next, we have =import-tree=, which automatically imports my Nix files,
+making all modules globally known.
+#+name: inputs-import-tree
+#+begin_src nix
+import-tree.url = "github:vic/import-tree";
+#+end_src
+
+And last but not least, =home-manager=. This allows me to manage the
+programs of me as the user of my machine and not necessarily the
+machine itself, as well as their configuration. As such, I can upgrade
+a machine’s system without touching my environment, and the inverse is
+true. However, it’s important to keep them in sync when it comes to
+major upgrades of NixOS, so home-manager will follow the system’s
+version.
+#+name: inputs-home-manager
+#+begin_src nix
+home-manager = {
+  url = "github:nix-community/home-manager";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+#+end_src

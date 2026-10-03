@@ -1,0 +1,99 @@
+#+title: Plymouth
+#+setupfile: ../headers
+
+* Plymouth
+Plymouth is a utility which shows an animation at startup or when
+powering off a device, instead of showing only terminal things. My
+Plymouth settings are set in the =nixos.plymouth= module.
+
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.plymouth = {pkgs, ...}: {
+    boot = {
+      <<plymouth>>
+      <<kernel-parameters>>
+      <<quiet-console>>
+      <<no-menu>>
+    };
+  };
+}
+#+end_src
+
+** Quieting Down the Console
+First, I need to set a few kernel parameters to make displaying
+Plymouth possible:
+#+name: kernel-parameters-list
+- =quiet= :: silences the logs in the terminal
+- =splash= :: show the splash screen (in our case, Plymouth)
+- =boot.shell_on_fail= :: sets =allowShell=1=, which permits the =fail()=
+  handler to drop an interactive rescue shell if stage-1 boot fails
+- =udev.log_level=3= :: sets udev’s log level to =err=
+- =rd.systemd.show_status=auto= :: suppress systemd status messages in
+  initrd unless boot is significantly delayed
+
+#+name: kernel-params
+#+begin_src emacs-lisp :var params=kernel-parameters-list :cache yes
+(mapconcat (lambda (param)
+             (format "\"%s\""
+                     (s-chop-suffix "=" (s-chop-prefix "=" (car (s-split " ::" param))))))
+           params
+           "\n")
+#+end_src
+
+#+RESULTS[7a824c095f2934792b4a3749e56091a8603aaacf]: kernel-params
+: "quiet"
+: "splash"
+: "boot.shell_on_fail"
+: "udev.log_level=3"
+: "rd.systemd.show_status=auto"
+
+This translates into:
+#+name: kernel-parameters
+#+begin_src nix :noweb yes
+kernelParams = [
+  <<kernel-params()>>
+];
+#+end_src
+
+To further decrease the verbosity of the booting screen, we can
+deactivate initrd’s verbosity and lower the console’s log level to
+=err=.
+#+name: quiet-console
+#+begin_src nix
+consoleLogLevel = 3;
+initrd.verbose = false;
+#+end_src
+
+And we’ll show Plymouth immediately, skipping the bootloader’s menu.
+We can hold a key to force displaying the menu, though.
+#+name: no-menu
+#+begin_src nix
+loader.timeout = 0;
+#+end_src
+
+
+** Configuring Plymouth
+Now, we can configure Plymouth proper.
+#+name: plymouth
+#+begin_src nix
+plymouth = {
+  enable = true;
+  <<plymouth-theme>>
+};
+#+end_src
+
+The only significant configuration I want to change in Plymouth is the
+animation. I really like how it looks. You can find a preview of it in
+[[https://github.com/adi1090x/plymouth-themes#previews][adi1090x's repository]], under the first pack. For this, I need to set
+a theme package and the theme name.
+#+name: plymouth-theme
+#+begin_src nix
+theme = "circle_hud";
+themePackages = with pkgs; [
+  (adi1090x-plymouth-themes.override {
+    selected_themes = ["circle_hud"];
+  })
+];
+#+end_src
+
+And we’re done!

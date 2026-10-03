@@ -1,0 +1,39 @@
+#+title: Flatpak
+#+setupfile: ../headers
+
+* Flatpak
+Here’s the =nixos.flatpak= module, enabling Flatpak itself and
+optionally pulling in its builder for the rare occasion I want to
+build a Flatpak myself.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.flatpak = {
+    pkgs,
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.packages.flatpak;
+    in {
+      <<enable-flatpak>>
+      <<builder>>
+    };
+}
+#+end_src
+
+** Enabling Flatpak
+Flatpak support itself is always on once this module is imported.
+#+name: enable-flatpak
+#+begin_src nix
+config.services.flatpak.enable = true;
+#+end_src
+
+** Flatpak Builder
+=flatpak-builder= is only worth installing on the machines where I
+actually build Flatpaks, if any, so it stays behind its own toggle.
+#+name: builder
+#+begin_src nix
+options.mySystem.packages.flatpak.builder.enable = mkEnableOption "Enable Flatpak builder";
+config.environment.systemPackages = lists.optional cfg.builder.enable pkgs.flatpak-builder;
+#+end_src

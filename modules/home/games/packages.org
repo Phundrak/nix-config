@@ -1,0 +1,197 @@
+#+title: Game Launchers
+#+setupfile: ../../headers
+
+* Game Launchers
+The actual game launchers and clients I use, kept separate from my
+catch-all package list so they only show up on hosts that actually
+want them. Here’s the =homeManager.game-packages= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.homeManager.game-packages = {
+    pkgs,
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.games.game-packages;
+      <<cairn-decl>>
+    in {
+      <<options>>
+      <<config>>
+    };
+}
+#+end_src
+
+** Declaring the Option
+#+name: options
+#+begin_src nix
+options.home.games.game-packages.enable = mkEnableOption "Install game launchers and clients";
+#+end_src
+
+** The Packages
+=atlauncher= and =heroic= are launchers for Minecraft and for
+Epic/GOG/Amazon respectively. =openmw= is an open-source
+reimplementation of Morrowind’s engine. It makes the experience a lot
+more enjoyable, especially on a 2K 21:9 screen like the one I use on
+my main computer. =openttd-jgrpp= is OpenTTD with the JGR patchpack.
+=moonlight-qt= lets me stream from my gaming machine to another one on
+the network (mostly via Tailscale).
+#+name: config
+#+begin_src nix
+config.home.packages = mkIf cfg.enable (with pkgs; [
+  atlauncher
+  heroic
+  openmw
+  openttd-jgrpp
+  moonlight-qt
+  <<vs-packages>>
+]);
+#+end_src
+
+** VintageStory
+The game =vintagestory= is, well, Vintage Story, and where all my free
+time has been disappearing into since early 2026. I also package
+myself [[https://cairns.gg/][Cairns]], as there isn’t any official Nix package as far as I am
+aware.
+
+First, to keep things simple, let me import the Cairns package into
+our module. I call it =vs-cairn= in this module to ensure there is no
+name conflict with any other package.
+#+name: cairn-decl
+#+begin_src nix
+vs-cairn = pkgs.callPackage ../../../packages/cairn.nix {};
+#+end_src
+
+Now, wee can add both =vintagestory= and =vs-cairn= to the list of
+installed packages.
+#+name: vs-packages
+#+begin_src nix
+vintagestory
+vs-cairn
+#+end_src
+
+*** Packaging Cairn
+#+name: metadata-source
+| Name            | Cairns                     |
+| Package Name    | cairn                      |
+| Package Version | 0.9.11                     |
+| Description     | Modpacks for Vintage Story |
+| Website         | https://cairns.gg/         |
+
+#+name: metadata
+#+begin_src emacs-lisp :exports none :var metadata=metadata-source meta="pname" quotes="yes"
+(let ((out (cadr (nth (cond ((string= "name" meta) 0)
+                            ((string= "pname" meta) 1)
+                            ((string= "version" meta) 2)
+                            ((string= "description" meta) 3)
+                            ((string= "website" meta) 4))
+                      metadata))))
+  (if (string= quotes "yes") (format "\"%s\"" out)
+    out))
+#+end_src
+
+The binary =cairn= is a self-contained .NET single-file bundle: the
+native apphost has a trailer baking in an absolute offset to the
+embedded bundle manifest, so any rewrite of the binary
+(=autoPatchelfHook=, or even the default fixup strip/shrink-rpath passes
+of =stdenv=) shifts that offset and the binary refuses to start. We must
+therefore leave the binary bytes untouched and instead feed its
+runtime =dlopen()= calls (SkiaSharp, Avalonia's X11 backend, ...)
+through =LD_LIBRARY_PATH= via a wrapper.
+#+begin_src nix :tangle ../../../packages/cairn.nix
+# https://cairns.gg/
+{
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  lib,
+  fontconfig,
+  freetype,
+  libx11,
+  libxext,
+  libxrandr,
+  libxinerama,
+  libxi,
+  libxcursor,
+  libxrender,
+  libxfixes,
+  libxtst,
+  libxcb,
+  libxkbcommon,
+  libglvnd,
+  libICE,
+  libSM,
+  dbus,
+  libxshmfence,
+}:
+stdenv.mkDerivation rec {
+  pname = <<metadata()>>;
+  version = <<metadata(meta="version")>>;
+  src = fetchzip {
+    url = "https://download.cairns.gg/releases/${version}/${pname}-${version}-linux-x64.tar.gz";
+    hash = "sha256-UbjeEbP4o6y+0j1oeF3RwqTuunGB5wD0CSpdFDk97/U=";
+  };
+
+  nativeBuildInputs = [makeWrapper];
+
+  dontBuild = true;
+  dontPatchELF = true;
+  dontStrip = true;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 $src/cairn $out/bin/cairn
+    wrapProgram $out/bin/cairn \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+      stdenv.cc.cc.lib
+      fontconfig
+      freetype
+      libx11
+      libxext
+      libxrandr
+      libxinerama
+      libxi
+      libxcursor
+      libxrender
+      libxfixes
+      libxtst
+      libxcb
+      libxkbcommon
+      libglvnd
+      libICE
+      libSM
+      dbus
+      libxshmfence
+    ]}
+
+    mkdir -p $out/share/applications
+    cat > $out/share/applications/cairn.desktop <<EOF
+<<cairns-desktop>>
+EOF
+
+    install -Dm644 ${./cairn.svg} $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    runHook postInstall
+  '';
+
+  meta = {
+    description = <<metadata(meta="description")>>;
+    homepage = <<metadata(meta="website")>>;
+    platforms = ["x86_64-linux"];
+  };
+}
+#+end_src
+
+There is no official =.desktop= file for Cairns, so let me create one.
+#+name: cairns-desktop
+#+begin_src conf-desktop :tangle no :noweb yes
+[Desktop Entry]
+Version=<<metadata(meta="version", quotes="no")>>
+Name=<<metadata(meta="name", quotes="no")>>
+Comment=<<metadata(meta="description", quotes="no")>>
+Exec=$out/bin/cairn
+Icon=<<metadata(meta="pname", quotes="no")>>
+Terminal=false
+Type=Application
+Categories=Games
+#+end_src

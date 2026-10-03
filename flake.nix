@@ -1,9 +1,9 @@
 # DO-NOT-EDIT. This file was auto-generated using github:denful/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
-  description = "NixOS and Home Manager configuration of phundrak";
+  description = "NixOS and Home Manager configuration of P'undrak";
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
 
   nixConfig = {
     extra-experimental-features = [

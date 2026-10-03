@@ -1,0 +1,21 @@
+#+title: Firmware
+#+setupfile: ../headers
+
+* Firmware
+A small module to pull in the full firmware blob set, for machines
+where I’d rather not chase down which specific firmware package a
+piece of hardware needs. Here’s the =nixos.firmware= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.firmware = {lib, ...}: {
+    <<enable-all-firmware>>
+  };
+}
+#+end_src
+
+=mkDefault= keeps this overridable, in case a host needs to turn it back
+off or pin a narrower set of firmware packages itself.
+#+name: enable-all-firmware
+#+begin_src nix
+hardware.enableAllFirmware = lib.mkDefault true;
+#+end_src

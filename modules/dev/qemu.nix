@@ -8,15 +8,12 @@
     with lib; let
       cfg = config.mySystem.dev.qemu;
     in {
-      options.mySystem.dev.qemu = {
-        enable = mkEnableOption "Enable QEMU";
-        users = mkOption {
-          type = types.listOf types.str;
-          default = ["phundrak"];
-          example = ["user1" "user2"];
-        };
+      options.mySystem.dev.qemu.users = mkOption {
+        type = types.listOf types.str;
+        default = ["phundrak"];
+        example = ["user1" "user2"];
       };
-      config = mkIf cfg.enable {
+      config = {
         programs.virt-manager.enable = true;
         users.groups.libvirtd.members = cfg.users;
         virtualisation = {

@@ -1,0 +1,136 @@
+#+title: Kernel Configuration
+#+setupfile: ../headers
+
+* Kernel Configuration
+This module centralises everything related to the kernel: which
+package to boot, which extra modules to load, which KVM module the
+CPU needs, and a couple of modprobe quirks for specific devices.
+Here’s the skeleton of the =nixos.kernel= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.kernel = {
+    pkgs,
+    config,
+    lib,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.boot.kernel;
+    in {
+      <<options>>
+      <<config>>
+    };
+}
+#+end_src
+
+** Declaring the Options
+#+name: options
+#+begin_src nix
+options.mySystem.boot.kernel = {
+  <<opt-package>>
+  <<opt-modules>>
+  <<opt-cpu-vendor>>
+  <<opt-v4l2loopback>>
+  <<opt-extra-modprobe>>
+};
+#+end_src
+
+*** Kernel Package
+=package= picks which kernel to boot. I default to the Zen kernel for
+its desktop-tuned scheduler, but a host can override it with a
+hardened or hardware-specific kernel instead.
+#+name: opt-package
+#+begin_src nix
+package = mkOption {
+  type = types.raw;
+  default = pkgs.linuxPackages_zen;
+};
+#+end_src
+
+*** Extra Kernel Modules
+=modules= lists any extra kernel modules a host needs beyond the ones
+this module already adds on its own.
+#+name: opt-modules
+#+begin_src nix
+modules = mkOption {
+  type = types.listOf types.str;
+  default = [];
+};
+#+end_src
+
+*** CPU Vendor
+=cpuVendor= tells the module which KVM module to load, since Intel and
+AMD CPUs each need their own.
+#+name: opt-cpu-vendor
+#+begin_src nix
+cpuVendor = mkOption {
+  description = "Intel or AMD?";
+  type = types.enum ["intel" "amd"];
+  default = "amd";
+};
+#+end_src
+
+*** Virtual Webcam
+=v4l2loopback.enable= turns on a virtual video device. I feed it a
+video source, and OBS Studio picks it up as if it were a webcam.
+#+name: opt-v4l2loopback
+#+begin_src nix
+v4l2loopback.enable = mkEnableOption "Enables v4l2loopback kernel module";
+#+end_src
+
+*** Extra Modprobe Configuration
+=extraModprobeConfig= lets a host inject raw =modprobe.d= lines. The
+example below fixes a USB sound card that otherwise misconfigures
+itself on boot.
+#+name: opt-extra-modprobe
+#+begin_src nix
+extraModprobeConfig = mkOption {
+  type = types.lines;
+  default = "";
+  example = ''
+    options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
+  '';
+};
+#+end_src
+
+** Wiring It All Up
+#+name: config
+#+begin_src nix
+config.boot = {
+  <<initrd-driver>>
+  <<extra-modprobe-lines>>
+  <<kernel-packages-and-modules>>
+};
+#+end_src
+
+*** Choosing the Initrd Driver
+Most of my machines have Intel graphics, so this module loads =i915=
+early, in the initrd, to keep the Plymouth splash screen from flashing
+or glitching before the proper driver takes over. Machines with an AMD
+GPU instead load =amdgpu= early; the [[file:../hardware/amdgpu.org][AMD GPU module]] handles that
+itself, so this module doesn’t need to know or care which GPU a host
+actually has.
+#+name: initrd-driver
+#+begin_src nix
+initrd.kernelModules = ["i915"];
+#+end_src
+
+*** Assembling Modprobe Configuration
+This concatenates whatever a host set through =cfg.extraModprobeConfig=
+with the v4l2loopback quirk line whenever =v4l2loopback.enable= is on.
+#+name: extra-modprobe-lines
+#+begin_src nix
+extraModprobeConfig =
+  strings.concatLines
+  ([cfg.extraModprobeConfig]
+    ++ lists.optional cfg.v4l2loopback.enable ''options v4l2loopback exclusive_caps=1 devices=1 video_nr=0 card_label="OBS Studio"'');
+#+end_src
+
+*** Kernel Package and Extra Modules
+Finally, =kernelPackages= and =kernelModules= wire the chosen package
+and modules through, appending the vendor-specific KVM module.
+#+name: kernel-packages-and-modules
+#+begin_src nix
+kernelPackages = cfg.package;
+kernelModules = cfg.modules ++ ["kvm-${cfg.cpuVendor}"];
+#+end_src

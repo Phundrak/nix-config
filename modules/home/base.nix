@@ -14,6 +14,7 @@ in {
         m.cli
         m.desktop
         m.dev
+        m.games
         m.media
         m.my-services
         m.security
@@ -32,6 +33,7 @@ in {
         cli.fullDesktop = mkDefault cfg.fullDesktop;
         desktop.fullDesktop = mkDefault cfg.fullDesktop;
         dev.fullDesktop = mkDefault cfg.fullDesktop;
+        games.fullDesktop = mkDefault cfg.fullDesktop;
         media.fullDesktop = mkDefault cfg.fullDesktop;
         security.fullDesktop = mkDefault cfg.fullDesktop;
         myServices.fullDesktop = mkDefault cfg.fullDesktop;

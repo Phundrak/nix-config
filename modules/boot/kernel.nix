@@ -1,6 +1,4 @@
-{config, ...}: let
-  flakeModules = config.flake.modules;
-in {
+{
   flake.modules.nixos.kernel = {
     pkgs,
     config,
@@ -10,8 +8,6 @@ in {
     with lib; let
       cfg = config.mySystem.boot.kernel;
     in {
-      imports = [flakeModules.nixos.amdgpu];
-
       options.mySystem.boot.kernel = {
         package = mkOption {
           type = types.raw;
@@ -35,13 +31,8 @@ in {
           '';
         };
       };
-
       config.boot = {
-        initrd.kernelModules = lib.lists.singleton (
-          if config.mySystem.hardware.amdgpu.enable
-          then "amdgpu"
-          else "i915"
-        );
+        initrd.kernelModules = ["i915"];
         extraModprobeConfig =
           strings.concatLines
           ([cfg.extraModprobeConfig]

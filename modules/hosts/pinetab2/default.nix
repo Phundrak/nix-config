@@ -9,7 +9,6 @@ in {
       m.niri
       m.waydroid
       m.xserver
-      m.amdgpu
       m.docker
       m.bluetooth
       m.opentablet
@@ -38,26 +37,15 @@ in {
         podman.enable = true;
         autoprune.enable = true;
       };
-      hardware = {
-        bluetooth.enable = true;
-        input.opentablet.enable = true;
-        pinetab2.enable = true;
-        sound.enable = true;
-      };
-      i18n.input.enable = true;
       misc.keymap = "fr-bepo";
       networking = {
         hostname = "pinetab2";
         id = "99a11b15";
         wifi.disablePowersave = true;
       };
-      packages = {
-        appimage.enable = true;
-        flatpak.enable = true;
-        nix = {
-          gc.automatic = true;
-          nix-ld.enable = true;
-        };
+      packages.nix = {
+        gc.automatic = true;
+        nix-ld.enable = true;
       };
       services.ssh.enable = true;
       users = {

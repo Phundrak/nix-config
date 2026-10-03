@@ -68,14 +68,11 @@
           };
           osd.enableMicrophone = true;
           bar = {
-            status = {
-              showAudio = true;
-              showKbLayout = false;
-            };
+            # status = {
+            #   showAudio = true;
+            #   showKbLayout = false;
+            # };
             tray.compact = true;
-          };
-          services = mkIf (config.home.gpuType != null) {
-            inherit (config.home) gpuType;
           };
           session.commands = {
             logout = ["uwsm" "stop"];

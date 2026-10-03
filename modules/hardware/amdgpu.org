@@ -1,0 +1,147 @@
+#+title: AMD GPU support
+#+setupfile: ../headers
+#+property: header-args:emacs-lisp  :lexical t :exports none :tangle no
+
+* AMD GPU support
+Only one of my machines has an AMD GPU, but it does require some
+tweaking. First, here’s the skeleton of the =nixos.amdgpu= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.amdgpu = {pkgs, ...}: {
+    <<enable-graphics>>
+    <<enable-hardware>>
+    <<hardware-extra-packages>>
+    <<system-packages>>
+    <<lact>>
+    <<environment-variables>>
+  };
+}
+#+end_src
+
+** Enable the Hardware
+The first thing is to enable graphics in NixOS. We’ll enable 32-bit
+support while we’re at it.
+#+name: enable-graphics
+#+begin_src nix
+hardware.graphics = {
+  enable = true;
+  enable32Bit = true;
+};
+#+end_src
+
+We can now enable the hardware proper, including initrd and OpenCL
+support for the GPU. =initrd.enable= already makes NixOS load =amdgpu= as
+early as stage 1 on its own, which is why the kernel module (see
+[[file:../boot/kernel.org][Kernel Configuration]]) doesn’t need to pick between =amdgpu= and =i915=
+itself: it can simply default to =i915= and let this module handle its
+own early loading.
+#+name: enable-hardware
+#+begin_src nix
+hardware.amdgpu = {
+  initrd.enable = true;
+  opencl.enable = true;
+};
+#+end_src
+
+Some software expect some packages to be installed by default, such as
+rocblas or Hipblas. Here are these packages.
+#+name: amd-packages
+| Package Name         | Description                                                        |
+|----------------------+--------------------------------------------------------------------|
+| =mesa=                 | Mesa drivers for AMD GPUs                                          |
+| =rocmPackages.clr=     | Common Language Runtime for ROCm                                   |
+| =rocmPackages.clr.icd= | ROCm ICD for OpenCL                                                |
+| =rocmPackages.rocblas= | ROCm BLAS library                                                  |
+| =rocmPackages.hipblas= | HIP BLAS marshalling library (CUDA-compatible interface to rocBLAS) |
+| =rocmPackages.rpp=     | High-performance computer vision library                           |
+| =nvtopPackages.amd=    | Just for me, GPU utilisation monitoring                            |
+
+#+name: extra-hardware-packages
+#+begin_src emacs-lisp :var packages=amd-packages :cache yes
+(mapconcat (lambda (package) (s-chop-prefix "=" (s-chop-suffix "=" package)))
+           (mapcar #'car packages)
+           "\n")
+#+end_src
+
+#+RESULTS[28ba71596b4f184338e46c76c0ba1aa41899bba0]: extra-hardware-packages
+: mesa
+: rocmPackages.clr
+: rocmPackages.clr.icd
+: rocmPackages.rocblas
+: rocmPackages.hipblas
+: rocmPackages.rpp
+: nvtopPackages.amd
+
+#+name: hardware-extra-packages
+#+begin_src nix
+hardware.graphics.extraPackages = with pkgs; [
+  <<extra-hardware-packages()>>
+];
+#+end_src
+
+** Diagnostics and Monitoring
+Beyond what’s needed by the driver stack itself, I also want a couple
+of tools available on the command line to check on the GPU: =clinfo= to
+inspect the available OpenCL platforms and devices, =amdgpu_top= for a
+=btop=-like view of the AMD GPU’s activity, and =nvtop= (packaged for AMD
+under =nvtopPackages.amd=) for a more familiar process-oriented monitor.
+#+name: system-packages
+#+begin_src nix
+environment.systemPackages = with pkgs; [
+  clinfo
+  amdgpu_top
+  nvtopPackages.amd
+];
+#+end_src
+
+** LACT, the GPU Control Daemon
+[[https://github.com/ilya-zlobintsev/LACT][LACT]] (Linux AMDGPU Control Application) lets me tweak fan curves,
+power limits and clocks on the card, through a daemon (=lactd=) and a
+GUI that talks to it. The package ships both a systemd service
+definition and a udev rule, so all that’s left for me to do is install
+the package and make sure the daemon is started.
+
+I’m also consolidating the ROCm libraries under =/opt/rocm= via a
+=tmpfiles= rule. Some tools out there still expect to find ROCm
+installed at that standard filesystem location rather than resolved
+through the Nix store, so I build a combined derivation of the ROCm
+packages I need and symlink it into place.
+#+name: lact
+#+begin_src nix
+systemd = {
+  packages = with pkgs; [lact];
+  services.lactd.wantedBy = ["multi-user.target"];
+  tmpfiles.rules = let
+    rocmEnv = pkgs.symlinkJoin {
+      name = "rocm-combined";
+      paths = with pkgs.rocmPackages; [
+        clr
+        clr.icd
+        rocblas
+        hipblas
+        rpp
+      ];
+    };
+  in [
+    "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
+  ];
+};
+#+end_src
+
+** Environment Variables
+Finally, a handful of environment variables to point tools at that
+=/opt/rocm= prefix and to steer ROCm/HIP towards the right GPU. This
+machine exposes the AMD card as device ID =1= (the other device being an
+iGPU), so I pin both =HIP_VISIBLE_DEVICES= and =ROCM_VISIBLE_DEVICES= to
+it. The card also isn’t officially supported by ROCm, hence the
+=HSA_OVERRIDE_GFX_VERSION= override, which tells ROCm to treat it as the
+closest supported architecture instead of refusing to run.
+#+name: environment-variables
+#+begin_src nix
+environment.variables = {
+  ROCM_PATH = "/opt/rocm";
+  HIP_VISIBLE_DEVICES = "1";
+  ROCM_VISIBLE_DEVICES = "1";
+  HSA_OVERRIDE_GFX_VERSION = "10.3.0";
+};
+#+end_src

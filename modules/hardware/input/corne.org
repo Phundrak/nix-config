@@ -1,0 +1,32 @@
+#+title: Corne Keyboard
+#+setupfile: ../../headers
+
+* Corne Keyboard
+I use a Corne (=crkbd=), a small split ergonomic keyboard, flashed with
+[[https://get.vial.today/][Vial]], a QMK-based firmware that lets me remap keys live from a GUI
+instead of having to reflash the keyboard every time I want to tweak
+my layout. Here’s the skeleton of the =nixos.corne= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.corne = {
+    <<udev-rule>>
+  };
+}
+#+end_src
+
+** Granting HID Access
+By default, the =hidraw= device nodes created for the keyboard are only
+accessible to root, which means Vial can’t talk to it without running
+as root too. Instead, I add a =udev= rule matching my keyboard’s Vial
+identifier (the part after =vial:= is the keyboard’s unique unlock ID,
+burned into its firmware) and grant the =users= group read/write access
+to it, tagging it for =uaccess= / =udev-acl= so it’s also picked up by the
+logged-in session’s ACLs.
+#+name: udev-rule
+#+begin_src nix
+services.udev = {
+  extraRules = ''
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+  '';
+};
+#+end_src

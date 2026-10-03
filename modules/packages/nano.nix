@@ -7,7 +7,7 @@
         set tabsize 2
         set autoindent
         set atblanks
-        set linenumber
+        set linenumbers
         set smarthome
         set softwrap
       '';

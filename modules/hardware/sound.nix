@@ -9,7 +9,6 @@
       cfg = config.mySystem.hardware.sound;
     in {
       options.mySystem.hardware.sound = {
-        enable = mkEnableOption "Whether to enable sounds with Pipewire";
         noisetorch = mkEnableOption "Whether to activate noisetorch support";
         scarlett.enable = mkEnableOption "Activate support for Scarlett sound card";
         alsa = mkOption {
@@ -35,7 +34,7 @@
       config = {
         environment.systemPackages = mkIf cfg.scarlett.enable [pkgs.alsa-scarlett-gui];
         services = {
-          pipewire = mkIf cfg.enable {
+          pipewire = {
             enable = true;
             alsa = mkIf cfg.alsa {
               enable = mkDefault true;
@@ -45,9 +44,7 @@
           };
           pulseaudio.enable = false;
         };
-        programs.noisetorch = mkIf cfg.enable {
-          enable = cfg.noisetorch;
-        };
+        programs.noisetorch.enable = cfg.noisetorch;
       };
     };
 }

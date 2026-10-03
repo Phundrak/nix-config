@@ -1,0 +1,99 @@
+#+title: QEMU
+#+setupfile: ../headers
+
+* QEMU
+On machines where I run virtual machines, I want =virt-manager=,
+=libvirtd=, and a few supporting pieces set up together. Here’s the
+skeleton of the =nixos.qemu= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.qemu = {
+    config,
+    lib,
+    pkgs,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.dev.qemu;
+    in {
+      <<options>>
+      config = {
+        <<virt-manager>>
+        <<libvirtd-group>>
+        <<virtualisation>>
+        <<packages>>
+        <<firmware-tmpfiles>>
+        <<binfmt>>
+      };
+    };
+}
+#+end_src
+
+** Declaring the Options
+=users= lists which users get added to the =libvirtd= group, so they can
+manage VMs without needing root. By default, I add myself to this
+group.
+#+name: options
+#+begin_src nix
+options.mySystem.dev.qemu.users = mkOption {
+  type = types.listOf types.str;
+  default = ["phundrak"];
+  example = ["user1" "user2"];
+};
+#+end_src
+
+This option is then passed onto the standard NixOS option.
+#+name: libvirtd-group
+#+begin_src nix
+users.groups.libvirtd.members = cfg.users;
+#+end_src
+
+** virt-manager
+This pulls in the GUI I actually use to create and manage VMs.
+#+name: virt-manager
+#+begin_src nix
+programs.virt-manager.enable = true;
+#+end_src
+
+** Virtualisation Backend
+=libvirtd= is the daemon that actually runs and manages the VMs. SPICE
+USB redirection lets me pass a USB device straight through to a guest
+without unplugging it from the host first.
+#+name: virtualisation
+#+begin_src nix
+virtualisation = {
+  libvirtd.enable = true;
+  spiceUSBRedirection.enable = true;
+};
+#+end_src
+
+** Extra Packages
+Besides =qemu= itself, =quickemu= lets me spin up a VM from a template in
+one command, and =swtpm= provides the software TPM that guests like
+Windows 11 insist on.
+#+name: packages
+#+begin_src nix
+environment.systemPackages = with pkgs; [
+  qemu
+  quickemu
+  swtpm
+];
+#+end_src
+
+** Firmware Lookup Path
+=virt-manager= and friends expect to find UEFI firmware images under
+=/var/lib/qemu/firmware=, so I symlink QEMU’s own copy there instead of
+making every tool aware of the Nix store path.
+#+name: firmware-tmpfiles
+#+begin_src nix
+systemd.tmpfiles.rules = ["L+ /var/lib/qemu/firmware - - - - ${pkgs.qemu}/share/qemu/firmware"];
+#+end_src
+
+** ARM Emulation
+This lets me run (and build) =aarch64-linux= binaries transparently
+through QEMU’s user-mode emulation, which comes in handy when working
+on the PineTab2 without needing actual ARM hardware on hand.
+#+name: binfmt
+#+begin_src nix
+boot.binfmt.emulatedSystems = ["aarch64-linux"];
+#+end_src

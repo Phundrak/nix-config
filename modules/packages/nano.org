@@ -1,0 +1,66 @@
+#+title: Nano
+#+setupfile: ../headers
+
+* Nano
+I mostly live in Emacs, but I still want a sane fallback editor for
+quick edits over SSH. Here’s the =nixos.nano= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.nano = {
+    programs.nano = {
+      <<enable-nano>>
+      <<syntax-highlight>>
+      <<nanorc>>
+    };
+  };
+}
+#+end_src
+
+** Enabling Nano
+#+name: enable-nano
+#+begin_src nix
+enable = true;
+#+end_src
+
+** Configuration
+First of all, let’s enable syntax highlighting. Nothing fancy here,
+the basics are enough.
+#+name: syntax-highlight
+#+begin_src nix
+syntaxHighlight = true;
+#+end_src
+
+A handful of =nanorc= settings make it behave a bit more like a modern
+editor.
+#+name: nanorc-settings
+| Setting     | Why                                                               |
+|-------------+-------------------------------------------------------------------|
+| =tabsize 2=   | Two spaces per tab, matching how I indent code                    |
+| =autoindent=  | Keep a new line at the same indentation as the one above it       |
+| =atblanks=    | Let soft-wrapped lines indent to match the line above, blanks too |
+| =linenumbers= | Show line numbers in the margin                                   |
+| =smarthome=   | Make Home jump to the first non-blank character, not column 0     |
+| =softwrap=    | Wrap long lines visually instead of running them off-screen       |
+
+#+name: make-nanorc
+#+begin_src emacs-lisp :exports none :var settings=nanorc-settings :cache yes
+(mapconcat (lambda (setting)
+             (concat "set " (s-chop-prefix "=" (s-chop-suffix "=" (car setting)))))
+           settings
+           "\n")
+#+end_src
+
+#+RESULTS[6aaf0a64a52e9d9f15f39ce4396583cec8896c58]: make-nanorc
+: set tabsize 2
+: set autoindent
+: set atblanks
+: set linenumbers
+: set smarthome
+: set softwrap
+
+#+name: nanorc
+#+begin_src nix
+nanorc = ''
+  <<make-nanorc()>>
+'';
+#+end_src

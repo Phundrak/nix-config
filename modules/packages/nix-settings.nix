@@ -33,19 +33,13 @@
       };
 
       config = {
-        nix = {
-          inherit (cfg) gc;
-          settings = {
-            inherit (cfg) trusted-users;
-            sandbox = cfg.disableSandbox;
-            experimental-features = ["nix-command" "flakes"];
-            auto-optimise-store = true;
-          };
-        };
         nixpkgs.config.allowUnfree = true;
-        programs = {
-          inherit (cfg) nix-ld;
-        };
+        nix.settings.sandbox = cfg.disableSandbox;
+        nix.gc = cfg.gc;
+        programs.nix-ld = cfg.nix-ld;
+        nix.settings.trusted-users = cfg.trusted-users;
+        nix.settings.experimental-features = ["nix-command" "flakes"];
+        nix.settings.auto-optimise-store = true;
       };
     };
 }

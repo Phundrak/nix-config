@@ -8,6 +8,7 @@ in {
       m.kernel
       m.hardened
       m.loader
+      m.zfs
       m.docker
       m.calibre
       m.endlessh
@@ -18,14 +19,8 @@ in {
 
     mySystem = {
       boot = {
-        kernel = {
-          hardened = true;
-          cpuVendor = "amd";
-        };
-        zfs = {
-          enable = true;
-          pools = ["tank"];
-        };
+        kernel.cpuVendor = "amd";
+        zfs.pools = ["tank"];
       };
       dev.docker.enable = true;
       misc.keymap = "fr-bepo";

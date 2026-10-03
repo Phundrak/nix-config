@@ -1,0 +1,109 @@
+#+title: Misc NixOS Configurations
+#+setupfile: headers
+
+* Misc NixOS Configurations
+
+This module hosts some misc configuration I am unsure where to put
+elsewhere than here. Don’t expect this file to be coherent, but expect
+it to be quite short.
+
+This module declares the aspect =nixos.misc=, which is used by all my
+hosts.
+
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.misc = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.misc;
+    in {
+      <<timezone-option>>
+      <<layout-option>>
+
+      config = {
+        <<layout-config>>
+        <<timezone-config>>
+        <<envfs>>
+        <<orca>>
+        <<clean-tmp>>
+        <<completion>>
+      };
+    };
+}
+#+end_src
+
+** System Timezone
+First, let me declare the timezone. I’ll set it as an option, as not
+all my machines live in the same place, but I’ll default to
+Metropolitan France’s timezone.
+#+name: timezone-option
+#+begin_src nix
+options.mySystem.misc.timezone = mkOption {
+  type = types.str;
+  default = "Europe/Paris";
+};
+#+end_src
+
+Now, I can set it for my system.
+#+name: timezone-config
+#+begin_src nix
+time.timeZone = cfg.timezone;
+#+end_src
+
+** TTY Keyboard Layout
+Now, I can set the TTY’s keyboard config. Most of my machines use the
+Bépo layout everywhere, but I do share one whose owner doesn’t use it,
+so I’ll let this as an option to be set, defaulting to the default
+French layout.
+#+name: layout-option
+#+begin_src nix
+options.mySystem.misc.keymap = mkOption {
+  type = types.str;
+  default = "fr";
+  example = "fr-bepo";
+  description = "Keymap to use in the TTY console";
+};
+#+end_src
+
+Now, I can set it on my system.
+#+name: layout-config
+#+begin_src nix
+console.keyMap = cfg.keymap;
+#+end_src
+
+** Truly Miscelaneous Config
+First, some scripts are written with the assumption that some
+utilities are always in the same place, such as =/bin/bash=. It is,
+however, not always the case with NixOS. Mic92’s [[https://github.com/Mic92/envfs][envfs]] solves that.
+#+name: envfs
+#+begin_src nix
+services.envfs.enable = true;
+#+end_src
+
+I have no idea why, but sometimes, [[https://orca.gnome.org/][Orca]] get activated without my
+consent. So I hard-disable it here.
+#+name: orca
+#+begin_src nix
+services.orca.enable = false;
+#+end_src
+
+I was surprised to see =/tmp= still hold the same files after my first
+reboot in NixOS, I always assumed it was cleared on every reboot on
+every system. But I can enable this behaviour back.
+#+name: clean-tmp
+#+begin_src nix
+boot.tmp.cleanOnBoot = true;
+#+end_src
+
+Lastly, I want to make sure my shell completions work, so I’ll enable
+this.
+#+name: completion
+#+begin_src nix
+environment.pathsToLink = [
+  "/share/bash-completion"
+  "/share/zsh"
+];
+#+end_src

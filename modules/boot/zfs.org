@@ -1,0 +1,62 @@
+#+title: ZFS Support
+#+setupfile: ../headers
+
+* ZFS Support
+Enabling ZFS is quite straightforward on my machines. In my module
+=nixos.zfs=, I expose two options: which ZFS pools to import, and
+whether to force-import the root pool. But first, here’s the skeleton
+of my module.
+
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.zfs = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.boot;
+    in {
+      <<options>>
+      <<enable>>
+      <<pools>>
+      <<force-import-root>>
+    };
+}
+#+end_src
+
+The main option is the list of pools, which I pass directly to the
+standard NixOS configuration.
+#+name: options
+#+begin_src nix
+options.mySystem.boot.zfs = {
+  pools = mkOption {
+    type = types.listOf types.str;
+    default = [];
+  };
+  forceImportRoot = mkEnableOption "Force-import the ZFS root pool at boot, even if it looks already imported elsewhere";
+};
+#+end_src
+
+Now, I can enable ZFS on the system importing the current module.
+#+name: enable
+#+begin_src nix
+config.boot.supportedFilesystems = ["zfs"];
+#+end_src
+
+And lastly, passing the list of pools to the standard NixOS option is
+quite simple.
+#+name: pools
+#+begin_src nix
+config.boot.zfs.extraPools = cfg.zfs.pools;
+#+end_src
+
+Force-importing the root pool can paper over a stale or mismatched
+host ID, but it also risks mounting a pool that’s already imported
+elsewhere and corrupting it, so NixOS is moving to disable it by
+default. I’d rather keep that safety and only turn it back on for the
+rare host (or the rare boot) that actually needs it.
+#+name: force-import-root
+#+begin_src nix
+config.boot.zfs.forceImportRoot = cfg.zfs.forceImportRoot;
+#+end_src

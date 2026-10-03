@@ -1,0 +1,151 @@
+#+title: Networking
+#+setupfile: ../headers
+
+* Networking
+This module centralises the basic networking identity of a host —
+hostname, host ID, domain, NetworkManager and the firewall — behind a
+single =mySystem.networking= namespace. Here’s the skeleton of the
+=nixos.networking= module.
+#+begin_src nix :tangle yes
+{...}: {
+  flake.modules.nixos.networking = {
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.networking;
+    in {
+      <<hostname>>
+      <<host-id>>
+      <<domain>>
+      <<host-files>>
+      <<wifi-powersave>>
+      <<firewall-ports>>
+      <<firewall-port-ranges>>
+      <<firewall-extra-commands>>
+    };
+}
+#+end_src
+
+** Hostname
+#+name: hostname
+#+begin_src nix
+options.mySystem.networking.hostname = mkOption {
+  type = types.str;
+  example = "gampo";
+};
+config.networking.hostName = cfg.hostname;
+#+end_src
+
+** Host ID
+Every host needs a unique =hostId=; besides identifying the machine on
+the network, ZFS also uses it to guard against accidentally importing
+a pool that’s still active on another machine (see [[file:../boot/zfs.org][ZFS Support]]).
+#+name: host-id
+#+begin_src nix
+options.mySystem.networking.id = mkOption {
+  type = types.str;
+  example = "deadb33f";
+};
+config.networking.hostId = cfg.id;
+#+end_src
+
+** Domain
+Not every host needs a domain name, so this defaults to =null=.
+#+name: domain
+#+begin_src nix
+options.mySystem.networking.domain = mkOption {
+  type = types.nullOr types.str;
+  example = "phundrak.com";
+  default = null;
+};
+config.networking.domain = cfg.domain;
+#+end_src
+
+** Extra Host Files
+=hostFiles= lets a host point at extra files to merge into =/etc/hosts=,
+on top of whatever NixOS generates itself.
+#+name: host-files
+#+begin_src nix
+options.mySystem.networking.hostFiles = mkOption {
+  type = types.listOf types.path;
+  example = [/path/to/hostFile];
+  default = [];
+};
+config.networking.hostFiles = cfg.hostFiles;
+#+end_src
+
+** NetworkManager and WiFi Powersave
+NetworkManager is always enabled; the only thing a host can tune here
+is WiFi powersave. I mainly need to turn it off on the PineTab2, since
+leaving powersave on with its =bes2600= WiFi chip causes stability
+issues.
+#+name: wifi-powersave
+#+begin_src nix
+options.mySystem.networking.wifi.disablePowersave = mkEnableOption ''
+  Disables powersave for Wifi.
+
+    Used mainly for the PineTab2, as leaving WiFi powersave with the bes2600 can cause stability issues.
+'';
+config.networking.networkmanager = {
+  enable = true;
+  wifi.powersave = !cfg.wifi.disablePowersave;
+};
+#+end_src
+
+** Firewall: Ports
+This also turns the firewall itself on; =openPorts= is just the plain
+list of single ports to open, on both TCP and UDP.
+#+name: firewall-ports
+#+begin_src nix
+options.mySystem.networking.firewall.openPorts = mkOption {
+  type = types.listOf types.int;
+  example = [22 80 443];
+  default = [];
+};
+config.networking.firewall = {
+  enable = true;
+  allowedTCPPorts = cfg.firewall.openPorts;
+  allowedUDPPorts = cfg.firewall.openPorts;
+};
+#+end_src
+
+** Firewall: Port Ranges
+=openPortRanges= does the same, but for a contiguous range of ports at
+once, again on both TCP and UDP.
+#+name: firewall-port-ranges
+#+begin_src nix
+options.mySystem.networking.firewall.openPortRanges = mkOption {
+  type = types.listOf (types.attrsOf types.port);
+  default = [];
+  example = [
+    {
+      from = 8080;
+      to = 8082;
+    }
+  ];
+  description = ''
+    A range of TCP and UDP ports on which incoming connections are
+    accepted.
+  '';
+};
+config.networking.firewall = {
+  allowedTCPPortRanges = cfg.firewall.openPortRanges;
+  allowedUDPPortRanges = cfg.firewall.openPortRanges;
+};
+#+end_src
+
+** Firewall: Extra Commands
+For anything the declarative options above can’t express, =extraCommands=
+lets a host drop raw =iptables= commands straight into the firewall
+setup.
+#+name: firewall-extra-commands
+#+begin_src nix
+options.mySystem.networking.firewall.extraCommands = mkOption {
+  type = types.nullOr types.lines;
+  example = "iptables -A INPUTS -p icmp -j ACCEPT";
+  default = null;
+};
+config.networking.firewall.extraCommands = mkIf (cfg.firewall.extraCommands != null) cfg.firewall.extraCommands;
+#+end_src

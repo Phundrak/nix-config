@@ -1,0 +1,26 @@
+#+title: Base Packages
+#+setupfile: ../headers
+
+* Base Packages
+A handful of command-line tools I expect to have available on every
+single machine, no matter how minimal. Here’s the =nixos.base-packages=
+module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.base-packages = {pkgs, ...}: {
+    <<packages>>
+  };
+}
+#+end_src
+
+=curl= and =wget= cover fetching things over HTTP one way or another, and
+=openssl= comes in handy for anything involving certificates or quick
+cryptographic one-liners.
+#+name: packages
+#+begin_src nix
+environment.systemPackages = with pkgs; [
+  curl
+  openssl
+  wget
+];
+#+end_src

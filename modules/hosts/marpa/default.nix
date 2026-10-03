@@ -17,6 +17,7 @@ in {
       # m.niri
       m.waydroid
       m.xserver
+      m.amdgpu
       m.docker
       m.qemu
       m.bluetooth
@@ -72,7 +73,6 @@ in {
 
     mySystem = {
       boot = {
-        plymouth.enable = true;
         kernel = {
           cpuVendor = "amd";
           v4l2loopback.enable = true;
@@ -84,11 +84,11 @@ in {
       };
       desktop = {
         hyprland.enable = true;
-        niri.enable = true;
         waydroid.enable = true;
         xserver = {
           enable = true;
           de = "gnome";
+          videoDrivers = ["amdgpu"];
         };
       };
       dev = {
@@ -97,23 +97,14 @@ in {
           podman.enable = true;
           autoprune.enable = true;
         };
-        qemu.enable = true;
       };
       hardware = {
-        amdgpu.enable = true;
-        bluetooth.enable = true;
-        input = {
-          corne.allowHidAccess = true;
-          opentablet.enable = true;
-        };
         sound = {
-          enable = true;
           noisetorch = true;
           jack = true;
           scarlett.enable = true;
         };
       };
-      i18n.input.enable = true;
       misc.keymap = "fr-bepo";
       networking = {
         hostname = "marpa";
@@ -126,11 +117,7 @@ in {
           }
         ];
       };
-      packages = {
-        appimage.enable = true;
-        flatpak.enable = true;
-        nix.nix-ld.enable = true;
-      };
+      packages.nix.nix-ld.enable = true;
       services = {
         fwupd.enable = true;
         harmonia = {

@@ -15,6 +15,12 @@
           example = "kde";
           description = "Which DE to enable";
         };
+        videoDrivers = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          example = ["amdgpu"];
+          description = "Extra X11 video drivers to load";
+        };
       };
       config.services = mkIf cfg.enable {
         displayManager = {
@@ -36,7 +42,7 @@
 
         xserver = {
           inherit (cfg) enable;
-          videoDrivers = lists.optional config.mySystem.hardware.amdgpu.enable "amdgpu";
+          videoDrivers = cfg.videoDrivers;
           xkb = {
             layout = "fr";
             variant = "bepo_afnor";

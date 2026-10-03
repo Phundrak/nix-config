@@ -1,0 +1,22 @@
+#+title: Trackball
+#+setupfile: ../../headers
+
+* Trackball
+I use a trackball on some of my machines, and I middle-click by
+pressing the left and right buttons together rather than through a
+dedicated button. That’s the only downside of the two trackballs I
+own; otherwise, I can’t recommend one enough. Here’s the
+=nixos.trackball= module enabling this behaviour.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.trackball = {
+    <<middle-emulation>>
+  };
+}
+#+end_src
+
+Enabling middle-click emulation is simple:
+#+name: middle-emulation
+#+begin_src nix
+services.libinput.mouse.middleEmulation = true;
+#+end_src
