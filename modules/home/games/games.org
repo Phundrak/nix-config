@@ -1,0 +1,46 @@
+#+title: Games
+#+setupfile: ../../headers
+
+* Games
+A small category to group everything gaming-related: performance
+overlays, launchers, and whatever else I add to it later. Here’s the
+skeleton of the =homeManager.games= module.
+#+begin_src nix :tangle yes
+{config, ...}: let
+  m = config.flake.modules.homeManager;
+in {
+  flake.modules.homeManager.games = {
+    config,
+    lib,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.games;
+    in {
+      imports = [
+        m.mangohud
+        m.game-packages
+      ];
+
+      <<fulldesktop-option>>
+      <<fulldesktop-cascade>>
+    };
+}
+#+end_src
+
+** The =fullDesktop= Toggle
+Like my other categories, =fullDesktop= is the one switch that turns
+everything in this category on by default, while still letting a host
+override one specific piece if it wants to.
+#+name: fulldesktop-option
+#+begin_src nix
+options.home.games.fullDesktop = mkEnableOption "Enable all optional game-related modules";
+#+end_src
+
+#+name: fulldesktop-cascade
+#+begin_src nix
+config.home.games = {
+  mangohud.enable = mkDefault cfg.fullDesktop;
+  game-packages.enable = mkDefault cfg.fullDesktop;
+};
+#+end_src

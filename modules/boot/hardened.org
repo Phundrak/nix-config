@@ -1,0 +1,116 @@
+#+title: Kernel Hardening
+#+setupfile: ../headers
+
+* Kernel Hardening
+Some of my machines are exposed to the Internet, and therefore get
+their kernel hardened. First, let me declare the Nix file’s skeleton,
+with the =nixos.hardened= module.
+
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.hardened = {
+    boot = {
+      <<kernel-modules>>
+      <<kernel-options>>
+    };
+  };
+}
+#+end_src
+
+** Kernel Modules
+The very first thing to do is to load the =tcp_bbr= kernel module. It
+increases the connection speed of the system with a better congestion
+control. It is particularly interesting for my servers, as they may
+have to deal with high traffic if a crawler ever decides to explore
+all webpages offered by some websites I host. See [[https://www.cyberciti.biz/cloud-computing/increase-your-linux-server-internet-speed-with-tcp-bbr-congestion-control/][this article]] by
+Nixcraft for more details.
+#+name: kernel-modules
+#+begin_src nix
+kernelModules = ["tcp_bbr"];
+#+end_src
+
+** Kernel Options
+Next are a series of kernel options.
+#+name: kernel-options
+#+begin_src nix
+kernel.sysctl = {
+  <<sysrq-key>>
+  <<icmp>>
+  <<icmp-no-accept-redirects>>
+  <<icmp-no-send-redirects>>
+  <<ip-source-route-packets>>
+  <<syn>>
+  <<tcp-time-wait>>
+  <<bufferfloat>>
+  <<latency>>
+};
+#+end_src
+
+First, we’ll disable the magic SysRq key. Not that I expect anyone to
+have physical access to my servers, but it is a really powerful tool
+that I’d rather have off.
+#+name: sysrq-key
+#+begin_src nix
+"kernel.sysrq" = 0;
+#+end_src
+
+Next, we’ll ignore ICMP broadcasts to avoid participating in Smurf
+attacks, and we’ll also ignore ICMP errors.
+#+name: icmp
+#+begin_src nix
+"net.ipv4.icmp_echo_ignore_broadcasts" = 1;
+"net.ipv4.icmp_ignore_bogus_error_responses" = 1;
+#+end_src
+
+Speaking of ICMP, we won’t accept ICMP redirects to prevent some MITM
+attacks.
+#+name: icmp-no-accept-redirects
+#+begin_src nix
+"net.ipv4.conf.all.accept_redirects" = 0;
+"net.ipv4.conf.default_accept_redirects" = 0;
+"net.ipv4.conf.all.secure_redirects" = 0;
+"net.ipv4.conf.default.secure_redirects" = 0;
+"net.ipv6.conf.all.accept_redirects" = 0;
+"net.ipv6.conf.default.accept_redirects" = 0;
+#+end_src
+
+And we won’t send ICMP redirects (we’re not a router).
+#+name: icmp-no-send-redirects
+#+begin_src nix
+"net.ipv4.conf.all.send_redirects" = 0;
+#+end_src
+
+We’re stil not a router, so we’ll refuse IP source route packets, both
+on IPV4 and IPV6.
+#+name: ip-source-route-packets
+#+begin_src nix
+"net.ipv4.conf.all.accept_source_route" = 0;
+"net.ipv6.conf.all.accept_source_route" = 0;
+#+end_src
+
+Now, let’s get some SYN flood protection.
+#+name: syn
+#+begin_src nix
+"net.ipv4.tcp_syncookies" = 1;
+#+end_src
+
+And protection against TCP time-wait assassination hazards.
+#+name: tcp-time-wait
+#+begin_src nix
+"net.ipv4.tcp_rfc1337" = 1;
+#+end_src
+
+We will also mitigate bufferfloat, including with BBR (hey, we enabled that above!)
+#+name: bufferfloat
+#+begin_src nix
+"net.ipv4.tcp_congestion_control" = "bbr";
+"net.core.default_qdisc" = "cake";
+#+end_src
+
+And lastly, we’ll reduce latency on IPV4.
+#+name: latency
+#+begin_src nix
+"net.ipv4.tcp_fastopen" = 3;
+#+end_src
+
+And we should be good to go!

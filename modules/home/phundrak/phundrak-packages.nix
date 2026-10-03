@@ -56,13 +56,6 @@
         watchmate
         chatterino7
 
-        # Games
-        atlauncher
-        heroic
-        openmw
-        openttd-jgrpp
-        moonlight-qt
-
         # Gnome stuff
         gnomeExtensions.tray-icons-reloaded
         gthumb

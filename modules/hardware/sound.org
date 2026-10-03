@@ -1,0 +1,118 @@
+#+title: Sound
+#+setupfile: ../headers
+
+* Sound
+I use Pipewire for audio on my desktop machines, with a couple of
+compatibility layers and bits of hardware-specific support switched on
+as needed. Here’s the skeleton of the =nixos.sound= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.sound = {
+    lib,
+    config,
+    pkgs,
+    ...
+  }:
+    with lib; let
+      cfg = config.mySystem.hardware.sound;
+    in {
+      options.mySystem.hardware.sound = {
+        <<opt-noisetorch>>
+        <<opt-scarlett>>
+        <<opt-alsa>>
+        <<opt-jack>>
+        <<opt-package>>
+      };
+
+      config = {
+        <<scarlett-package>>
+        <<pipewire-config>>
+        <<noisetorch-config>>
+      };
+    };
+}
+#+end_src
+
+** Noise Suppression
+=noisetorch= toggles [[https://github.com/noisetorch/NoiseTorch][NoiseTorch]], a real-time microphone noise
+suppression tool I use for calls, so I have an option for that.
+#+name: opt-noisetorch
+#+begin_src nix
+noisetorch = mkEnableOption "Whether to activate noisetorch support";
+#+end_src
+
+Passing it to NixOS is quite simple.
+#+name: noisetorch-config
+#+begin_src nix
+programs.noisetorch.enable = cfg.noisetorch;
+#+end_src
+
+** Scarlett Sound Card
+=scarlett.enable= is for the machine =marpa= with a Focusrite Scarlett 2i2
+audio interface plugged in; it only pulls in that card’s control GUI.
+#+name: opt-scarlett
+#+begin_src nix
+scarlett.enable = mkEnableOption "Activate support for Scarlett sound card";
+#+end_src
+
+It is installed quite easily in enabled.
+#+name: scarlett-package
+#+begin_src nix
+environment.systemPackages = mkIf cfg.scarlett.enable [pkgs.alsa-scarlett-gui];
+#+end_src
+
+** Enabling Pipewire
+Enabling Pipewire also means explicitly turning PulseAudio off, since
+the two can’t run as the system’s sound server at the same time.
+#+name: pipewire-config
+#+begin_src nix
+services = {
+  pipewire = {
+    enable = true;
+    alsa = mkIf cfg.alsa {
+      enable = mkDefault true;
+      support32Bit = mkDefault true;
+    };
+    jack.enable = mkDefault cfg.jack;
+  };
+  pulseaudio.enable = false;
+};
+#+end_src
+
+** ALSA Compatibility
+=alsa= enables Pipewire’s ALSA compatibility layer, on by default since
+most of my audio software still expects ALSA.
+#+name: opt-alsa
+#+begin_src nix
+alsa = mkOption {
+  type = types.bool;
+  example = true;
+  default = true;
+  description = "Whether to enable ALSA support with Pipewire";
+};
+#+end_src
+
+** JACK Compatibility
+=jack= enables Pipewire’s JACK compatibility layer, off by default since
+only my production machine needs it.
+#+name: opt-jack
+#+begin_src nix
+jack = mkOption {
+  type = types.bool;
+  example = true;
+  default = false;
+  description = "Whether to enable JACK support with Pipewire";
+};
+#+end_src
+
+** Base Package
+=package= picks which PulseAudio package to build things on top of.
+#+name: opt-package
+#+begin_src nix
+package = mkOption {
+  type = types.package;
+  example = pkgs.pulseaudio;
+  default = pkgs.pulseaudioFull;
+  description = "Which base package to use for PulseAudio";
+};
+#+end_src

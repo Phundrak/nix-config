@@ -11,5 +11,5 @@
     };
   };
   flake-file.outputs = "dendritic";
-  flake-file.description = "NixOS and Home Manager configuration of phundrak";
+  flake-file.description = "NixOS and Home Manager configuration of P'undrak";
 }

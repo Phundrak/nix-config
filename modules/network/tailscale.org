@@ -1,0 +1,52 @@
+#+title: Tailscale
+#+setupfile: ../headers
+
+* Tailscale
+I use [[https://tailscale.com/][Tailscale]] as the mesh VPN tying all my machines together. Here’s
+the =nixos.tailscale= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.tailscale = {
+    services.tailscale = {
+      <<enable>>
+      <<extra-flags>>
+    };
+  };
+}
+#+end_src
+
+** Enabling Tailscale
+#+name: enable
+#+begin_src nix
+enable = true;
+#+end_src
+
+** Extra Flags
+I add some extra flags for Tailscale.
+
+#+name: flags
+| Flag            | Why                                                     |
+|-----------------+---------------------------------------------------------|
+| =--accept-dns=    | Turns on MagicDNS                                       |
+| =--accept-routes= | Let this machine use subnets advertised by other nodes  |
+| =--ssh=           | Turns on Tailscale’s own SSH server for easy SSH access |
+
+#+name: make-flags
+#+begin_src emacs-lisp :exports none :var flags=flags :cache yes
+(mapconcat (lambda (flag)
+             (replace-regexp-in-string "=" "\"" (car flag)))
+           flags
+           "\n")
+#+end_src
+
+#+RESULTS[4969e8a817fa6617e136b57d47a43d6e21ce2a7b]: make-flags
+: "--accept-dns"
+: "--accept-routes"
+: "--ssh"
+
+#+name: extra-flags
+#+begin_src nix
+extraSetFlags = [
+  <<make-flags()>>
+];
+#+end_src

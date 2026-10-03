@@ -1,0 +1,51 @@
+#+title: Game Launchers
+#+setupfile: ../../headers
+
+* Game Launchers
+The actual game launchers and clients I use, kept separate from my
+catch-all package list so they only show up on hosts that actually
+want them. Here’s the =homeManager.game-packages= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.homeManager.game-packages = {
+    pkgs,
+    lib,
+    config,
+    ...
+  }:
+    with lib; let
+      cfg = config.home.games.game-packages;
+    in {
+      <<options>>
+      <<config>>
+    };
+}
+#+end_src
+
+** Declaring the Option
+#+name: options
+#+begin_src nix
+options.home.games.game-packages.enable = mkEnableOption "Install game launchers and clients";
+#+end_src
+
+** The Packages
+=atlauncher= and =heroic= are launchers for Minecraft and for
+Epic/GOG/Amazon respectively. =openmw= is an open-source
+reimplementation of Morrowind’s engine. It makes the experience a lot
+more enjoyable, especially on a 2K 21:9 screen like the one I use on
+my main computer. =openttd-jgrpp= is OpenTTD with the JGR patchpack.
+=moonlight-qt= lets me stream from my gaming machine to another one on
+the network (mostly via Tailscale). Lastly, =vintagestory= is, well,
+Vintage Story, and where all my free time has been disappearing into
+since early 2026.
+#+name: config
+#+begin_src nix
+config.home.packages = mkIf cfg.enable (with pkgs; [
+  atlauncher
+  heroic
+  openmw
+  openttd-jgrpp
+  moonlight-qt
+  vintagestory
+]);
+#+end_src

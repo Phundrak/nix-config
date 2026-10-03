@@ -9,6 +9,7 @@ in {
       m.kernel
       m.hardened
       m.loader
+      m.zfs
       m.docker
       m.endlessh
       m.ssh
@@ -22,18 +23,12 @@ in {
 
     mySystem = {
       boot = {
-        kernel = {
-          hardened = true;
-          cpuVendor = "intel";
-        };
+        kernel.cpuVendor = "intel";
         grub = {
           enable = true;
           device = "/dev/sdh";
         };
-        zfs = {
-          enable = true;
-          pools = ["tank"];
-        };
+        zfs.pools = ["tank"];
       };
       dev.docker = {
         enable = true;

@@ -1,0 +1,81 @@
+#+title: Nix Configuration
+#+setupfile: headers
+#+property: header-args:emacs-lisp  :lexical t :exports none :tangle no
+
+* Nix Configuration
+Something that I want to enable everywhere is, first and foremost, the
+support for Nix commands and Nix flakes. I also want to make sure I
+can use some caches, also known as substituters, including one of mine
+from Cachix, to avoid compiling stuff as much as possible.
+
+So first, here are my caches with their public key.
+
+#+name: substituters
+| Substituter's URL                            | Public Key                                                              |
+|----------------------------------------------+-------------------------------------------------------------------------|
+| https://phundrak.cachix.org?priority=10      | =phundrak.cachix.org-1:osJAkYO0ioTOPqaQCIXMfIRz1/+YYlVFkup3R2KSexk==      |
+| https://nix-community.cachix.org?priority=20 | =nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs== |
+| https://cache.nixos.org?priority=40          | =cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY==          |
+
+#+name: substituters-urls
+#+begin_src emacs-lisp :var subs=substituters :cache yes
+(mapconcat (lambda (sub) (format "\"%s\"" (car sub))) subs "\n")
+#+end_src
+
+#+RESULTS[99d05698d7e8ca90b34823f4dd4858224be8d007]: substituters-urls
+: "https://phundrak.cachix.org?priority=10"
+: "https://nix-community.cachix.org?priority=20"
+: "https://cache.nixos.org?priority=40"
+
+#+name: substituters-keys
+#+begin_src emacs-lisp :var subs=substituters :cache yes
+(require 's)
+(mapconcat (lambda (sub) (format "\"%s\""
+                            (s-chop-prefix "=" (s-chop-suffix "=" (cadr sub)))))
+           subs
+           "\n")
+#+end_src
+
+#+RESULTS[6f5e709a7b1c1dd55e4187dfaf8be945138c68ec]: substituters-keys
+: "phundrak.cachix.org-1:osJAkYO0ioTOPqaQCIXMfIRz1/+YYlVFkup3R2KSexk="
+: "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+: "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+
+This results in the following substituters and trusted public keys.
+#+name: config-vars
+#+begin_src nix :noweb yes
+substituters = [
+  <<substituters-urls()>>
+];
+trustedPublicKeys = [
+  <<substituters-keys()>>
+];
+#+end_src
+
+Now, we can declare the rest of the file. You’ll see, it repeats
+itself a bit.
+
+#+begin_src nix :tangle yes
+let
+  cacheSettings = rec {
+    <<config-vars>>
+    commonConf = {
+      extra-trusted-public-keys = trustedPublicKeys;
+      extra-substituters = substituters;
+      extra-experimental-features = ["nix-command" "flakes"];
+      http-connections = 128;
+    };
+  };
+in {
+  flake-file.nixConfig = cacheSettings.commonConf;
+  flake.nixConfig = cacheSettings.commonConf;
+  flake.modules.nixos.nix-cache-settings = {
+    nix.settings = {
+      inherit (cacheSettings) substituters;
+      trusted-public-keys = cacheSettings.trustedPublicKeys;
+      experimental-features = ["nix-command" "flakes"];
+      http-connections = 128;
+    };
+  };
+}
+#+end_src

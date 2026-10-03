@@ -1,0 +1,100 @@
+#+title: Steam
+#+setupfile: ../headers
+
+* Steam
+This module sets up Steam and gamescope for gaming on my desktop,
+along with a few tweaks for Proton and controller support. Here’s the
+skeleton of the =nixos.steam= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.steam = {pkgs, ...}: {
+    <<steam-enable>>
+    <<remote-play>>
+    <<gamescope-session>>
+    <<proton-ge>>
+    <<steam-package>>
+    <<gamescope>>
+    <<controller-support>>
+  };
+}
+#+end_src
+
+** Enabling Steam
+=protontricks= lets me run winetricks-style tweaks against a specific
+game’s own Proton prefix, which some finicky titles still need.
+#+name: steam-enable
+#+begin_src nix
+programs.steam.enable = true;
+programs.steam.protontricks.enable = true;
+#+end_src
+
+** Remote Play and Local Transfers
+These punch the firewall holes Steam needs: one for streaming games
+over Remote Play, the other for transferring an install to another
+machine on the LAN instead of re-downloading it.
+#+name: remote-play
+#+begin_src nix
+programs.steam.remotePlay.openFirewall = true;
+programs.steam.localNetworkGameTransfers.openFirewall = true;
+#+end_src
+
+** Proton-GE
+[[https://github.com/GloriousEggroll/proton-ge-custom][Proton-GE]] is a community Proton build with extra compatibility
+patches, and it often supports a game before official Proton catches
+up.
+#+name: proton-ge
+#+begin_src nix
+programs.steam.extraCompatPackages = [pkgs.proton-ge-bin];
+#+end_src
+
+** The Steam Package Itself
+=OBS_VKCAPTURE= lets OBS Studio capture Vulkan games directly through
+game capture instead of a slower screen/window capture. =RADV_TEX_ANISO=
+forces anisotropic filtering on Mesa’s RADV driver for games that
+don’t expose the setting themselves. =atk= fixes some GTK-based Steam
+dialogs that otherwise complain about a missing accessibility toolkit,
+and the extra Qt5 and =libpulseaudio= packages patch up older games and
+launchers that load those libraries dynamically at runtime.
+#+name: steam-package
+#+begin_src nix
+programs.steam.package = pkgs.steam.override {
+  extraEnv = {
+    OBS_VKCAPTURE = true;
+    RADV_TEX_ANISO = 16;
+  };
+  extraLibraries = p: with p; [atk];
+  extraPkgs = pkgs:
+    with pkgs; [
+      qt5.qtmultimedia
+      qt5.qtbase
+      libpulseaudio
+    ];
+};
+#+end_src
+
+** Gamescope
+[[https://github.com/ValveSoftware/gamescope][gamescope]] is Valve’s micro-compositor, the same one powering the
+session above. =capSysNice= lets it set realtime scheduling priority
+(=--rt=) without running as root, and =--expose-wayland= lets
+Wayland-native games run inside it directly instead of being forced
+through XWayland.
+#+name: gamescope
+#+begin_src nix
+programs.gamescope = {
+  enable = true;
+  capSysNice = true;
+  args = [
+    "--rt"
+    "--expose-wayland"
+  ];
+};
+#+end_src
+
+** Controller Support
+This installs the udev rules for the Steam Controller, Steam Deck
+controls, and other Valve input hardware, so they work without root.
+In my case, that’s my original Steam controller and Valve Index.
+#+name: controller-support
+#+begin_src nix
+hardware.steam-hardware.enable = true;
+#+end_src

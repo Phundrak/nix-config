@@ -1,6 +1,6 @@
 {inputs, ...}: {
   flake-file.inputs.caelestia-shell = {
-    url = "github:caelestia-dots/shell";
+    url = "github:caelestia-dots/shell?ref=stable";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 

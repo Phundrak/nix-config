@@ -25,7 +25,6 @@
         inputs.nixpkgsUnstable.follows = "nixpkgsPinetab2Kernel";
       };
     };
-
     systems = ["x86_64-linux" "aarch64-linux"];
 
     flake.lib = {
@@ -37,7 +36,6 @@
           ];
         };
       };
-
       mkHome = system: userName: hostName: {
         "${userName}@${hostName}" = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages.${system};
@@ -48,7 +46,6 @@
           modules = [config.flake.modules.homeManager."${userName}-${hostName}"];
         };
       };
-
       mkPinetab = buildPlatform: variantModule: {
         pinetab2 = inputs.nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
@@ -72,24 +69,22 @@
     };
 
     flake.nixosConfigurations = lib.mkMerge [
-      (config.flake.lib.mkNixos "x86_64-linux" "elcafe")
-      (config.flake.lib.mkNixos "x86_64-linux" "gampo")
       (config.flake.lib.mkNixos "x86_64-linux" "marpa")
-      (config.flake.lib.mkNixos "x86_64-linux" "NaroMk3")
+      (config.flake.lib.mkNixos "x86_64-linux" "gampo")
       (config.flake.lib.mkNixos "x86_64-linux" "tilo")
+      (config.flake.lib.mkNixos "x86_64-linux" "elcafe")
+      (config.flake.lib.mkNixos "x86_64-linux" "NaroMk3")
       (config.flake.lib.mkPinetab "x86_64-linux" config.flake.modules.nixos.pinetab2-gnome)
     ];
-
     flake.homeConfigurations = lib.mkMerge [
-      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "elcafe")
-      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "gampo")
       (config.flake.lib.mkHome "x86_64-linux" "phundrak" "marpa")
-      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "NaroMk3")
-      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "pinetab2")
+      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "gampo")
       (config.flake.lib.mkHome "x86_64-linux" "phundrak" "tilo")
+      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "elcafe")
       (config.flake.lib.mkHome "x86_64-linux" "creug" "elcafe")
+      (config.flake.lib.mkHome "x86_64-linux" "phundrak" "NaroMk3")
+      (config.flake.lib.mkHome "aarch64-linux" "phundrak" "pinetab2")
     ];
-
     perSystem = {
       pkgs,
       system,

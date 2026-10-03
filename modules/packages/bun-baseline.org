@@ -1,0 +1,136 @@
+#+title: Bun (Baseline)
+#+setupfile: ../headers
+
+* Bun (Baseline)
+Some of my CPUs don’t support AVX2, which the regular =bun= package
+needs, so I keep my own baseline build of it around instead. This page
+covers both the derivation itself and the small module that wires it
+into the flake’s own =packages= output.
+
+** The Derivation
+The regular =bun= package from =nixpkgs= is compiled assuming AVX2, which
+crashes with SIGILL on my ThinkPad x220 (=gampo=). Oven’s own release
+ships a “baseline” build that doesn’t need AVX2, so this derivation
+just fetches and installs that instead. It tangles out to
+=packages/bun-baseline.nix=, separate from the module below.
+#+begin_src nix :tangle ../../packages/bun-baseline.nix
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  autoPatchelfHook,
+  unzip,
+  makeBinaryWrapper,
+  glibc,
+  stdenv,
+  version ? "1.3.13",
+}: let
+  <<version-hash>>
+in
+  stdenvNoCC.mkDerivation {
+    pname = "bun-baseline";
+    inherit version;
+
+    <<src>>
+
+    <<build-inputs>>
+
+    <<phases>>
+
+    <<meta>>
+  }
+#+end_src
+
+*** Keeping the Version in Sync
+I try to keep =version= in step with whatever =bun= nixpkgs itself ships.
+Bumping it means adding a new entry to this table, with the hash
+computed via =nix store prefetch-file= against the matching GitHub
+release URL.
+#+name: version-hash
+#+begin_src nix
+hash = {
+  "1.3.13" = "sha256-nYokKSpwaAkCBdqsCloiP19pc29Sh+N7+I07QDHtx1A=";
+};
+#+end_src
+
+*** Fetching the Release
+Oven-sh publishes the baseline build as a prebuilt zip directly on
+GitHub releases, so there’s no building Bun from source here, just
+downloading and unpacking it.
+#+name: src
+#+begin_src nix
+src = fetchurl {
+  url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-baseline.zip";
+  hash = hash.${version};
+};
+#+end_src
+
+*** Build Inputs
+=autoPatchelfHook= patches the prebuilt binary’s dynamic linker and
+rpath to point at the Nix store instead of the FHS paths it was built
+against, and =glibc= / =stdenv.cc.cc= are the libraries it actually needs
+at runtime.
+#+name: build-inputs
+#+begin_src nix
+nativeBuildInputs =
+  [unzip]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    autoPatchelfHook
+    makeBinaryWrapper
+  ];
+
+buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+  glibc
+  (lib.getLib stdenv.cc.cc)
+];
+#+end_src
+
+*** Unpacking and Installing
+There’s nothing to configure or build here, just unzip the release and
+copy the =bun= binary into place, with =bunx= symlinked alongside it as
+usual.
+#+name: phases
+#+begin_src nix
+dontConfigure = true;
+dontBuild = true;
+
+unpackPhase = ''
+  runHook preUnpack
+  mkdir -p source
+  cd source
+  ${lib.getExe unzip} -q $src
+  runHook postUnpack
+'';
+
+installPhase = ''
+  runHook preInstall
+  mkdir -p $out/bin
+  find . -type f -name "bun" -not -path "./__MACOSX/*" -exec cp {} $out/bin/bun \;
+  chmod +x $out/bin/bun
+  ln -s $out/bin/bun $out/bin/bunx
+  runHook postInstall
+'';
+#+end_src
+
+*** Metadata
+#+name: meta
+#+begin_src nix
+meta = {
+  description = "Bun JavaScript runtime (baseline variant, works without AVX2)";
+  homepage = "https://bun.sh";
+  license = lib.licenses.mit;
+  platforms = ["x86_64-linux"];
+  mainProgram = "bun";
+};
+#+end_src
+
+** Wiring It Into the Flake
+This module just exposes the derivation above as a per-system flake
+package. It tangles out to =modules/packages/bun-baseline.nix=.
+#+begin_src nix :tangle yes
+{
+  perSystem = {pkgs, ...}: {
+    packages.bun-baseline = pkgs.callPackage ../../packages/bun-baseline.nix {};
+  };
+}
+#+end_src

@@ -1,0 +1,24 @@
+#+title: Bluetooth
+#+setupfile: ../headers
+
+* Bluetooth
+Not all of my machines have Bluetooth hardware worth turning on, so
+this is a plain toggle rather than something applied unconditionally.
+Here’s the skeleton of the =nixos.bluetooth= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.bluetooth = {
+    <<config>>
+  };
+}
+#+end_src
+
+** Enabling Bluetooth
+Turning the option on enables Bluetooth support at the kernel level
+and installs =blueman=, a tray applet I use to pair and manage devices
+without digging through a terminal.
+#+name: config
+#+begin_src nix
+hardware.bluetooth.enable = true;
+services.blueman.enable = true;
+#+end_src

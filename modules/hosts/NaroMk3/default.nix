@@ -27,10 +27,7 @@ in {
 
     mySystem = {
       boot = {
-        kernel = {
-          hardened = true;
-          cpuVendor = "amd";
-        };
+        kernel.cpuVendor = "amd";
         grub = {
           enable = true;
           device = "/dev/sdb";

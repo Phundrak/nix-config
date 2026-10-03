@@ -1,0 +1,22 @@
+#+title: Fingerprint Reader
+#+setupfile: ../headers
+
+* Fingerprint Reader
+My ThinkPad x220 has a fingerprint reader, so this is a plain toggle
+rather than something applied unconditionally. Here’s the skeleton of
+the =nixos.fingerprint= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.fingerprint = {
+    <<config>>
+  };
+}
+#+end_src
+
+** Enabling the Reader
+Rather than picking a driver myself, I let [[https://github.com/numtide/nixos-facter-modules][nixos-facter]] detect the
+reader and wire up the matching driver automatically.
+#+name: config
+#+begin_src nix
+hardware.facter.detected.fingerprint.enable = true;
+#+end_src

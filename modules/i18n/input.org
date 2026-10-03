@@ -1,0 +1,52 @@
+#+title: Input Methods
+#+setupfile: ../headers
+
+* Input Methods
+I type in more than one script, so I need a proper input method
+framework rather than relying on whatever the desktop environment
+ships with. Plus, the default /AFNOR bépo/ layout is currently buggy,
+with some dead keys not working properly, such as =AltGr+s=, but it
+isn’t with fcitx5. Here’s the =nixos.i18n-input= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.i18n-input = {pkgs, ...}: {
+    i18n.inputMethod = {
+      <<enable-fcitx5>>
+      <<fcitx5-addons>>
+    };
+  };
+}
+#+end_src
+
+** Enabling fcitx5
+[[https://fcitx-im.org/wiki/Fcitx_5][fcitx5]] is the input method framework I’ve settled on; it covers
+everything from CJK input to custom table-based methods.
+#+name: enable-fcitx5
+#+begin_src nix
+enable = true;
+type = "fcitx5";
+#+end_src
+
+** Addons
+=fcitx5-gtk= gets fcitx5 working inside GTK applications, and the Qt
+equivalents (=fcitx5-configtool=, =fcitx5-with-addons=) do the same for Qt
+ones whilst also giving me a GUI to configure it all. =fcitx5-mozc-ut=
+adds Japanese input through Mozc, and
+=qt6Packages.fcitx5-chinese-addons= adds the table addons Chinese input
+methods need. I don’t actually need this package for Chinese itself,
+but it is somehow necessary for the X-SAMPA input method, which I get
+from =fcitx5-table-other=. I have it to type IPA on the fly when working
+on my constructed languages. Lastly, =fcitx5-nord= just reskins the UI
+to match the rest of my setup.
+#+name: fcitx5-addons
+#+begin_src nix
+fcitx5.addons = with pkgs; [
+  fcitx5-gtk
+  fcitx5-mozc-ut
+  fcitx5-nord
+  fcitx5-table-other
+  qt6Packages.fcitx5-chinese-addons
+  qt6Packages.fcitx5-configtool
+  qt6Packages.fcitx5-with-addons
+];
+#+end_src

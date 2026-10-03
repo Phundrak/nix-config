@@ -1,0 +1,24 @@
+#+title: AppImage
+#+setupfile: ../headers
+
+* AppImage
+A small module to let AppImages run directly, without having to
+extract or wrap them by hand first. Here’s the =nixos.appimage= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.appimage = {
+    <<enable-appimage>>
+  };
+}
+#+end_src
+
+=binfmt= registers AppImages with the kernel’s =binfmt_misc=, so running
+one is as simple as executing it directly, the same as any other
+binary.
+#+name: enable-appimage
+#+begin_src nix
+programs.appimage = {
+  enable = true;
+  binfmt = true;
+};
+#+end_src

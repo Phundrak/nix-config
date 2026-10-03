@@ -1,0 +1,48 @@
+#+title: PineTab2
+#+setupfile: ../headers
+
+* PineTab2
+A few tweaks are specific to my PineTab2 tablet: getting a serial
+console working at boot, exposing its sensors, and making it easy to
+find on whatever network it’s connected to. Here’s the skeleton of the
+=nixos.pinetab2= module.
+#+begin_src nix :tangle yes
+{
+  flake.modules.nixos.pinetab2 = {
+    <<kernel-params>>
+    <<sensors>>
+    <<avahi>>
+  };
+}
+#+end_src
+
+** Serial Console
+These kernel parameters get me a working serial console on the
+tablet’s UART at boot, and point the kernel at the SD card’s root
+filesystem by label rather than by a device path that can shift
+around.
+#+name: kernel-params
+#+begin_src nix
+boot.kernelParams = ["console=tty0" "console=ttyS2,1500000n8" "rootwait" "root=LABEL=NIXOS_SD" "rw"];
+#+end_src
+
+** Sensors
+Turning on the IIO (Industrial I/O) subsystem exposes the tablet’s
+accelerometer and ambient light sensor, which is what lets things like
+auto-rotate work.
+#+name: sensors
+#+begin_src nix
+hardware.sensor.iio.enable = true;
+#+end_src
+
+** Finding It on the Network
+The tablet moves between networks a lot, so Avahi lets me reach it by
+its =.local= hostname over mDNS instead of having to look up whatever IP
+it was handed.
+#+name: avahi
+#+begin_src nix
+services.avahi = {
+  enable = true;
+  openFirewall = true;
+};
+#+end_src

@@ -19,7 +19,7 @@ in {
       m.bluetooth
       m.fingerprint
       m.corne
-      m.ibm-trackpoint
+      m.disable-ibm-trackpoint
       m.opentablet
       m.sound
       m.i18n-input
@@ -32,7 +32,6 @@ in {
 
     mySystem = {
       boot = {
-        plymouth.enable = true;
         kernel = {
           cpuVendor = "intel";
           package = pkgs.linuxPackages;
@@ -51,29 +50,14 @@ in {
         podman.enable = true;
         autoprune.enable = true;
       };
-      hardware = {
-        bluetooth.enable = true;
-        fingerprint.enable = true;
-        input = {
-          corne.allowHidAccess = true;
-          ibmTrackpoint.disable = true;
-          opentablet.enable = true;
-        };
-        sound.enable = true;
-      };
-      i18n.input.enable = true;
       misc.keymap = "fr-bepo";
       networking = {
         hostname = "gampo";
         id = "0630b33f";
       };
-      packages = {
-        appimage.enable = true;
-        flatpak.enable = true;
-        nix = {
-          gc.automatic = true;
-          nix-ld.enable = true;
-        };
+      packages.nix = {
+        gc.automatic = true;
+        nix-ld.enable = true;
       };
       services = {
         fwupd.enable = true;
